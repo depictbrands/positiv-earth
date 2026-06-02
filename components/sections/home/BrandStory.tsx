@@ -48,8 +48,8 @@ function renderHeading(content: BrandStoryContent) {
 export default function BrandStory({
   content = DEFAULT_CONTENT,
 }: BrandStoryProps) {
-  const imageUrl = content.imageUrl ?? DEFAULT_CONTENT.imageUrl;
-  const imageAlt = content.imageAlt ?? DEFAULT_CONTENT.imageAlt;
+  const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
+  const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
 
   return (
     <section

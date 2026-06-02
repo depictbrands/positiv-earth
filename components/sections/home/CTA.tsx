@@ -17,12 +17,24 @@ type CTAProps = {
   content?: CTAContent;
 };
 
-export default function CTA({ content = DEFAULT_CONTENT }: CTAProps) {
+function resolveCtaContent(content?: CTAContent): CTAContent {
+  return {
+    ...DEFAULT_CONTENT,
+    ...content,
+    heading: content?.heading?.trim() || DEFAULT_CONTENT.heading,
+    buttonLabel: content?.buttonLabel?.trim() || DEFAULT_CONTENT.buttonLabel,
+    imageUrl: content?.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl,
+    imageAlt: content?.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt,
+  };
+}
+
+export default function CTA({ content }: CTAProps) {
+  const resolved = resolveCtaContent(content);
   return (
     <section className="relative flex w-full items-center justify-center overflow-hidden px-6 py-24 sm:px-10 lg:min-h-[var(--size-cta-height)] lg:py-0">
       <Image
-        src={content.imageUrl}
-        alt={content.imageAlt}
+        src={resolved.imageUrl}
+        alt={resolved.imageAlt}
         fill
         sizes="100vw"
         className="object-cover"
@@ -38,10 +50,10 @@ export default function CTA({ content = DEFAULT_CONTENT }: CTAProps) {
         style={{ gap: "var(--spacing-cta-content-gap)" }}
       >
         <h2 className="font-display text-heading-4 text-base-white lg:max-w-[var(--size-cta-heading-width)] lg:whitespace-nowrap">
-          {content.heading}
+          {resolved.heading}
         </h2>
 
-        <QuizEntryButton>{content.buttonLabel}</QuizEntryButton>
+        <QuizEntryButton>{resolved.buttonLabel}</QuizEntryButton>
       </div>
     </section>
   );

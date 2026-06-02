@@ -26,14 +26,32 @@ type HeroProps = {
   content?: HeroContent;
 };
 
-export default function Hero({ content = DEFAULT_CONTENT }: HeroProps) {
+function resolveHeroContent(content?: HeroContent): HeroContent {
+  return {
+    ...DEFAULT_CONTENT,
+    ...content,
+    headline: {
+      ...DEFAULT_CONTENT.headline,
+      ...content?.headline,
+    },
+    backgroundImageUrl:
+      content?.backgroundImageUrl?.trim() || DEFAULT_CONTENT.backgroundImageUrl,
+    backgroundImageAlt:
+      content?.backgroundImageAlt?.trim() ||
+      DEFAULT_CONTENT.backgroundImageAlt,
+    subcopy: content?.subcopy?.trim() || DEFAULT_CONTENT.subcopy,
+  };
+}
+
+export default function Hero({ content }: HeroProps) {
+  const resolved = resolveHeroContent(content);
   return (
     <section
       className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]"
     >
       <Image
-        src={content.backgroundImageUrl}
-        alt={content.backgroundImageAlt}
+        src={resolved.backgroundImageUrl}
+        alt={resolved.backgroundImageAlt}
         fill
         className="object-cover"
         priority
@@ -82,14 +100,14 @@ export default function Hero({ content = DEFAULT_CONTENT }: HeroProps) {
               style={{ gap: "var(--spacing-hero-headline-gap)" }}
             >
               <span className="font-display text-heading-3 uppercase text-base-white">
-                {content.headline.pre}
+                {resolved.headline.pre}
               </span>
               <span className="font-display text-heading-1 text-base-white">
-                {content.headline.emphasis}
+                {resolved.headline.emphasis}
               </span>
             </div>
             <span className="font-display text-heading-3 uppercase text-base-white">
-              {content.headline.post}
+              {resolved.headline.post}
             </span>
           </div>
 
@@ -100,10 +118,10 @@ export default function Hero({ content = DEFAULT_CONTENT }: HeroProps) {
               style={{ gap: "var(--spacing-hero-headline-gap)" }}
             >
               <span className="font-display text-heading-3 uppercase text-base-white">
-                {content.headline.pre}
+                {resolved.headline.pre}
               </span>
               <span className="font-display text-heading-1 text-base-white">
-                {content.headline.emphasis}
+                {resolved.headline.emphasis}
               </span>
             </div>
             {/*
@@ -119,7 +137,7 @@ export default function Hero({ content = DEFAULT_CONTENT }: HeroProps) {
                 marginTop: "min(9.59vw, 9.0625rem)",
               }}
             >
-              {content.headline.post}
+              {resolved.headline.post}
             </span>
           </div>
         </div>
@@ -128,7 +146,7 @@ export default function Hero({ content = DEFAULT_CONTENT }: HeroProps) {
           className="mx-auto w-full font-body text-hero-subcopy text-base-white"
           style={{ maxWidth: "var(--size-hero-subcopy-width)" }}
         >
-          {content.subcopy}
+          {resolved.subcopy}
         </p>
       </div>
 

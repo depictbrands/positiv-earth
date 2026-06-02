@@ -73,8 +73,11 @@ export default function Testimonial({
                 key={`${testimonial.name}-${index}`}
                 name={testimonial.name}
                 quote={testimonial.quote}
-                avatarUrl={testimonial.avatarUrl}
-                avatarAlt={testimonial.avatarAlt}
+                avatarUrl={testimonial.avatarUrl?.trim() || DEFAULT_AVATAR}
+                avatarAlt={
+                  testimonial.avatarAlt?.trim() ||
+                  `Portrait of ${testimonial.name}`
+                }
               />
             ))}
           </div>

@@ -57,8 +57,8 @@ function renderHeading(content: HowItWorksContent) {
 export default function HowItWorks({
   content = DEFAULT_CONTENT,
 }: HowItWorksProps) {
-  const imageUrl = content.imageUrl ?? DEFAULT_CONTENT.imageUrl;
-  const imageAlt = content.imageAlt ?? DEFAULT_CONTENT.imageAlt;
+  const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
+  const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
 
   return (
     <section

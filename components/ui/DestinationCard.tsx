@@ -3,6 +3,9 @@ import Link from "next/link";
 
 import type { Destination } from "@/types/destination";
 
+const PLACEHOLDER_IMAGE =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 342 650"><defs><linearGradient id="g" x1="0" x2="0.9" y1="0" y2="1"><stop stop-color="%236b8f8f"/><stop offset="1" stop-color="%23181818"/></linearGradient></defs><rect width="342" height="650" fill="url(%23g)"/></svg>';
+
 type DestinationCardProps = {
   destination: Destination;
   orientation: "landscape" | "portrait";
@@ -14,14 +17,16 @@ function DestinationCardContent({
 }: DestinationCardProps) {
   const locations = destination.locations.join(", ");
   const isPortrait = orientation === "portrait";
+  const imageUrl = destination.imageUrl?.trim() || PLACEHOLDER_IMAGE;
+  const imageAlt = destination.imageAlt?.trim() || destination.name;
 
   return (
     <article
       className="relative h-full w-full overflow-hidden rounded-card-corner"
     >
       <Image
-        src={destination.imageUrl}
-        alt={destination.imageAlt}
+        src={imageUrl}
+        alt={imageAlt}
         fill
         className="object-cover"
       />
