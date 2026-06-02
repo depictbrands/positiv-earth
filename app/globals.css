@@ -1,26 +1,532 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Figma token mapping
+ * Original Figma name   | CSS variable name                         | Original value
+ * base-black            | --color-base-black                        | #181818ff
+ * base-white            | --color-base-white                        | #ffffffff
+ * header-corner         | --radius-header-corner                    | 50px
+ * search-bar-corner     | --radius-search-bar-corner                | 80px
+ * search-button-corner  | --radius-search-button-corner             | 48px
+ * search-button-surface | --color-search-button-surface             | #c7c7c7
+ * search-bar-surface    | --color-search-bar-surface                | #f2f1f1
+ * search-bar-ink-light  | --color-search-bar-ink-light              | #6c7072
+ * search-bar-divider    | --color-search-bar-divider                | rgba(20, 20, 20, 0.12)
+ * search-bar-shadow     | --shadow-search-bar                       | 0px 0px 1px 0px rgba(20,20,20,0.08), 0px 1px 8px 2px rgba(20,20,20,0.08)
+ * header-glass-surface  | --color-header-glass-surface              | rgba(47, 47, 47, 0.6)
+ * header-glass-border   | --color-header-glass-border               | rgba(255, 255, 255, 0.18)
+ * header-active-pill    | --color-header-active-pill                | #a5a5a5
+ * card-corner           | --radius-card-corner                      | 10px
+ * header-active-pill-corner | --radius-header-active-pill-corner    | 25px
+ * Merriweather          | --font-merriweather                       | Merriweather
+ * Raleway               | --font-raleway                            | Raleway
+ * Open Sans             | --font-open-sans                          | Open Sans
+ * heading-1             | --text-heading-1                          | 150px
+ * heading-2             | --text-heading-2                          | 96px
+ * heading-3             | --text-heading-3                          | 70px
+ * heading-4             | --text-heading-4                          | 70px
+ * boby-1                | --text-body-1                            | 20px
+ * body-2                | --text-body-2                            | 40px
+ * p1                    | --text-p1                                | 20px
+ * p2                    | --text-p2                                | 36px
+ * cta-button            | --text-cta-button                        | 20px
+ * destination-card-title | --text-destination-card-title           | 36px
+ * destination-card-duration | --text-destination-card-duration      | 36px
+ * destination-card-duration-label | --text-destination-card-duration-label | 14px
+ * destination-card-locations | --text-destination-card-locations    | 24px
+ * turntable-tag         | --text-turntable-tag                     | 24px
+ * navi                  | --text-nav                               | 16px
+ * quick-link-footer     | --text-quick-link-footer                 | 20px
+ * destination-card-scrim | --color-destination-card-scrim         | rgba(0, 0, 0, 0.4)
+ * destination-card-divider | --color-destination-card-divider     | #ffffffff
+ * destination-card-copy-inset | --spacing-destination-card-copy-inset | 28px
+ * destination-card-copy-gap | --spacing-destination-card-copy-gap | 8px
+ * destination-card-title-gap | --spacing-destination-card-title-gap | 6px
+ * destination-card-header-gap | --spacing-destination-card-header-gap | 16px
+ * destination-card-copy-width | --size-destination-card-copy-width | 387px
+ * destination-card-title-width | --size-destination-card-title-width | 295px
+ * destination-card-vertical-divider-height | --size-destination-card-vertical-divider-height | 32px
+ * destination-card-duration-label-offset-x | --spacing-destination-card-duration-label-offset-x | 25px
+ * destination-card-duration-label-offset-y | --spacing-destination-card-duration-label-offset-y | 18px
+ * destination-card-landscape-width | --size-destination-card-landscape-width | 701px
+ * destination-card-landscape-height | --size-destination-card-landscape-height | 650px
+ * destination-card-portrait-width | --size-destination-card-portrait-width | 21.375rem
+ * destination-card-portrait-height | --size-destination-card-portrait-height | 40.625rem
+ * search-button-width   | --size-search-button-width                | 160px
+ * search-button-height  | --size-search-button-height               | 56px
+ * search-button-padding-left | --spacing-search-button-padding-left  | 52px
+ * search-button-padding-right | --spacing-search-button-padding-right | 53px
+ * search-button-padding-y | --spacing-search-button-padding-y        | 15px
+ * search-button-focus-ring-width | --size-search-button-focus-ring-width | 2px
+ * search-button-focus-ring-offset | --spacing-search-button-focus-ring-offset | 2px
+ * search-bar-width      | --size-search-bar-width                   | 1216px
+ * search-bar-height     | --size-search-bar-height                  | 80px
+ * search-bar-padding-x  | --spacing-search-bar-padding-x            | 24px
+ * search-bar-segment-width | --size-search-bar-segment-width        | 336px
+ * search-bar-segment-gap | --spacing-search-bar-segment-gap         | 16px
+ * search-bar-divider-height | --size-search-bar-divider-height       | 80px
+ * search-bar-icon-size  | --size-search-bar-icon-size               | 24px
+ * search-bar-focus-ring-width | --size-search-bar-focus-ring-width   | 2px
+ * search-bar-focus-ring-offset | --spacing-search-bar-focus-ring-offset | 2px
+ * header-width          | --size-header-width                       | 500px
+ * header-height         | --size-header-height                      | 56px
+ * header-active-pill-width | --size-header-active-pill-width        | 99px
+ * header-active-pill-height | --size-header-active-pill-height      | 46px
+ * header-menu-left      | --spacing-header-menu-left                | 31px
+ * header-menu-right     | --spacing-header-menu-right               | 35px
+ * header-menu-gap       | --spacing-header-menu-gap                 | 43px
+ * header-active-pill-offset | --spacing-header-active-pill-offset   | 5px
+ * header-glass-blur     | --blur-header-glass                       | 2px
+ * testimonial-card-width | --size-testimonial-card-width          | 384px
+ * testimonial-card-height | --size-testimonial-card-height        | 307px
+ * testimonial-card-inset-x | --spacing-testimonial-card-inset-x   | 32px
+ * testimonial-card-inset-top | --spacing-testimonial-card-inset-top | 34px
+ * testimonial-card-content-width | --size-testimonial-card-content-width | 320px
+ * testimonial-card-gap | --spacing-testimonial-card-gap          | 11px
+ * testimonial-card-avatar-size | --size-testimonial-card-avatar-size | 64px
+ * header-logo           | --text-header-logo                        | 24px
+ * footer-surface        | --color-footer-surface                    | #181818
+ * footer-overlay        | --color-footer-overlay                    | rgba(0, 0, 0, 0.2)
+ * footer-muted-text     | --color-footer-muted-text                 | #cfcfcf
+ * footer-divider        | --color-footer-divider                    | rgba(255, 255, 255, 0.4)
+ * footer-form-placeholder | --color-footer-form-placeholder         | rgba(255, 255, 255, 0.6)
+ * testimonial-card-name | --text-testimonial-card-name           | 20px
+ * testimonial-card-quote | --text-testimonial-card-quote         | 16px
+ * footer-width          | --size-footer-width                       | 1512px
+ * footer-height         | --size-footer-height                      | 661px
+ * footer-logo-offset-x  | --spacing-footer-logo-offset-x            | 62px
+ * footer-logo-offset-top | --spacing-footer-logo-offset-top         | 86px
+ * footer-main-offset-top | --spacing-footer-main-offset-top         | 203px
+ * footer-left-column-width | --size-footer-left-column-width        | 648px
+ * footer-connect-gap    | --spacing-footer-connect-gap              | 18px
+ * footer-connect-copy-gap | --spacing-footer-connect-copy-gap       | 13px
+ * footer-support-width  | --size-footer-support-width               | 648px
+ * footer-social-gap     | --spacing-footer-social-gap               | 17px
+ * footer-social-icon    | --size-footer-social-icon                 | 24px
+ * footer-contact-offset-top | --spacing-footer-contact-offset-top   | 398px
+ * footer-contact-gap    | --spacing-footer-contact-gap              | 63px
+ * footer-contact-column-width | --size-footer-contact-column-width  | 409px
+ * footer-contact-copy-gap | --spacing-footer-contact-copy-gap       | 8px
+ * footer-quick-links-gap | --spacing-footer-quick-links-gap         | 6px
+ * footer-quick-links-width | --size-footer-quick-links-width        | 77px
+ * footer-form-width     | --size-footer-form-width                  | 596px
+ * footer-form-height    | --size-footer-form-height                 | 344px
+ * footer-form-offset-x  | --spacing-footer-form-offset-x            | 814px
+ * footer-form-offset-top | --spacing-footer-form-offset-top         | 158px
+ * footer-form-sections-gap | --spacing-footer-form-sections-gap     | 42px
+ * footer-form-row-gap   | --spacing-footer-form-row-gap             | 39px
+ * footer-form-field-width | --size-footer-form-field-width          | 278px
+ * footer-form-message-width | --size-footer-form-message-width      | 595px
+ * footer-form-message-gap | --spacing-footer-form-message-gap       | 8px
+ * footer-form-line-offset-top | --spacing-footer-form-line-offset-top | 55px
+ * footer-divider-offset-top | --spacing-footer-divider-offset-top    | 608px
+ * footer-note-offset-top | --spacing-footer-note-offset-top         | 613px
+ * footer-note-gap       | --spacing-footer-note-gap                 | 306px
+ * footer-copyright-width | --size-footer-copyright-width            | 298px
+ * footer-legal-width    | --size-footer-legal-width                 | 102px
+ * footer-terms-width    | --size-footer-terms-width                 | 109px
+ * footer-credit-width   | --size-footer-credit-width                | 306px
+ * footer-dot-size       | --size-footer-dot-size                    | 24px
+ * footer-submit-width   | --size-footer-submit-width                | 193px
+ * footer-submit-offset-x | --spacing-footer-submit-offset-x         | 403px
+ * footer-submit-offset-top | --spacing-footer-submit-offset-top     | 297px
+ * footer-submit-padding-x | --spacing-footer-submit-padding-x       | 24px
+ * footer-submit-padding-y | --spacing-footer-submit-padding-y       | 12px
+ * footer-submit-shadow  | --shadow-footer-submit                    | 0px 0px 14px 0px rgba(0,0,0,0.12)
+ * footer-logo           | --text-footer-logo                        | 40px
+ * footer-heading        | --text-footer-heading                     | 32px
+ * footer-support        | --text-footer-support                     | 16px
+ * footer-form-label     | --text-footer-form-label                  | 16px
+ * footer-form-placeholder | --text-footer-form-placeholder          | 14px
+ * footer-legal          | --text-footer-legal                       | 16px
+ * brand-story-width     | --size-brand-story-width                  | 1512px
+ * brand-story-height    | --size-brand-story-height                 | 880px
+ * brand-story-copy-width | --size-brand-story-copy-width            | 695px
+ * brand-story-body-width | --size-brand-story-body-width            | 555px
+ * brand-story-image-width | --size-brand-story-image-width          | 854px
+ * brand-story-offset-x  | --spacing-brand-story-offset-x            | 48px
+ * brand-story-copy-gap  | --spacing-brand-story-copy-gap            | 67px
+ * brand-story-body-gap  | --spacing-brand-story-body-gap            | 20px
+ * testimonial-section-width | --size-testimonial-section-width      | 1512px
+ * testimonial-section-height | --size-testimonial-section-height    | 855px
+ * testimonial-section-inner-width | --size-testimonial-section-inner-width | 1216px
+ * testimonial-section-offset-top | --spacing-testimonial-section-offset-top | 155px
+ * testimonial-section-gap | --spacing-testimonial-section-gap       | 55px
+ * testimonial-section-stack-gap | --spacing-testimonial-section-stack-gap | 88px
+ * testimonial-section-cards-gap | --spacing-testimonial-section-cards-gap | 32px
+ * testimonial-pagination-width | --size-testimonial-pagination-width | 40px
+ * testimonial-pagination-height | --size-testimonial-pagination-height | 8px
+ * testimonial-pagination-dot-size | --size-testimonial-pagination-dot-size | 8px
+ * testimonial-pagination-gap | --spacing-testimonial-pagination-gap | 8px
+ * testimonial-pagination-inactive | --color-testimonial-pagination-inactive | rgba(255,255,255,0.5)
+ * ink-base              | --color-ink-base                          | #404446
+ * how-it-works-overlay  | --color-how-it-works-overlay              | rgba(255,255,255,0.3)
+ * destinations-section-width | --size-destinations-section-width    | 1512px
+ * destinations-section-height | --size-destinations-section-height  | 1905px
+ * destinations-heading-offset-top | --spacing-destinations-heading-offset-top | 134px
+ * destinations-cards-offset-top | --spacing-destinations-cards-offset-top | 328px
+ * destinations-grid-width | --size-destinations-grid-width          | 1422px
+ * destinations-grid-gap-y | --spacing-destinations-grid-gap-y      | 15px
+ * destinations-grid-gap-x-sm | --spacing-destinations-grid-gap-x-sm | 16px
+ * destinations-grid-gap-x-lg | --spacing-destinations-grid-gap-x-lg | 18px
+ * destinations-cta-offset-top | --spacing-destinations-cta-offset-top | 1783px
+ * destinations-cta-width | --size-destinations-cta-width           | 190px
+ * destinations-cta-height | --size-destinations-cta-height         | 56px
+ * how-it-works-width    | --size-how-it-works-width                 | 1512px
+ * how-it-works-height   | --size-how-it-works-height                | 982px
+ * how-it-works-left-width | --size-how-it-works-left-width          | 936px
+ * how-it-works-turntable-width | --size-how-it-works-turntable-width | 706px
+ * how-it-works-turntable-height | --size-how-it-works-turntable-height | 698px
+ * how-it-works-turntable-gap | --spacing-how-it-works-turntable-gap | 145px
+ * how-it-works-copy-width | --size-how-it-works-copy-width          | 473px
+ * how-it-works-copy-offset-x | --spacing-how-it-works-copy-offset-x | 991px
+ * how-it-works-copy-offset-top | --spacing-how-it-works-copy-offset-top | 531px
+ * how-it-works-copy-gap | --spacing-how-it-works-copy-gap         | 50px
+ * hero-overlay          | --color-hero-overlay                      | rgba(0,0,0,0.25)
+ * hero-width            | --size-hero-width                         | 1512px
+ * hero-height           | --size-hero-height                        | 982px
+ * hero-content-width    | --size-hero-content-width                 | 1253px
+ * hero-content-offset-top | --spacing-hero-content-offset-top       | 277px
+ * hero-content-gap      | --spacing-hero-content-gap                | 50px
+ * hero-subcopy-width    | --size-hero-subcopy-width                 | 869px
+ * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
+ * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
+ * hero-subcopy          | --text-hero-subcopy                       | 20px
+ * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
+ * cta-content-gap       | --spacing-cta-content-gap                 | 46px
+ * cta-height            | --size-cta-height                         | 711px
+ * cta-heading-width     | --size-cta-heading-width                  | 1065px
+ */
+
+@theme {
+  --color-base-black: oklch(0.209 0 0);
+  --color-base-white: oklch(1 0 0);
+  --color-search-bar-surface: oklch(0.9589 0.0011 17.18);
+  --color-search-bar-ink-light: oklch(0.5424 0.0058 228.89);
+  --color-search-bar-divider: oklch(0.1913 0 89.88 / 0.12);
+  --color-header-glass-surface: oklch(0.3052 0 89.88 / 0.6);
+  --color-header-glass-border: oklch(1 0 89.88 / 0.18);
+  --color-header-active-pill: oklch(0.7219 0 89.88);
+  --color-footer-surface: var(--color-base-black);
+  --color-footer-overlay: oklch(0 0 0 / 0.2);
+  --color-footer-muted-text: oklch(0.8545 0 89.88);
+  --color-footer-divider: oklch(1 0 89.88 / 0.4);
+  --color-footer-form-placeholder: oklch(1 0 89.88 / 0.6);
+  --color-testimonial-pagination-inactive: oklch(1 0 89.88 / 0.5);
+  --color-ink-base: oklch(0.3995 0.0101 257.7);
+  --color-how-it-works-overlay: oklch(1 0 89.88 / 0.3);
+  --color-hero-overlay: oklch(0 0 0 / 0.25);
+  --color-search-button-surface: oklch(0.8297 0 89.88);
+  --color-destination-card-scrim: oklch(0 0 0 / 0.4);
+  --color-destination-card-divider: var(--color-base-white);
+  --color-cta-overlay: oklch(0 0 0 / 0.25);
+
+  --radius-header-corner: 3.125rem;
+  --radius-header-active-pill-corner: 1.5625rem;
+  --radius-search-bar-corner: 5rem;
+  --radius-search-button-corner: 3rem;
+  --radius-card-corner: 0.625rem;
+
+  --spacing-header-menu-left: 1.9375rem;
+  --spacing-header-menu-right: 2.1875rem;
+  --spacing-header-menu-gap: 2.6875rem;
+  --spacing-header-active-pill-offset: 0.3125rem;
+  --spacing-search-bar-padding-x: 1.5rem;
+  --spacing-search-bar-segment-gap: 1rem;
+  --spacing-search-bar-focus-ring-offset: 0.125rem;
+  --spacing-footer-logo-offset-x: 3.875rem;
+  --spacing-footer-logo-offset-top: 5.375rem;
+  --spacing-footer-main-offset-top: 12.6875rem;
+  --spacing-footer-connect-gap: 1.125rem;
+  --spacing-footer-connect-copy-gap: 0.8125rem;
+  --spacing-footer-social-gap: 1.0625rem;
+  --spacing-footer-contact-offset-top: 24.875rem;
+  --spacing-footer-contact-gap: 3.9375rem;
+  --spacing-footer-contact-copy-gap: 0.5rem;
+  --spacing-footer-quick-links-gap: 0.375rem;
+  --spacing-footer-form-offset-x: 50.875rem;
+  --spacing-footer-form-offset-top: 9.875rem;
+  --spacing-footer-form-sections-gap: 2.625rem;
+  --spacing-footer-form-row-gap: 2.4375rem;
+  --spacing-footer-form-message-gap: 0.5rem;
+  --spacing-footer-form-line-offset-top: 3.4375rem;
+  --spacing-footer-divider-offset-top: 38rem;
+  --spacing-footer-note-offset-top: 38.3125rem;
+  --spacing-footer-note-gap: 19.125rem;
+  --spacing-footer-submit-offset-x: 25.1875rem;
+  --spacing-footer-submit-offset-top: 18.5625rem;
+  --spacing-footer-submit-padding-x: 1.5rem;
+  --spacing-footer-submit-padding-y: 0.75rem;
+  --spacing-brand-story-offset-x: 3rem;
+  --spacing-brand-story-copy-gap: 4.1875rem;
+  --spacing-brand-story-body-gap: 1.25rem;
+  --spacing-destinations-heading-offset-top: 8.375rem;
+  --spacing-destinations-cards-offset-top: 20.5rem;
+  --spacing-destinations-grid-gap-y: 0.9375rem;
+  --spacing-destinations-grid-gap-x-sm: 1rem;
+  --spacing-destinations-grid-gap-x-lg: 1.125rem;
+  --spacing-destinations-cta-offset-top: 111.4375rem;
+  --spacing-hero-content-offset-top: 17.3125rem;
+  --spacing-hero-content-gap: 3.125rem;
+  --spacing-hero-search-offset-top: 44.25rem;
+  --spacing-hero-headline-gap: 2.25rem;
+  --spacing-how-it-works-turntable-gap: 9.0625rem;
+  --spacing-how-it-works-copy-offset-x: 61.9375rem;
+  --spacing-how-it-works-copy-offset-top: 33.1875rem;
+  --spacing-how-it-works-copy-gap: 3.125rem;
+  --spacing-testimonial-section-offset-top: 9.6875rem;
+  --spacing-testimonial-section-gap: 3.4375rem;
+  --spacing-testimonial-section-stack-gap: 5.5rem;
+  --spacing-testimonial-section-cards-gap: 2rem;
+  --spacing-testimonial-pagination-gap: 0.5rem;
+  --spacing-destination-card-copy-inset: 1.75rem;
+  --spacing-destination-card-copy-gap: 0.5rem;
+  --spacing-destination-card-title-gap: 0.375rem;
+  --spacing-destination-card-header-gap: 1rem;
+  --spacing-destination-card-duration-label-offset-x: 0.2rem;
+  --spacing-search-button-padding-left: 3.25rem;
+  --spacing-search-button-padding-right: 3.3125rem;
+  --spacing-search-button-padding-y: 0.9375rem;
+  --spacing-search-button-focus-ring-offset: 0.125rem;
+  --spacing-testimonial-card-inset-x: 2rem;
+  --spacing-testimonial-card-inset-top: 2.125rem;
+  --spacing-testimonial-card-gap: 0.6875rem;
+  --spacing-cta-content-gap: 2.875rem;
+
+  --size-destination-card-copy-width: 24.1875rem;
+  --size-destination-card-title-width: 18.4375rem;
+  --size-destination-card-vertical-divider-height: 2rem;
+  --size-destination-card-landscape-width: 43.8125rem;
+  --size-destination-card-landscape-height: 40.625rem;
+  --size-destination-card-portrait-width: 21.375rem;
+  --size-destination-card-portrait-height: 40.625rem;
+  --size-search-bar-width: 76rem;
+  --size-search-bar-height: 5rem;
+  --size-search-bar-segment-width: 21rem;
+  --size-search-bar-divider-height: 5rem;
+  --size-search-bar-icon-size: 1.5rem;
+  --size-search-bar-focus-ring-width: 0.125rem;
+  --size-footer-width: 94.5rem;
+  --size-footer-height: 41.3125rem;
+  --size-footer-left-column-width: 40.5rem;
+  --size-footer-support-width: 40.5rem;
+  --size-footer-social-icon: 1.5rem;
+  --size-footer-contact-column-width: 25.5625rem;
+  --size-footer-quick-links-width: 4.8125rem;
+  --size-footer-form-width: 37.25rem;
+  --size-footer-form-height: 21.5rem;
+  --size-footer-form-field-width: 17.375rem;
+  --size-footer-form-message-width: 37.1875rem;
+  --size-footer-copyright-width: 18.625rem;
+  --size-footer-legal-width: 6.375rem;
+  --size-footer-terms-width: 6.8125rem;
+  --size-footer-credit-width: 19.125rem;
+  --size-footer-dot-size: 1.5rem;
+  --size-footer-submit-width: 12.0625rem;
+  --size-brand-story-width: 94.5rem;
+  --size-brand-story-height: 55rem;
+  --size-brand-story-copy-width: 43.4375rem;
+  --size-brand-story-body-width: 34.6875rem;
+  --size-brand-story-image-width: 53.375rem;
+  --size-destinations-section-width: 94.5rem;
+  --size-destinations-section-height: 119.0625rem;
+  --size-destinations-grid-width: 88.875rem;
+  --size-destinations-cta-width: 11.875rem;
+  --size-destinations-cta-height: 3.5rem;
+  --size-hero-width: 94.5rem;
+  --size-hero-height: 61.375rem;
+  --size-hero-content-width: 78.3125rem;
+  --size-hero-subcopy-width: 54.3125rem;
+  --size-how-it-works-width: 94.5rem;
+  --size-how-it-works-height: 61.375rem;
+  --size-how-it-works-left-width: 58.5rem;
+  --size-how-it-works-turntable-width: 44.125rem;
+  --size-how-it-works-turntable-height: 43.625rem;
+  --size-how-it-works-copy-width: 29.5625rem;
+  --size-testimonial-section-width: 94.5rem;
+  --size-testimonial-section-height: 53.4375rem;
+  --size-testimonial-section-inner-width: 76rem;
+  --size-testimonial-pagination-width: 2.5rem;
+  --size-testimonial-pagination-height: 0.5rem;
+  --size-testimonial-pagination-dot-size: 0.5rem;
+  --size-header-width: 31.25rem;
+  --size-header-height: 3.5rem;
+  --size-header-active-pill-width: 6.1875rem;
+  --size-header-active-pill-height: 2.875rem;
+  --size-search-button-width: 10rem;
+  --size-search-button-height: 3.5rem;
+  --size-search-button-focus-ring-width: 0.125rem;
+  --size-testimonial-card-width: 24rem;
+  --size-testimonial-card-height: 19.1875rem;
+  --size-testimonial-card-content-width: 20rem;
+  --size-testimonial-card-avatar-size: 4rem;
+  --size-cta-height: 44.4375rem;
+  --size-cta-heading-width: 66.5625rem;
+
+  --font-merriweather: var(--ff-merriweather), "Merriweather", serif;
+  --font-raleway: var(--ff-raleway), "Raleway", sans-serif;
+  --font-open-sans: var(--ff-open-sans), "Open Sans", sans-serif;
+  
+
+  --color-text: var(--color-base-black);
+  --color-surface: var(--color-base-white);
+  --font-display: var(--font-merriweather);
+  --font-body: var(--font-raleway);
+  --blur-header-glass: 0.125rem;
+  --shadow-search-bar: 0 0 0.0625rem 0 oklch(0.1913 0 89.88 / 0.08), 0 0.0625rem 0.5rem 0.125rem oklch(0.1913 0 89.88 / 0.08);
+  --shadow-footer-submit: 0 0 0.875rem 0 oklch(0 0 0 / 0.12);
+
+  /*
+   * Fluid display typography.
+   * clamp(min, fluid-vw, max): the max equals the original desktop value and is
+   * reached at the 1512px design width (1vw = 15.12px there), so desktop stays
+   * pixel-faithful while text scales down on smaller viewports. Line-heights are
+   * unitless ratios (derived from the original design) so they scale with size.
+   */
+  --text-heading-1: clamp(3rem, 9.92vw, 9.375rem);
+  --text-heading-1--line-height: 0.704;
+  --text-heading-1--letter-spacing: 0em;
+  --text-heading-1--font-weight: 400;
+
+  --text-heading-2: clamp(2.5rem, 6.35vw, 6rem);
+  --text-heading-2--line-height: 1.094;
+  --text-heading-2--letter-spacing: 0em;
+  --text-heading-2--font-weight: 400;
+
+  --text-heading-3: clamp(1.75rem, 4.63vw, 4.375rem);
+  --text-heading-3--line-height: 1.1;
+  --text-heading-3--letter-spacing: 0em;
+  --text-heading-3--font-weight: 300;
+
+  --text-heading-4: clamp(2.25rem, 4.63vw, 4.375rem);
+  --text-heading-4--line-height: 1.257;
+  --text-heading-4--letter-spacing: 0em;
+  --text-heading-4--font-weight: 600;
+
+  --text-body-1: 1.25rem;
+  --text-body-1--line-height: 1.5;
+  --text-body-1--letter-spacing: 0em;
+  --text-body-1--font-weight: 500;
+
+  --text-body-2: clamp(1.5rem, 2.65vw, 2.5rem);
+  --text-body-2--line-height: 1.25;
+  --text-body-2--letter-spacing: -0.02em;
+  --text-body-2--font-weight: 300;
+
+  --text-p1: 1.25rem;
+  --text-p1--line-height: 1.5;
+  --text-p1--letter-spacing: 0em;
+  --text-p1--font-weight: 400;
+
+  --text-p2: clamp(1.5rem, 2.38vw, 2.25rem);
+  --text-p2--line-height: 1.389;
+  --text-p2--letter-spacing: -0.02em;
+  --text-p2--font-weight: 300;
+
+  --text-cta-button: 1.25rem;
+  --text-cta-button--line-height: 1.5rem;
+  --text-cta-button--letter-spacing: 0.03em;
+  --text-cta-button--font-weight: 600;
+
+  --text-destination-card-title: clamp(1.75rem, 2.38vw, 2.25rem);
+  --text-destination-card-title--line-height: normal;
+  --text-destination-card-title--letter-spacing: 0.03em;
+  --text-destination-card-title--font-weight: 700;
+
+  --text-destination-card-duration: clamp(1.75rem, 2.38vw, 2.25rem);
+  --text-destination-card-duration--line-height: normal;
+  --text-destination-card-duration--letter-spacing: 0.03em;
+  --text-destination-card-duration--font-weight: 600;
+
+  --text-destination-card-duration-label: 0.875rem;
+  --text-destination-card-duration-label--line-height: normal;
+  --text-destination-card-duration-label--letter-spacing: 0em;
+  --text-destination-card-duration-label--font-weight: 400;
+
+  --text-destination-card-locations: 1.5rem;
+  --text-destination-card-locations--line-height: normal;
+  --text-destination-card-locations--letter-spacing: 0em;
+  --text-destination-card-locations--font-weight: 400;
+
+  --text-search-bar: 1rem;
+  --text-search-bar--line-height: 1.6rem;
+  --text-search-bar--letter-spacing: 0.02em;
+  --text-search-bar--font-weight: 600;
+
+  --text-header-logo: 1.5rem;
+  --text-header-logo--line-height: normal;
+  --text-header-logo--letter-spacing: 0em;
+  --text-header-logo--font-weight: 500;
+
+  --text-hero-subcopy: 1.25rem;
+  --text-hero-subcopy--line-height: 1.875rem;
+  --text-hero-subcopy--letter-spacing: 0.03em;
+  --text-hero-subcopy--font-weight: 500;
+  --text-hero-subcpy--font-family: var(--font-body);
+
+  --text-footer-logo: clamp(2rem, 2.65vw, 2.5rem);
+  --text-footer-logo--line-height: normal;
+  --text-footer-logo--letter-spacing: 0em;
+  --text-footer-logo--font-weight: 400;
+
+  --text-footer-heading: clamp(1.5rem, 2.12vw, 2rem);
+  --text-footer-heading--line-height: 1.1;
+  --text-footer-heading--letter-spacing: 0em;
+  --text-footer-heading--font-weight: 400;
+
+  --text-footer-support: 1rem;
+  --text-footer-support--line-height: 1.25rem;
+  --text-footer-support--letter-spacing: 0em;
+  --text-footer-support--font-weight: 400;
+
+  --text-footer-form-label: 1rem;
+  --text-footer-form-label--line-height: 1.25rem;
+  --text-footer-form-label--letter-spacing: 0em;
+  --text-footer-form-label--font-weight: 600;
+
+  --text-footer-form-placeholder: 0.875rem;
+  --text-footer-form-placeholder--line-height: 1.25rem;
+  --text-footer-form-placeholder--letter-spacing: 0em;
+  --text-footer-form-placeholder--font-weight: 600;
+
+  --text-footer-legal: 1rem;
+  --text-footer-legal--line-height: 1.875rem;
+  --text-footer-legal--letter-spacing: 0em;
+  --text-footer-legal--font-weight: 400;
+
+  --text-testimonial-card-name: 1.25rem;
+  --text-testimonial-card-name--line-height: 1.6;
+  --text-testimonial-card-name--letter-spacing: 0.02em;
+  --text-testimonial-card-name--font-weight: 600;
+
+  --text-testimonial-card-quote: 1rem;
+  --text-testimonial-card-quote--line-height: 1.6rem;
+  --text-testimonial-card-quote--letter-spacing: 0.02em;
+  --text-testimonial-card-quote--font-weight: 400;
+
+  --text-turntable-tag: 1.5rem;
+  --text-turntable-tag--line-height: 1.875rem;
+  --text-turntable-tag--letter-spacing: 0em;
+  --text-turntable-tag--font-weight: 600;
+
+  --text-nav: 1rem;
+  --text-nav--line-height: 1.2rem;
+  --text-nav--letter-spacing: 0em;
+  --text-nav--font-weight: 400;
+
+  --text-quick-link-footer: 1.25rem;
+  --text-quick-link-footer--line-height: 1.5625rem;
+  --text-quick-link-footer--letter-spacing: 0em;
+  --text-quick-link-footer--font-weight: 400;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
 }
