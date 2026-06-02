@@ -18,33 +18,29 @@ const DEFAULT_STEPS = [
   "On-Trip Resources",
 ] as const;
 
-// Figma "turntable" frame (node 630:787): 702×408 box with an offset 357px ring.
+// Structural geometry of the Figma "turntable" frame (node 630:787): a 702×408
+// viewBox with an offset 357px-diameter ring. Nodes sit evenly around the ring,
+// the first one at the top (12 o'clock).
 const BOX_W = 702;
 const BOX_H = 408;
 const CENTER_X = 315.5;
 const CENTER_Y = 229.5;
 const RING_RADIUS = 178.5;
-const LABEL_RADIUS = 214;
+const LABEL_RADIUS = 206;
 const DOT_RADIUS = 5;
+
 const ENTRY_THRESHOLD = 0.4;
-const SEGMENT_DURATION_MS = 420;
+// One full clockwise turn for the intro draw and click sweeps (within the
+// 1200–1600ms brief).
+const FULL_TURN_MS = 1400;
+// Floor so a single short click hop still eases noticeably.
+const MIN_STEP_MS = 220;
+// Auto-advance glides one node at a noticeably slower, calmer pace than a click
+// so the resting wheel visibly drifts and reads as interactive.
+const AUTO_STEP_MS = 1600;
+const EPSILON = 0.0005;
 
 type LabelAlign = "left" | "center" | "right";
-
-type FigmaNode = {
-  angle: number;
-  label: { left: number; top: number; width: number; align: LabelAlign };
-};
-
-// Explicit label placement (percent of the box) lifted from the Figma frame so
-// the five default steps land exactly where the design shows them.
-const FIGMA_LAYOUT: FigmaNode[] = [
-  { angle: -90, label: { left: 23.65, top: 0, width: 42.59, align: "center" } },
-  { angle: -17.18, label: { left: 72.22, top: 39.71, width: 27.78, align: "left" } },
-  { angle: 46.1, label: { left: 66.24, top: 85.54, width: 26.35, align: "left" } },
-  { angle: 135.5, label: { left: 1.99, top: 81.86, width: 21.09, align: "left" } },
-  { angle: -162.8, label: { left: 0, top: 36.03, width: 18.52, align: "left" } },
-];
 
 type TurntableProps = {
   className?: string;
@@ -57,6 +53,8 @@ type Point = {
   y: number;
 };
 
+type Phase = "idle" | "intro" | "steady";
+
 function cn(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
 }
@@ -65,6 +63,8 @@ function toRadians(angle: number) {
   return (angle * Math.PI) / 180;
 }
 
+// Angle convention matches the SVG screen space (y grows downward): -90° is the
+// top, 0° is the right, and the angle increases clockwise.
 function getPoint(angle: number, radius: number): Point {
   const theta = toRadians(angle);
 
@@ -74,24 +74,10 @@ function getPoint(angle: number, radius: number): Point {
   };
 }
 
-function getArcPath(start: Point, end: Point) {
-  return `M ${start.x} ${start.y} A ${RING_RADIUS} ${RING_RADIUS} 0 0 1 ${end.x} ${end.y}`;
-}
-
-function getClockwiseSegments(from: number, to: number, count: number) {
-  if (count <= 1 || from === to) {
-    return [];
-  }
-
-  const segments: number[] = [];
-  let cursor = from;
-
-  while (cursor !== to) {
-    segments.push(cursor);
-    cursor = (cursor + 1) % count;
-  }
-
-  return segments;
+// Clockwise easing shared by the intro draw, auto-advance, and click sweep so
+// every motion reads with the same acceleration curve.
+function easeInOut(t: number) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 function usePrefersReducedMotion() {
@@ -116,208 +102,238 @@ export default function Turntable({
   steps = DEFAULT_STEPS,
 }: TurntableProps) {
   const itemCount = steps.length;
-  const rootRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number | null>(null);
-  const autoAdvanceTimeoutRef = useRef<number | null>(null);
-  const hasPlayedIntroRef = useRef(false);
-  const activeIndexRef = useRef(0);
-  const pausedRef = useRef(false);
-  const isAnimatingRef = useRef(false);
   const prefersReducedMotion = usePrefersReducedMotion();
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number | null>(null);
+  const introPlayedRef = useRef(false);
+
+  // Mirror state into refs so the rAF loop and timers read current values
+  // without re-subscribing on every render.
+  const activeRef = useRef(0);
+  const frontRef = useRef(0);
+  const phaseRef = useRef<Phase>("idle");
+  const pausedRef = useRef(false);
+  const animatingRef = useRef(false);
+
   const [activeIndex, setActiveIndex] = useState(0);
-  const [animatedSegment, setAnimatedSegment] = useState<number | null>(null);
-  const [segmentProgress, setSegmentProgress] = useState(0);
+  // Fraction of the ring (0–1) the highlight arc reveals, clockwise from the top.
+  const [frontFraction, setFrontFraction] = useState(0);
+  const [phase, setPhase] = useState<Phase>("idle");
 
-  activeIndexRef.current = activeIndex;
-
-  const useFigmaLayout = itemCount === FIGMA_LAYOUT.length;
-
+  // Even 72° spacing for five nodes, first node at the top, plus a derived
+  // clockwise fraction (0 at top) used to place the highlight arc endpoint.
   const geometry = useMemo(() => {
     return steps.map((label, index) => {
-      const node = useFigmaLayout ? FIGMA_LAYOUT[index] : null;
-      const angle = node ? node.angle : -90 + index * (360 / itemCount);
+      const fraction = index / itemCount;
+      const angle = -90 + fraction * 360;
       const dot = getPoint(angle, RING_RADIUS);
+      const labelPoint = getPoint(angle, LABEL_RADIUS);
+
+      const dx = labelPoint.x - CENTER_X;
+      const isCentered = Math.abs(dx) < 40;
 
       let align: LabelAlign;
-      let labelStyle: CSSProperties;
+      let translateX: string;
 
-      if (node) {
-        align = node.label.align;
-        labelStyle = {
-          left: `${node.label.left}%`,
-          top: `${node.label.top}%`,
-          width: `${node.label.width}%`,
-        };
+      if (isCentered) {
+        align = "center";
+        translateX = "-50%";
+      } else if (dx > 0) {
+        align = "left";
+        translateX = "0";
       } else {
-        const point = getPoint(angle, LABEL_RADIUS);
-        align =
-          Math.abs(point.x - CENTER_X) < 6
-            ? "center"
-            : point.x > CENTER_X
-              ? "left"
-              : "right";
-        labelStyle = {
-          left: `${(point.x / BOX_W) * 100}%`,
-          top: `${(point.y / BOX_H) * 100}%`,
-          width: align === "center" ? "40%" : "28%",
-          transform: "translate(-50%, -50%)",
-        };
+        align = "right";
+        translateX = "-100%";
       }
 
-      // Scale labels with the turntable so they stay proportional on small
-      // screens; 3.4cqw == the 24px turntable-tag token at the 706px design width.
-      labelStyle.fontSize = "min(var(--text-turntable-tag), 3.4cqw)";
-      labelStyle.lineHeight = "1.25";
+      const labelStyle: CSSProperties = {
+        left: `${(labelPoint.x / BOX_W) * 100}%`,
+        top: `${(labelPoint.y / BOX_H) * 100}%`,
+        maxWidth: isCentered ? "46%" : "30%",
+        transform: `translate(${translateX}, -50%)`,
+        // Scale labels with the turntable so they stay proportional on small
+        // screens; 3.4cqw == the 24px turntable-tag token at the design width.
+        fontSize: "min(var(--text-turntable-tag), 3.4cqw)",
+        lineHeight: "1.25",
+      };
 
-      return { angle, dot, label, align, labelStyle };
+      return { angle, fraction, dot, label, align, labelStyle };
     });
-  }, [itemCount, steps, useFigmaLayout]);
+  }, [itemCount, steps]);
 
-  const segmentPaths = useMemo(() => {
-    return geometry.map((item, index) => {
-      const next = geometry[(index + 1) % itemCount];
-      return getArcPath(item.dot, next.dot);
-    });
-  }, [geometry, itemCount]);
+  // Single full-circle path starting at the top and sweeping clockwise, so a
+  // stroke-dashoffset reveal exposes the arc from the top onward.
+  const ringPath = useMemo(() => {
+    const top = getPoint(-90, RING_RADIUS);
+    const bottom = getPoint(90, RING_RADIUS);
+    return `M ${top.x} ${top.y} A ${RING_RADIUS} ${RING_RADIUS} 0 0 1 ${bottom.x} ${bottom.y} A ${RING_RADIUS} ${RING_RADIUS} 0 0 1 ${top.x} ${top.y}`;
+  }, []);
 
-  useEffect(() => {
-    if (activeIndex >= itemCount) {
-      setActiveIndex(0);
+  const clearTimer = () => {
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
-  }, [activeIndex, itemCount]);
+  };
+
+  const cancelRaf = () => {
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+    animatingRef.current = false;
+  };
 
   useEffect(() => {
     return () => {
-      if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-      }
-
-      if (autoAdvanceTimeoutRef.current !== null) {
-        window.clearTimeout(autoAdvanceTimeoutRef.current);
-      }
+      cancelRaf();
+      clearTimer();
     };
   }, []);
 
-  const clearAutoAdvance = () => {
-    if (autoAdvanceTimeoutRef.current !== null) {
-      window.clearTimeout(autoAdvanceTimeoutRef.current);
-      autoAdvanceTimeoutRef.current = null;
-    }
-  };
+  // Drive the highlight arc from its current position by `delta` of the ring
+  // (always positive == clockwise) over `duration` ms, settling exactly on
+  // `finalFraction`.
+  function animateFront(
+    delta: number,
+    finalFraction: number,
+    duration: number,
+    onDone?: () => void,
+  ) {
+    cancelRaf();
 
-  const clearSweep = () => {
-    if (animationFrameRef.current !== null) {
-      window.cancelAnimationFrame(animationFrameRef.current);
-      animationFrameRef.current = null;
-    }
+    const from = frontRef.current;
+    const start = performance.now();
 
-    isAnimatingRef.current = false;
-    setAnimatedSegment(null);
-    setSegmentProgress(0);
-  };
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      let value = from + delta * easeInOut(t);
 
-  const maybeScheduleAutoAdvance = () => {
-    clearAutoAdvance();
+      // Keep the rendered fraction in [0,1); crossing the top wraps once.
+      if (value > 1) value -= 1;
+      if (value < 0) value += 1;
+
+      frontRef.current = value;
+      setFrontFraction(value);
+
+      if (t < 1) {
+        rafRef.current = window.requestAnimationFrame(tick);
+        return;
+      }
+
+      frontRef.current = finalFraction;
+      setFrontFraction(finalFraction);
+      rafRef.current = null;
+      animatingRef.current = false;
+      onDone?.();
+    };
+
+    animatingRef.current = true;
+    rafRef.current = window.requestAnimationFrame(tick);
+  }
+
+  function scheduleNext() {
+    clearTimer();
 
     if (
       prefersReducedMotion ||
       pausedRef.current ||
-      isAnimatingRef.current ||
-      !hasPlayedIntroRef.current ||
+      animatingRef.current ||
+      phaseRef.current !== "steady" ||
       itemCount <= 1
     ) {
       return;
     }
 
-    autoAdvanceTimeoutRef.current = window.setTimeout(() => {
-      const nextIndex = (activeIndexRef.current + 1) % itemCount;
-      runSweepTo(nextIndex);
+    timeoutRef.current = window.setTimeout(() => {
+      runStepTo((activeRef.current + 1) % itemCount, "auto");
     }, intervalMs);
-  };
+  }
 
-  const finishSweep = (nextIndex: number) => {
-    clearSweep();
-    setActiveIndex(nextIndex);
-    maybeScheduleAutoAdvance();
-  };
-
-  const animateSegments = (
-    segments: number[],
-    nextIndex: number,
-    segmentIndex = 0,
-  ) => {
-    if (segmentIndex >= segments.length) {
-      finishSweep(nextIndex);
-      return;
-    }
-
-    const currentSegment = segments[segmentIndex];
-    const startTime = performance.now();
-
-    setAnimatedSegment(currentSegment);
-    setSegmentProgress(0);
-
-    const step = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / SEGMENT_DURATION_MS, 1);
-
-      setSegmentProgress(progress);
-
-      if (progress < 1) {
-        animationFrameRef.current = window.requestAnimationFrame(step);
-        return;
-      }
-
-      setAnimatedSegment(null);
-      setSegmentProgress(0);
-      animateSegments(segments, nextIndex, segmentIndex + 1);
-    };
-
-    animationFrameRef.current = window.requestAnimationFrame(step);
-  };
-
-  function runSweepTo(nextIndex: number) {
-    clearAutoAdvance();
+  // Move the active node (and arc endpoint) to `target`, sweeping clockwise.
+  // Auto-advance glides slowly; clicks track the faster intro rate.
+  function runStepTo(target: number, source: "auto" | "click") {
+    clearTimer();
 
     if (itemCount === 0) {
       return;
     }
 
-    const fromIndex = activeIndexRef.current;
+    const targetFraction = geometry[target].fraction;
 
     if (prefersReducedMotion) {
-      clearSweep();
-      setActiveIndex(nextIndex);
+      // Switch instantly; the arc endpoint is derived from the active node.
+      cancelRaf();
+      activeRef.current = target;
+      frontRef.current = targetFraction;
+      phaseRef.current = "steady";
+      setActiveIndex(target);
       return;
     }
 
-    clearSweep();
+    let delta = (targetFraction - frontRef.current) % 1;
+    if (delta < 0) delta += 1;
 
-    const segments = getClockwiseSegments(fromIndex, nextIndex, itemCount);
-
-    if (segments.length === 0) {
-      setActiveIndex(nextIndex);
-      maybeScheduleAutoAdvance();
+    // Clicking the already-active node: nothing to sweep.
+    if (delta < EPSILON) {
+      scheduleNext();
       return;
     }
 
-    setActiveIndex(nextIndex);
-    isAnimatingRef.current = true;
-    animateSegments(segments, nextIndex);
+    phaseRef.current = "steady";
+    activeRef.current = target;
+    setPhase("steady");
+    setActiveIndex(target);
+
+    const duration =
+      source === "auto"
+        ? AUTO_STEP_MS
+        : Math.max(FULL_TURN_MS * delta, MIN_STEP_MS);
+
+    animateFront(delta, targetFraction, duration, scheduleNext);
   }
 
+  function playIntro() {
+    phaseRef.current = "intro";
+    activeRef.current = 0;
+    setPhase("intro");
+    setActiveIndex(0);
+
+    // Draw a full clockwise turn, then settle into the steady carousel with the
+    // top node active and the arc reset to undrawn.
+    animateFront(1, 0, FULL_TURN_MS, () => {
+      phaseRef.current = "steady";
+      activeRef.current = 0;
+      setPhase("steady");
+      setActiveIndex(0);
+      scheduleNext();
+    });
+  }
+
+  // Reduced motion: stop any running motion. The final state is derived during
+  // render (see renderFront / renderPhase below), so no setState is needed here.
+  useEffect(() => {
+    if (!prefersReducedMotion) {
+      return;
+    }
+
+    cancelRaf();
+    clearTimer();
+    introPlayedRef.current = true;
+    phaseRef.current = "steady";
+  }, [prefersReducedMotion]);
+
+  // Trigger A: play the intro once the wheel is ~40% on screen.
   useEffect(() => {
     if (prefersReducedMotion || itemCount === 0) {
-      clearAutoAdvance();
-      clearSweep();
       return;
     }
 
     const node = rootRef.current;
 
-    if (!node || hasPlayedIntroRef.current) {
-      maybeScheduleAutoAdvance();
+    if (!node || introPlayedRef.current) {
       return;
     }
 
@@ -325,16 +341,13 @@ export default function Turntable({
       (entries) => {
         const [entry] = entries;
 
-        if (!entry?.isIntersecting || hasPlayedIntroRef.current) {
+        if (!entry?.isIntersecting || introPlayedRef.current) {
           return;
         }
 
-        hasPlayedIntroRef.current = true;
-        clearAutoAdvance();
-        clearSweep();
-        isAnimatingRef.current = true;
-        animateSegments(Array.from({ length: itemCount }, (_, index) => index), 0);
+        introPlayedRef.current = true;
         observer.disconnect();
+        playIntro();
       },
       { threshold: ENTRY_THRESHOLD },
     );
@@ -342,34 +355,22 @@ export default function Turntable({
     observer.observe(node);
 
     return () => observer.disconnect();
-  }, [itemCount, prefersReducedMotion]);
-
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      hasPlayedIntroRef.current = true;
-      clearAutoAdvance();
-      clearSweep();
-      return;
-    }
-
-    if (hasPlayedIntroRef.current) {
-      maybeScheduleAutoAdvance();
-    }
-  }, [activeIndex, intervalMs, prefersReducedMotion]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefersReducedMotion, itemCount]);
 
   const handleMouseEnter = () => {
     pausedRef.current = true;
-    clearAutoAdvance();
+    clearTimer();
   };
 
   const handleMouseLeave = () => {
     pausedRef.current = false;
-    maybeScheduleAutoAdvance();
+    scheduleNext();
   };
 
   const handleFocusCapture = () => {
     pausedRef.current = true;
-    clearAutoAdvance();
+    clearTimer();
   };
 
   const handleBlurCapture = (event: FocusEvent<HTMLDivElement>) => {
@@ -380,25 +381,50 @@ export default function Turntable({
     }
 
     pausedRef.current = false;
-    maybeScheduleAutoAdvance();
+    scheduleNext();
   };
 
-  const handleNodeClick = (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
-    if (event.currentTarget.disabled) {
-      return;
-    }
+  const handleNodeClick =
+    (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
+      if (event.currentTarget.disabled) {
+        return;
+      }
 
-    runSweepTo(index);
-  };
+      // Trigger B.
+      introPlayedRef.current = true;
+      runStepTo(index, "click");
+    };
 
   if (itemCount === 0) {
     return null;
   }
 
+  const safeActiveIndex = activeIndex < itemCount ? activeIndex : 0;
+
+  // With reduced motion we render the final state directly: the arc endpoint
+  // sits at the active node and there is no intro phase.
+  const renderPhase: Phase = prefersReducedMotion ? "steady" : phase;
+  const renderFront = prefersReducedMotion
+    ? (geometry[safeActiveIndex]?.fraction ?? 0)
+    : frontFraction;
+
+  // A node lights to 100% when the draw front has passed it (intro) or when it
+  // is the active node (steady / idle default).
+  const isLit = (index: number, fraction: number) => {
+    if (renderPhase === "intro") {
+      return fraction <= renderFront + EPSILON;
+    }
+
+    return index === safeActiveIndex;
+  };
+
   return (
     <div
       ref={rootRef}
-      className={cn("@container relative aspect-[702/408] w-full text-base-black", className)}
+      className={cn(
+        "@container relative aspect-[702/408] w-full text-base-black",
+        className,
+      )}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocusCapture={handleFocusCapture}
@@ -409,6 +435,7 @@ export default function Turntable({
         className="block size-full overflow-visible"
         aria-hidden="true"
       >
+        {/* Faint base track. */}
         <circle
           cx={CENTER_X}
           cy={CENTER_Y}
@@ -417,46 +444,34 @@ export default function Turntable({
           strokeWidth="1.5"
         />
 
-        {segmentPaths.map((path, index) => {
-          const isCurrentSegment = animatedSegment === index;
+        {/* 100%-opacity highlight arc, revealed clockwise from the top. */}
+        <path
+          d={ringPath}
+          pathLength={1}
+          className="fill-none stroke-base-black"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeDasharray="1"
+          strokeDashoffset={1 - renderFront}
+        />
 
-          return (
-            <path
-              key={path}
-              d={path}
-              pathLength={1}
-              className={cn(
-                "fill-none stroke-base-black transition-opacity",
-                isCurrentSegment ? "opacity-100" : "opacity-0",
-              )}
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeDasharray="1"
-              strokeDashoffset={isCurrentSegment ? 1 - segmentProgress : 1}
-            />
-          );
-        })}
-
-        {geometry.map((item, index) => {
-          const isActive = index === activeIndex;
-
-          return (
-            <circle
-              key={`dot-${item.label}`}
-              cx={item.dot.x}
-              cy={item.dot.y}
-              r={DOT_RADIUS}
-              className={cn(
-                "fill-base-black transition-opacity",
-                isActive ? "opacity-100" : "opacity-40",
-              )}
-            />
-          );
-        })}
+        {geometry.map((item, index) => (
+          <circle
+            key={`dot-${item.label}`}
+            cx={item.dot.x}
+            cy={item.dot.y}
+            r={DOT_RADIUS}
+            className={cn(
+              "fill-base-black transition-opacity duration-300",
+              isLit(index, item.fraction) ? "opacity-100" : "opacity-40",
+            )}
+          />
+        ))}
       </svg>
 
       {geometry.map((item, index) => {
-        const isActive = index === activeIndex;
+        const isActive = index === safeActiveIndex;
+        const lit = isLit(index, item.fraction);
         const textAlign =
           item.align === "center"
             ? "text-center"
@@ -471,9 +486,9 @@ export default function Turntable({
             aria-current={isActive ? "step" : undefined}
             onClick={handleNodeClick(index)}
             className={cn(
-              "absolute bg-transparent font-body font-semibold text-base-black transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black disabled:pointer-events-none",
+              "absolute rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-black disabled:pointer-events-none",
               textAlign,
-              isActive ? "opacity-100" : "opacity-65",
+              lit ? "opacity-100" : "opacity-40",
             )}
             style={item.labelStyle}
           >

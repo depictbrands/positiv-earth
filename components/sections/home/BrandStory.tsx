@@ -50,6 +50,10 @@ export default function BrandStory({
 }: BrandStoryProps) {
   const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
   const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
+  const ctaLabel = content.cta?.label?.trim() || DEFAULT_CONTENT.cta?.label;
+  const ctaHref = content.cta?.href?.trim() || DEFAULT_CONTENT.cta?.href;
+  const cta =
+    ctaLabel && ctaHref ? { label: ctaLabel, href: ctaHref } : undefined;
 
   return (
     <section
@@ -75,12 +79,12 @@ export default function BrandStory({
             {content.body.join(" ")}
           </p>
 
-          {content.cta ? (
+          {cta ? (
             <Link
-              href={content.cta.href}
+              href={cta.href}
               className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
             >
-              <MoreDetailButton>{content.cta.label}</MoreDetailButton>
+              <MoreDetailButton>{cta.label}</MoreDetailButton>
             </Link>
           ) : null}
         </div>

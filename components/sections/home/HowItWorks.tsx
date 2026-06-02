@@ -59,6 +59,10 @@ export default function HowItWorks({
 }: HowItWorksProps) {
   const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
   const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
+  const ctaLabel = content.cta?.label?.trim() || DEFAULT_CONTENT.cta?.label;
+  const ctaHref = content.cta?.href?.trim() || DEFAULT_CONTENT.cta?.href;
+  const cta =
+    ctaLabel && ctaHref ? { label: ctaLabel, href: ctaHref } : undefined;
 
   return (
     <section
@@ -99,13 +103,13 @@ export default function HowItWorks({
       >
         <p className="font-body text-p2 text-base-black">{content.body}</p>
 
-        {content.cta ? (
+        {cta ? (
           <Link
-            href={content.cta.href}
+            href={cta.href}
             className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
             style={{ filter: "invert(1)" }}
           >
-            <MoreDetailButton>{content.cta.label}</MoreDetailButton>
+            <MoreDetailButton>{cta.label}</MoreDetailButton>
           </Link>
         ) : null}
       </div>

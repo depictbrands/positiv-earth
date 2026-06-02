@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import Logo from "@/components/ui/Logo";
+
 const QUICK_LINKS = ["Home", "About", "Services", "FAQ", "Contact"] as const;
 
 type FooterProps = {
@@ -93,7 +95,7 @@ export default function Footer({ className }: FooterProps) {
       />
 
       <div className="relative mx-auto w-full max-w-[var(--size-footer-width)] px-6 py-14 sm:px-10 lg:px-[var(--spacing-footer-logo-offset-x)] lg:py-[var(--spacing-footer-logo-offset-top)]">
-        <span className="font-body text-footer-logo text-base-white">[logo]</span>
+        <Logo variant="footer" />
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:mt-[var(--spacing-footer-connect-gap)] lg:grid-cols-2 lg:gap-x-16">
           {/* Left column: connect, contact, quick links */}

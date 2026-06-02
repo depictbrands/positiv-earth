@@ -16,7 +16,10 @@ export default function QuizEntryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/12 px-6 py-3 text-center font-body text-cta-button text-base-white shadow-[inset_0_1px_0_rgba(255,255,255,0.28),0_10px_30px_rgba(24,24,24,0.12)] backdrop-blur-md transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+      // Apple-style liquid glass: heavy backdrop blur + saturation boost, a
+      // bright hairline border, a specular top highlight and soft depth shadow.
+      // All values come from the --*-glass design tokens (see globals.css).
+      className="inline-flex items-center justify-center rounded-full border border-glass-border bg-glass-surface px-6 py-3 text-center font-body text-cta-button text-base-white shadow-glass backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] transition-opacity hover:opacity-90 active:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white disabled:cursor-not-allowed disabled:opacity-50"
     >
       {children}
     </button>

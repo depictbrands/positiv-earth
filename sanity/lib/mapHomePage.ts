@@ -85,11 +85,16 @@ function mapImage(image?: SanityImageWithAlt) {
 }
 
 function mapCta(cta?: { label?: string; href?: string }) {
-  if (!cta?.label || !cta.href) {
+  const label = cta?.label?.trim();
+
+  if (!label) {
     return undefined;
   }
 
-  return { label: cta.label, href: cta.href };
+  return {
+    label,
+    href: cta?.href?.trim() || "#",
+  };
 }
 
 function mapHero(hero: NonNullable<SanityHomePage["hero"]>): HeroContent {

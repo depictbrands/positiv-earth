@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
+
+import Logo from "@/components/ui/Logo";
 
 const NAV_ITEMS = ["About", "Services", "FAQ", "Contact"] as const;
 
@@ -20,6 +22,94 @@ const glassStyle: CSSProperties = {
   WebkitBackdropFilter: "blur(var(--blur-header-glass))",
 };
 
+// The hover / active pill is half the bar's corner radius and keeps an equal
+// `offset` gap to the bar on top, bottom and (for the leftmost item) the left,
+// so it nests concentrically inside the rounded header.
+const PILL_CORNER = "calc(var(--radius-header-corner) / 2)";
+const PILL_OFFSET = "var(--spacing-header-active-pill-offset)";
+
+const pillClassName =
+  "pointer-events-none absolute opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100";
+
+const pillVisualStyle: CSSProperties = {
+  borderRadius: PILL_CORNER,
+  backgroundColor: "var(--color-header-active-pill)",
+};
+
+// Every desktop item shares the active pill's footprint: pill-width plus an
+// `offset` gutter on each side, so the nested pill is exactly
+// `--size-header-active-pill-width` wide with the label centered over it.
+const navCellStyle: CSSProperties = {
+  width:
+    "calc(var(--size-header-active-pill-width) + 2 * var(--spacing-header-active-pill-offset))",
+};
+
+const navButtonClassName =
+  "relative z-10 inline-flex items-center justify-center font-body text-nav text-base-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white";
+
+type HeaderNavButtonProps = {
+  children: ReactNode;
+  isActive?: boolean;
+  // "fixed": pill matches the design's pill-width and nests an equal `offset`
+  // gap on every side — shared by every desktop item so they all read like the
+  // active "About" pill. "menu": mobile stacked item — pill expands `offset`
+  // around the full-width button.
+  variant?: "fixed" | "menu";
+  className?: string;
+  buttonClassName?: string;
+  style?: CSSProperties;
+};
+
+const PILL_OFFSET_NEG = `calc(-1 * ${PILL_OFFSET})`;
+
+const pillInsetByVariant: Record<
+  NonNullable<HeaderNavButtonProps["variant"]>,
+  CSSProperties
+> = {
+  // Inset equally on all sides → offset gap top/bottom/left and a pill that is
+  // exactly `--size-header-active-pill-width` wide.
+  fixed: { top: PILL_OFFSET, right: PILL_OFFSET, bottom: PILL_OFFSET, left: PILL_OFFSET },
+  // Expand `offset` around the full-width mobile button.
+  menu: { top: PILL_OFFSET_NEG, right: PILL_OFFSET_NEG, bottom: PILL_OFFSET_NEG, left: PILL_OFFSET_NEG },
+};
+
+function HeaderNavButton({
+  children,
+  isActive = false,
+  variant = "fixed",
+  className,
+  buttonClassName,
+  style,
+}: HeaderNavButtonProps) {
+  const wrapperClassName =
+    variant === "menu"
+      ? "group relative"
+      : "group relative flex h-full items-center justify-center";
+
+  const pillStyle: CSSProperties = {
+    ...pillVisualStyle,
+    ...pillInsetByVariant[variant],
+  };
+
+  return (
+    <div className={cn(wrapperClassName, className)} style={style}>
+      <span
+        aria-hidden="true"
+        className={cn(pillClassName, isActive && "opacity-100")}
+        style={pillStyle}
+      />
+
+      <button
+        type="button"
+        aria-current={isActive ? "page" : undefined}
+        className={cn(navButtonClassName, buttonClassName)}
+      >
+        {children}
+      </button>
+    </div>
+  );
+}
+
 export default function Header({ className, style }: HeaderProps) {
   const [open, setOpen] = useState(false);
 
@@ -27,9 +117,8 @@ export default function Header({ className, style }: HeaderProps) {
     <header className={cn("relative", className)} style={style}>
       {/* Desktop: glass pill navigation */}
       <div
-        className="relative hidden lg:block"
+        className="relative hidden lg:block lg:w-fit lg:max-w-full"
         style={{
-          width: "var(--size-header-width)",
           height: "var(--size-header-height)",
         }}
       >
@@ -39,57 +128,26 @@ export default function Header({ className, style }: HeaderProps) {
           style={glassStyle}
         />
 
-        <div
-          aria-hidden="true"
-          className="absolute"
-          style={{
-            left: "var(--spacing-header-active-pill-offset)",
-            top: "var(--spacing-header-active-pill-offset)",
-            width: "var(--size-header-active-pill-width)",
-            height: "var(--size-header-active-pill-height)",
-            borderRadius: "var(--radius-header-active-pill-corner)",
-            backgroundColor: "var(--color-header-active-pill)",
-          }}
-        />
-
         <nav
           aria-label="Primary"
-          className="absolute inset-y-0 z-10 flex items-center text-base-white"
+          className="relative z-10 flex h-full items-center text-base-white"
           style={{
-            left: "var(--spacing-header-menu-left)",
-            right: "var(--spacing-header-menu-right)",
             gap: "var(--spacing-header-menu-gap)",
+            paddingRight: "var(--spacing-header-menu-right)",
           }}
         >
-          <button
-            type="button"
-            aria-current="page"
-            className="inline-flex items-center justify-center font-body text-nav text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-[var(--radius-header-active-pill-corner)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-            style={{
-              width: "var(--size-header-active-pill-width)",
-              height: "var(--size-header-active-pill-height)",
-            }}
-          >
+          <HeaderNavButton isActive style={navCellStyle}>
             About
-          </button>
+          </HeaderNavButton>
 
-          <button
-            type="button"
-            className="font-body text-nav text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-[var(--radius-header-active-pill-corner)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-          >
-            Services
-          </button>
+          <HeaderNavButton style={navCellStyle}>Services</HeaderNavButton>
 
-          <span className="font-body text-header-logo text-base-white">[logo]</span>
+          <Logo variant="header" priority className="shrink-0" />
 
           {NAV_ITEMS.slice(2).map((item) => (
-            <button
-              key={item}
-              type="button"
-              className="font-body text-nav text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-[var(--radius-header-active-pill-corner)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-            >
+            <HeaderNavButton key={item} style={navCellStyle}>
               {item}
-            </button>
+            </HeaderNavButton>
           ))}
         </nav>
       </div>
@@ -100,7 +158,7 @@ export default function Header({ className, style }: HeaderProps) {
           className="flex items-center gap-4 rounded-header-corner px-5"
           style={{ height: "var(--size-header-height)", ...glassStyle }}
         >
-          <span className="font-body text-header-logo text-base-white">[logo]</span>
+          <Logo variant="header" priority />
 
           <button
             type="button"
@@ -143,13 +201,14 @@ export default function Header({ className, style }: HeaderProps) {
             style={glassStyle}
           >
             {NAV_ITEMS.map((item) => (
-              <button
+              <HeaderNavButton
                 key={item}
-                type="button"
-                className="rounded-[var(--radius-header-active-pill-corner)] px-4 py-2 text-left font-body text-nav text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+                variant="menu"
+                className="w-full"
+                buttonClassName="w-full px-4 py-2 text-left"
               >
                 {item}
-              </button>
+              </HeaderNavButton>
             ))}
           </nav>
         ) : null}

@@ -377,6 +377,20 @@
   --shadow-footer-submit: 0 0 0.875rem 0 oklch(0 0 0 / 0.12);
 
   /*
+   * Apple-style "liquid glass" treatment (not from Figma; added per request).
+   * The look comes from a heavy backdrop blur paired with a saturation boost
+   * (--glass-saturate, applied via backdrop-saturate), a bright hairline
+   * border, a top specular highlight, and a soft outer depth shadow. The
+   * surface stays dark-leaning so white label text remains legible over the
+   * hero / CTA photography it sits on.
+   */
+  --blur-glass: 1.25rem;
+  --glass-saturate: 1.8;
+  --color-glass-surface: oklch(0.34 0 0 / 0.38);
+  --color-glass-border: oklch(1 0 0 / 0.4);
+  --shadow-glass: inset 0 0.0625rem 0 0 oklch(1 0 0 / 0.5), inset 0 -0.0625rem 0.0625rem 0 oklch(0 0 0 / 0.15), 0 0.5rem 1.5rem 0 oklch(0 0 0 / 0.28);
+
+  /*
    * Fluid display typography.
    * clamp(min, fluid-vw, max): the max equals the original desktop value and is
    * reached at the 1512px design width (1vw = 15.12px there), so desktop stays
