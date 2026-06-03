@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Merriweather, Open_Sans, Raleway } from "next/font/google";
+import { Merriweather, Merriweather_Sans, Open_Sans, Raleway } from "next/font/google";
 import "./globals.css";
 
 const merriweather = Merriweather({
@@ -7,6 +7,12 @@ const merriweather = Merriweather({
   subsets: ["latin"],
   weight: ["300", "400", "600", "700", "900"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+const merriweatherSans = Merriweather_Sans({
+  variable: "--ff-merriweather-sans",
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -35,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${merriweather.variable} ${raleway.variable} ${openSans.variable} h-full antialiased`}
+      className={`${merriweather.variable} ${merriweatherSans.variable} ${raleway.variable} ${openSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

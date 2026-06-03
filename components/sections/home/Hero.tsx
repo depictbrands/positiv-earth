@@ -5,6 +5,7 @@ import Image from "next/image";
 import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import SearchBar from "@/components/ui/SearchBar";
+import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { HeroContent } from "@/types/hero-content";
 
 const DEFAULT_IMAGE_URL =
@@ -45,6 +46,16 @@ function resolveHeroContent(content?: HeroContent): HeroContent {
 
 export default function Hero({ content }: HeroProps) {
   const resolved = resolveHeroContent(content);
+  const navHidden = useHideOnScroll();
+
+  // The top bar (Header + "Design Your Travel") pins to the viewport and slides
+  // up out of view on downward scroll, back in on upward scroll.
+  const topBarTransition =
+    "transition-transform duration-300 ease-out will-change-transform";
+  const topBarTransform = navHidden
+    ? "-translate-y-[200%]"
+    : "translate-y-0";
+
   return (
     <section
       className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]"
@@ -63,14 +74,17 @@ export default function Hero({ content }: HeroProps) {
         style={{ backgroundColor: "var(--color-hero-overlay)" }}
       />
 
-      {/* Top bar — desktop: nav centered at the top, quiz button pinned right */}
-      <div className="relative z-20 hidden lg:block">
-        <div className="absolute inset-x-0 top-6 flex justify-center">
+      {/* Top bar — desktop: nav centered at the top, quiz button pinned right.
+          Both pin to the viewport and hide/reveal with scroll direction. */}
+      <div className="hidden lg:block">
+        <div
+          className={`fixed inset-x-0 top-6 z-50 flex justify-center ${topBarTransition} ${topBarTransform}`}
+        >
           <Header />
         </div>
 
         <div
-          className="absolute top-6"
+          className={`fixed top-6 z-50 ${topBarTransition} ${topBarTransform}`}
           style={{
             left: "82.0767195767%",
           }}
@@ -79,8 +93,10 @@ export default function Hero({ content }: HeroProps) {
         </div>
       </div>
 
-      {/* Top bar — mobile / tablet flows in normal layout */}
-      <div className="relative z-20 flex items-start justify-between gap-4 px-5 pt-5 sm:px-8 lg:hidden">
+      {/* Top bar — mobile / tablet: pinned, hides/reveals with scroll direction */}
+      <div
+        className={`fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-4 px-5 pt-5 sm:px-8 lg:hidden ${topBarTransition} ${topBarTransform}`}
+      >
         <Header />
         <QuizEntryButton>Design Your Travel</QuizEntryButton>
       </div>

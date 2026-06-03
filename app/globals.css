@@ -19,6 +19,7 @@
  * card-corner           | --radius-card-corner                      | 10px
  * header-active-pill-corner | --radius-header-active-pill-corner    | 25px
  * Merriweather          | --font-merriweather                       | Merriweather
+ * Merriweather Sans     | --font-merriweather-sans                  | Merriweather Sans
  * Raleway               | --font-raleway                            | Raleway
  * Open Sans             | --font-open-sans                          | Open Sans
  * heading-1             | --text-heading-1                          | 150px
@@ -196,6 +197,43 @@
  * cta-content-gap       | --spacing-cta-content-gap                 | 46px
  * cta-height            | --size-cta-height                         | 711px
  * cta-heading-width     | --size-cta-heading-width                  | 1065px
+ * services-hero-heading-width | --size-services-hero-heading-width  | 579px
+ * three-services-width  | --size-three-services-width               | 1512px
+ * three-services-top    | --spacing-three-services-top              | 101px
+ * three-services-bottom | --spacing-three-services-bottom           | 247px
+ * three-services-row-gap | --spacing-three-services-row-gap         | 125px
+ * three-services-caption-gap | --spacing-three-services-caption-gap | 18px
+ * three-services-caption-inset | --spacing-three-services-caption-inset | 42px
+ * three-services-title-lift | --spacing-three-services-title-lift   | 88px (one heading-4 line)
+ * three-services-image-overlay | --color-three-services-image-overlay | rgba(0,0,0,0.1)
+ * cream-white           | --color-cream-white                       | #f4efe9
+ * contact-detail-ink    | --color-contact-detail-ink                | #373737
+ * contact-info-detail   | --text-contact-info-detail                | 36px
+ * contact-info-width    | --size-contact-info-width                 | 1416px
+ * contact-info-photos-width | --size-contact-info-photos-width      | 805px
+ * contact-info-photos-height | --size-contact-info-photos-height    | 716px
+ * contact-info-photo-width | --size-contact-info-photo-width        | 393px
+ * contact-info-photo-height | --size-contact-info-photo-height      | 468px
+ * contact-info-column-width | --size-contact-info-column-width      | 532px
+ * contact-info-social-icon | --size-contact-info-social-icon        | 36px
+ * contact-info-block-offset | --spacing-contact-info-block-offset   | 146px
+ * contact-info-side-offset | --spacing-contact-info-side-offset     | 48px
+ * contact-info-column-gap | --spacing-contact-info-column-gap       | 36px
+ * contact-info-details-gap | --spacing-contact-info-details-gap     | 40px
+ * contact-info-detail-gap | --spacing-contact-info-detail-gap       | 45px
+ * contact-info-photo-offset-x | --spacing-contact-info-photo-offset-x | 412px
+ * contact-info-photo-offset-y | --spacing-contact-info-photo-offset-y | 248px
+ * contact-info-social-gap | --spacing-contact-info-social-gap       | 17px
+ * faq-question          | --color-faq-question                      | #303030
+ * faq-answer            | --color-faq-answer                        | #515151
+ * faq-divider           | --color-faq-divider                       | rgba(48,48,48,0.18) (derived; Figma divider is an image fill with no bound variable)
+ * faq-width             | --size-faq-width                          | 1512px
+ * faq-heading-width     | --size-faq-heading-width                  | 356px
+ * faq-list-width        | --size-faq-list-width                     | 692px
+ * faq-top               | --spacing-faq-top                         | 88px
+ * faq-bottom            | --spacing-faq-bottom                      | 202px
+ * faq-item-gap          | --spacing-faq-item-gap                    | 24px
+ * faq-answer-gap        | --spacing-faq-answer-gap                  | 20px
  */
 
 @theme {
@@ -220,6 +258,12 @@
   --color-destination-card-scrim: oklch(0 0 0 / 0.4);
   --color-destination-card-divider: var(--color-base-white);
   --color-cta-overlay: oklch(0 0 0 / 0.25);
+  --color-three-services-image-overlay: oklch(0 0 0 / 0.1);
+  --color-cream-white: oklch(0.954 0.011 65.1);
+  --color-contact-detail-ink: oklch(0.338 0 0);
+  --color-faq-question: oklch(0.309 0 0);
+  --color-faq-answer: oklch(0.435 0 0);
+  --color-faq-divider: oklch(0.309 0 0 / 0.18);
 
   --radius-header-corner: 3.125rem;
   --radius-header-active-pill-corner: 1.5625rem;
@@ -292,6 +336,24 @@
   --spacing-testimonial-card-inset-top: 2.125rem;
   --spacing-testimonial-card-gap: 0.6875rem;
   --spacing-cta-content-gap: 2.875rem;
+  --spacing-three-services-top: 6.3125rem;
+  --spacing-three-services-bottom: 15.4375rem;
+  --spacing-three-services-row-gap: 7.8125rem;
+  --spacing-three-services-caption-gap: 1.125rem;
+  --spacing-three-services-caption-inset: 2.625rem;
+  --spacing-three-services-title-lift: clamp(2.83rem, 5.82vw, 5.5rem);
+  --spacing-contact-info-block-offset: 9.125rem;
+  --spacing-contact-info-side-offset: 3rem;
+  --spacing-contact-info-column-gap: 2.25rem;
+  --spacing-contact-info-details-gap: 2.5rem;
+  --spacing-contact-info-detail-gap: 2.8125rem;
+  --spacing-contact-info-photo-offset-x: 25.75rem;
+  --spacing-contact-info-photo-offset-y: 15.5rem;
+  --spacing-contact-info-social-gap: 1.0625rem;
+  --spacing-faq-top: 5.5rem;
+  --spacing-faq-bottom: 12.625rem;
+  --spacing-faq-item-gap: 1.5rem;
+  --spacing-faq-answer-gap: 1.25rem;
 
   --size-destination-card-copy-width: 24.1875rem;
   --size-destination-card-title-width: 18.4375rem;
@@ -362,8 +424,21 @@
   --size-testimonial-card-avatar-size: 4rem;
   --size-cta-height: 44.4375rem;
   --size-cta-heading-width: 66.5625rem;
+  --size-services-hero-heading-width: 36.1875rem;
+  --size-three-services-width: 94.5rem;
+  --size-contact-info-width: 88.5rem;
+  --size-contact-info-photos-width: 50.3125rem;
+  --size-contact-info-photos-height: 44.75rem;
+  --size-contact-info-photo-width: 24.5625rem;
+  --size-contact-info-photo-height: 29.25rem;
+  --size-contact-info-column-width: 33.25rem;
+  --size-contact-info-social-icon: 2.25rem;
+  --size-faq-width: 94.5rem;
+  --size-faq-heading-width: 22.25rem;
+  --size-faq-list-width: 43.25rem;
 
   --font-merriweather: var(--ff-merriweather), "Merriweather", serif;
+  --font-merriweather-sans: var(--ff-merriweather-sans), "Merriweather Sans", sans-serif;
   --font-raleway: var(--ff-raleway), "Raleway", sans-serif;
   --font-open-sans: var(--ff-open-sans), "Open Sans", sans-serif;
   
@@ -532,6 +607,11 @@
   --text-quick-link-footer--line-height: 1.5625rem;
   --text-quick-link-footer--letter-spacing: 0em;
   --text-quick-link-footer--font-weight: 400;
+
+  --text-contact-info-detail: clamp(1.5rem, 2.38vw, 2.25rem);
+  --text-contact-info-detail--line-height: 1.25;
+  --text-contact-info-detail--letter-spacing: 0em;
+  --text-contact-info-detail--font-weight: 400;
 }
 
 html {

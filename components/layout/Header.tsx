@@ -1,10 +1,17 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState, type CSSProperties, type ReactNode } from "react";
 
 import Logo from "@/components/ui/Logo";
 
-const NAV_ITEMS = ["About", "Services", "FAQ", "Contact"] as const;
+const NAV_ITEMS = [
+  { label: "About" },
+  { label: "Services", href: "/services" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
+] as const;
 
 type HeaderProps = {
   className?: string;
@@ -49,7 +56,9 @@ const navButtonClassName =
 
 type HeaderNavButtonProps = {
   children: ReactNode;
+  href?: string;
   isActive?: boolean;
+  onNavigate?: () => void;
   // "fixed": pill matches the design's pill-width and nests an equal `offset`
   // gap on every side — shared by every desktop item so they all read like the
   // active "About" pill. "menu": mobile stacked item — pill expands `offset`
@@ -75,7 +84,9 @@ const pillInsetByVariant: Record<
 
 function HeaderNavButton({
   children,
+  href,
   isActive = false,
+  onNavigate,
   variant = "fixed",
   className,
   buttonClassName,
@@ -99,19 +110,34 @@ function HeaderNavButton({
         style={pillStyle}
       />
 
-      <button
-        type="button"
-        aria-current={isActive ? "page" : undefined}
-        className={cn(navButtonClassName, buttonClassName)}
-      >
-        {children}
-      </button>
+      {href ? (
+        <Link
+          href={href}
+          aria-current={isActive ? "page" : undefined}
+          className={cn(navButtonClassName, buttonClassName)}
+          onClick={onNavigate}
+        >
+          {children}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          aria-current={isActive ? "page" : undefined}
+          className={cn(navButtonClassName, buttonClassName)}
+          onClick={onNavigate}
+        >
+          {children}
+        </button>
+      )}
     </div>
   );
 }
 
 export default function Header({ className, style }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  const closeMenu = () => setOpen(false);
 
   return (
     <header className={cn("relative", className)} style={style}>
@@ -130,23 +156,33 @@ export default function Header({ className, style }: HeaderProps) {
 
         <nav
           aria-label="Primary"
-          className="relative z-10 flex h-full items-center text-base-white"
+          className="relative z-10 flex h-full items-center gap-2 text-base-white"
           style={{
-            gap: "var(--spacing-header-menu-gap)",
             paddingRight: "var(--spacing-header-menu-right)",
           }}
         >
-          <HeaderNavButton isActive style={navCellStyle}>
-            About
+          <HeaderNavButton style={navCellStyle}>
+            {NAV_ITEMS[0].label}
           </HeaderNavButton>
 
-          <HeaderNavButton style={navCellStyle}>Services</HeaderNavButton>
+          <HeaderNavButton
+            style={navCellStyle}
+            href={NAV_ITEMS[1].href}
+            isActive={pathname === NAV_ITEMS[1].href}
+          >
+            {NAV_ITEMS[1].label}
+          </HeaderNavButton>
 
           <Logo variant="header" priority className="shrink-0" />
 
           {NAV_ITEMS.slice(2).map((item) => (
-            <HeaderNavButton key={item} style={navCellStyle}>
-              {item}
+            <HeaderNavButton
+              key={item.label}
+              style={navCellStyle}
+              href={"href" in item ? item.href : undefined}
+              isActive={"href" in item ? pathname === item.href : false}
+            >
+              {item.label}
             </HeaderNavButton>
           ))}
         </nav>
@@ -202,12 +238,15 @@ export default function Header({ className, style }: HeaderProps) {
           >
             {NAV_ITEMS.map((item) => (
               <HeaderNavButton
-                key={item}
+                key={item.label}
                 variant="menu"
                 className="w-full"
                 buttonClassName="w-full px-4 py-2 text-left"
+                href={"href" in item ? item.href : undefined}
+                isActive={"href" in item ? pathname === item.href : false}
+                onNavigate={closeMenu}
               >
-                {item}
+                {item.label}
               </HeaderNavButton>
             ))}
           </nav>
