@@ -1,8 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-
-const LOGO_WIDTH = 649;
-const LOGO_HEIGHT = 141;
 
 type LogoProps = {
   variant?: "header" | "footer";
@@ -19,10 +15,11 @@ export default function Logo({
   variant = "header",
   className,
   imageClassName,
-  priority = false,
 }: LogoProps) {
-  const heightClass =
-    variant === "footer" ? "h-[var(--text-footer-logo)]" : "h-[var(--text-header-logo)]";
+  const textClass =
+    variant === "footer"
+      ? "font-display text-footer-logo text-base-white"
+      : "font-display text-header-logo text-base-white";
 
   return (
     <Link
@@ -33,14 +30,7 @@ export default function Logo({
         className,
       )}
     >
-      <Image
-        src="/logo.png"
-        alt="Positiv Earth"
-        width={LOGO_WIDTH}
-        height={LOGO_HEIGHT}
-        priority={priority}
-        className={cn("w-auto brightness-0 invert", heightClass, imageClassName)}
-      />
+      <span className={cn(textClass, imageClassName)}>[logo]</span>
     </Link>
   );
 }

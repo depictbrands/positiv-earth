@@ -65,7 +65,7 @@ function ServiceRow({ service, reversed = false }: ServiceRowProps) {
   return (
     <article
       className={cn(
-        "flex flex-col",
+        "relative flex flex-col",
         reversed ? "items-end" : "items-start",
       )}
     >
@@ -73,7 +73,7 @@ function ServiceRow({ service, reversed = false }: ServiceRowProps) {
           only on the inner corner so it bleeds to the outer edge. */}
       <div
         className={cn(
-          "relative aspect-[608/339] w-full overflow-hidden lg:w-[80.42%]",
+          "relative z-10 aspect-[608/339] w-full overflow-hidden lg:w-[80.42%]",
           reversed
             ? "rounded-l-[var(--radius-card-corner)]"
             : "rounded-r-[var(--radius-card-corner)]",
@@ -88,29 +88,60 @@ function ServiceRow({ service, reversed = false }: ServiceRowProps) {
         {reversed ? (
           <div
             aria-hidden="true"
-            className="absolute inset-0"
+            className="absolute inset-0 z-[1]"
             style={{
               backgroundColor: "var(--color-three-services-image-overlay)",
             }}
           />
         ) : null}
+        {/* Lead word aligns horizontally with the black line in the h3 below. */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            "absolute bottom-0 z-10 font-display text-heading-4 text-base-white",
+            reversed
+              ? "right-0 w-max text-left lg:mr-[var(--spacing-three-services-caption-inset)]"
+              : "left-0 lg:ml-[var(--spacing-three-services-caption-inset)]",
+          )}
+        >
+          {reversed ? (
+            leadWord
+          ) : (
+            <>
+              {/* Match the h3 width so the lead word's right edge lines up with the black word. */}
+              {restWords ? (
+                <span
+                  className="block opacity-0 select-none"
+                  aria-hidden="true"
+                >
+                  {restWords}
+                </span>
+              ) : null}
+              <span className="block text-right">{leadWord}</span>
+            </>
+          )}
+        </span>
       </div>
 
-      {/* Caption lifts up by one title line so the white lead word straddles the
-          image's bottom edge and the black remainder drops just below it. */}
+      {/* Caption lifts up by one title line so the black remainder drops just
+          below the photo while the white lead word stays on the image above. */}
       <div
         className={cn(
-          "flex w-full flex-col gap-[var(--spacing-three-services-caption-gap)] mt-[calc(var(--spacing-three-services-title-lift)*-1)] lg:items-end lg:px-[var(--spacing-three-services-caption-inset)]",
+          "relative z-0 flex w-full flex-col gap-[var(--spacing-three-services-caption-gap)] mt-[calc(var(--spacing-three-services-title-lift)*-1)] lg:items-end lg:px-[var(--spacing-three-services-caption-inset)]",
           reversed ? "items-end lg:flex-row-reverse" : "items-start lg:flex-row",
         )}
       >
         <h3
+          aria-label={service.title}
           className={cn(
             "shrink-0 font-display text-heading-4",
             reversed ? "text-left" : "text-right",
           )}
         >
-          <span className="block text-base-white">{leadWord}</span>
+          {/* Invisible spacer keeps the black line aligned with the design grid. */}
+          <span className="block opacity-0 select-none" aria-hidden="true">
+            {leadWord}
+          </span>
           {restWords ? (
             <span className="block text-base-black">{restWords}</span>
           ) : null}

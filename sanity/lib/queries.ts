@@ -107,6 +107,18 @@ export const FAQ_PAGE_QUERY = `*[_type == "faqPage" && _id == "faqPage"][0]{
   }
 }`;
 
+export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "aboutPage"][0]{
+  hero {
+    lead,
+    name,
+    role,
+    backgroundImage {
+      asset,
+      alt
+    }
+  }
+}`;
+
 export const CONTACT_PAGE_QUERY = `*[_type == "contactPage" && _id == "contactPage"][0]{
   hero {
     headline,

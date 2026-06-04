@@ -157,9 +157,6 @@ export default function Header({ className, style }: HeaderProps) {
         <nav
           aria-label="Primary"
           className="relative z-10 flex h-full items-center gap-2 text-base-white"
-          style={{
-            paddingRight: "var(--spacing-header-menu-right)",
-          }}
         >
           <HeaderNavButton style={navCellStyle}>
             {NAV_ITEMS[0].label}

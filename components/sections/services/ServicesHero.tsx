@@ -32,8 +32,36 @@ function resolveServicesHeroContent(
   };
 }
 
+// The headline is a staggered three-word display (Figma node 731:429/432/433):
+// a small lead word, a large emphasized middle word, and a small trailing word.
+// We derive the three parts from the single headline string so the CMS field
+// stays a plain string. "Cultural-First" is one (hyphenated) token, so the
+// default "Luxury Cultural-First Planning" splits cleanly into three.
+function splitHeadline(headline: string): {
+  lead: string;
+  emphasis: string;
+  trail: string;
+} {
+  const words = headline.trim().split(/\s+/).filter(Boolean);
+
+  if (words.length >= 3) {
+    return {
+      lead: words[0],
+      emphasis: words.slice(1, -1).join(" "),
+      trail: words[words.length - 1],
+    };
+  }
+
+  if (words.length === 2) {
+    return { lead: words[0], emphasis: words[1], trail: "" };
+  }
+
+  return { lead: "", emphasis: words[0] ?? "", trail: "" };
+}
+
 export default function ServicesHero({ content }: ServicesHeroProps) {
   const resolved = resolveServicesHeroContent(content);
+  const { lead, emphasis, trail } = splitHeadline(resolved.headline);
   const navHidden = useHideOnScroll();
 
   // The top bar (Header + "Design Your Travel") matches the home hero exactly:
@@ -85,15 +113,46 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
         <QuizEntryButton>Design Your Travel</QuizEntryButton>
       </div>
 
-      {/* Centered hero title */}
-      <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white">
-        <h1
-          className="mx-auto w-full font-display text-heading-2 text-base-white"
-          style={{ maxWidth: "var(--size-services-hero-heading-width)" }}
+      {/* Hero title — staggered display composition (Figma node 731:429/432/433):
+          small lead word, large emphasized middle, small trailing word. The
+          desktop percentages reproduce each word's center point within the
+          1512×982 frame so the layout scales fluidly; below lg it collapses to a
+          centered stack. A single sr-only <h1> carries the full title. */}
+      <h1 className="relative z-10 flex w-full flex-1 flex-col font-display text-base-white">
+        <span className="sr-only">{resolved.headline}</span>
+
+        {/* Mobile / tablet: centered stack */}
+        <span
+          aria-hidden="true"
+          className="flex flex-1 flex-col items-center justify-center gap-2 px-6 text-center lg:hidden"
         >
-          {resolved.headline}
-        </h1>
-      </div>
+          {lead ? <span className="text-heading-2">{lead}</span> : null}
+          {emphasis ? <span className="text-heading-1">{emphasis}</span> : null}
+          {trail ? <span className="text-heading-2">{trail}</span> : null}
+        </span>
+
+        {/* Desktop: staggered diagonal composition */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 hidden lg:block"
+        >
+          {lead ? (
+            <span className="absolute left-[32.14%] top-[35.39%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
+              {lead}
+            </span>
+          ) : null}
+          {emphasis ? (
+            <span className="absolute left-[50.23%] top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-1">
+              {emphasis}
+            </span>
+          ) : null}
+          {trail ? (
+            <span className="absolute left-[53.47%] top-[64.61%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
+              {trail}
+            </span>
+          ) : null}
+        </span>
+      </h1>
     </section>
   );
 }

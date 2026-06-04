@@ -73,9 +73,6 @@
  * header-height         | --size-header-height                      | 56px
  * header-active-pill-width | --size-header-active-pill-width        | 99px
  * header-active-pill-height | --size-header-active-pill-height      | 46px
- * header-menu-left      | --spacing-header-menu-left                | 31px
- * header-menu-right     | --spacing-header-menu-right               | 35px
- * header-menu-gap       | --spacing-header-menu-gap                 | 43px
  * header-active-pill-offset | --spacing-header-active-pill-offset   | 5px
  * header-glass-blur     | --blur-header-glass                       | 2px
  * testimonial-card-width | --size-testimonial-card-width          | 384px
@@ -271,9 +268,6 @@
   --radius-search-button-corner: 3rem;
   --radius-card-corner: 0.625rem;
 
-  --spacing-header-menu-left: 1.9375rem;
-  --spacing-header-menu-right: 2.1875rem;
-  --spacing-header-menu-gap: 2.6875rem;
   --spacing-header-active-pill-offset: 0.3125rem;
   --spacing-search-bar-padding-x: 1.5rem;
   --spacing-search-bar-segment-gap: 1rem;

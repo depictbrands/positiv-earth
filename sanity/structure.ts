@@ -26,11 +26,16 @@ export const structure: StructureResolver = (S) =>
         .child(
           S.document().schemaType("contactPage").documentId("contactPage"),
         ),
+      S.listItem()
+        .title("About page")
+        .id("aboutPage")
+        .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
       ...S.documentTypeListItems().filter(
         (item) =>
           item.getId() !== "homePage" &&
           item.getId() !== "servicesPage" &&
           item.getId() !== "faqPage" &&
-          item.getId() !== "contactPage",
+          item.getId() !== "contactPage" &&
+          item.getId() !== "aboutPage",
       ),
     ]);

@@ -68,17 +68,28 @@ function mapFaq(section: NonNullable<SanityFaqPage["faq"]>): FaqContent {
 }
 
 export type FaqPageContent = {
-  hero: FaqHeroContent;
-  faq: FaqContent;
+  hero?: FaqHeroContent;
+  faq?: FaqContent;
 };
 
 export function mapFaqPage(data: SanityFaqPage | null): FaqPageContent | null {
-  if (!data?.hero || !data.faq) {
+  if (!data) {
     return null;
   }
 
-  return {
-    hero: mapHero(data.hero),
-    faq: mapFaq(data.faq),
-  };
+  const result: FaqPageContent = {};
+
+  if (data.hero) {
+    result.hero = mapHero(data.hero);
+  }
+
+  if (data.faq) {
+    result.faq = mapFaq(data.faq);
+  }
+
+  if (!result.hero && !result.faq) {
+    return null;
+  }
+
+  return result;
 }

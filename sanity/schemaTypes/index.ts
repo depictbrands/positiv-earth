@@ -1,5 +1,6 @@
 import { type SchemaTypeDefinition } from "sanity";
 
+import { aboutPage } from "./documents/aboutPage";
 import { contactPage } from "./documents/contactPage";
 import { faqPage } from "./documents/faqPage";
 import { homePage } from "./documents/homePage";
@@ -11,6 +12,7 @@ import { faqItem } from "./objects/faqItem";
 import { imageWithAlt } from "./objects/imageWithAlt";
 import { service } from "./objects/service";
 import { testimonial } from "./objects/testimonial";
+import { aboutHeroSection } from "./sections/aboutHeroSection";
 import { brandStorySection } from "./sections/brandStorySection";
 import { contactHeroSection } from "./sections/contactHeroSection";
 import { contactInfoSection } from "./sections/contactInfoSection";
@@ -45,9 +47,11 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faqSection,
     contactHeroSection,
     contactInfoSection,
+    aboutHeroSection,
     homePage,
     servicesPage,
     faqPage,
     contactPage,
+    aboutPage,
   ],
 };
