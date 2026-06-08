@@ -231,6 +231,10 @@
  * faq-bottom            | --spacing-faq-bottom                      | 202px
  * faq-item-gap          | --spacing-faq-item-gap                    | 24px
  * faq-answer-gap        | --spacing-faq-answer-gap                  | 20px
+ * about-scene-a         | --color-about-scene-a                     | #c7b97a (olive — MOTION_SPEC §5 Scene A)
+ * about-scene-b         | --color-about-scene-b                     | #7297ae (blue — MOTION_SPEC §5 Scene B)
+ * about-scene-c         | --color-about-scene-c                     | #c47066 (coral — MOTION_SPEC §5 Scene C)
+ * about-cta-band-height | --size-about-cta-band-height              | 580px (MOTION_SPEC §7 bandH)
  */
 
 @theme {
@@ -261,6 +265,22 @@
   --color-faq-question: oklch(0.309 0 0);
   --color-faq-answer: oklch(0.435 0 0);
   --color-faq-divider: oklch(0.309 0 0 / 0.18);
+
+  /*
+   * About page scene backgrounds (MOTION_SPEC §5). Kept as the exact sRGB hex
+   * from Figma Dev Mode (not converted to oklch) so the scroll-driven color
+   * interpolation between scenes stays faithful to the spec.
+   */
+  --color-about-scene-a: #c7b97a;
+  --color-about-scene-b: #7297ae;
+  --color-about-scene-c: #c47066;
+
+  /*
+   * Burnt-orange emphasis colour for the intro stat lines (Figma about-2 —
+   * "12 years", "Psychology", "100+"). APPROXIMATED from the screenshot; no
+   * matching token existed. Confirm the exact hex from Figma Dev Mode.
+   */
+  --color-about-accent: #c15a34;
 
   --radius-header-corner: 3.125rem;
   --radius-header-active-pill-corner: 1.5625rem;
@@ -430,6 +450,10 @@
   --size-faq-width: 94.5rem;
   --size-faq-heading-width: 22.25rem;
   --size-faq-list-width: 43.25rem;
+  --size-about-cta-band-height: 36.25rem;
+  /* About intro (about-2) — APPROXIMATED from screenshot; confirm in Figma. */
+  --size-about-intro-portrait-width: 27.5rem;
+  --size-about-intro-stat-width: 24rem;
 
   --font-merriweather: var(--ff-merriweather), "Merriweather", serif;
   --font-merriweather-sans: var(--ff-merriweather-sans), "Merriweather Sans", sans-serif;
