@@ -22,6 +22,15 @@ type AboutHeroProps = {
   content?: AboutHeroContent;
 };
 
+// The role sits in two lines in the design (node 411:809 / 411:801), broken at
+// the ampersand: "Your Travel Expert" / "& Cultural Connector". Split on the
+// first " & " so the "&" leads the second line; fall back to a single line.
+function splitRole(role: string): string[] {
+  const idx = role.indexOf(" & ");
+  if (idx === -1) return [role];
+  return [role.slice(0, idx), `& ${role.slice(idx + 3)}`];
+}
+
 function resolveAboutHeroContent(content?: AboutHeroContent): AboutHeroContent {
   return {
     lead: content?.lead?.trim() || DEFAULT_CONTENT.lead,
@@ -36,6 +45,7 @@ function resolveAboutHeroContent(content?: AboutHeroContent): AboutHeroContent {
 
 export default function AboutHero({ content }: AboutHeroProps) {
   const resolved = resolveAboutHeroContent(content);
+  const roleLines = splitRole(resolved.role);
   const navHidden = useHideOnScroll();
 
   // The top bar (Header + "Design Your Travel") matches the other heroes
@@ -88,23 +98,60 @@ export default function AboutHero({ content }: AboutHeroProps) {
         <QuizEntryButton>Design Your Travel</QuizEntryButton>
       </div>
 
-      {/* Hero title — centered composition (Figma node 722:951): a small lead
-          word ("Meet"), the large emphasized name ("JORGE"), and a small
-          trailing role. The pieces flow in a centered, wrapping row baseline-
-          aligned to the name; on the 1512px frame the role wraps under the
-          name as in the design, and on small screens the words stack. A single
-          sr-only <h1> carries the full readable title. */}
-      <h1 className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 text-center font-display text-base-white">
+      {/* Hero title — Figma node 411:813. Same responsive pattern as home Hero:
+          mobile/tablet stacks each line centred; desktop is a single centred row
+          of lead + name + two-line role block with a 36px gap. sr-only h1 text
+          carries the readable title. */}
+      <h1 className="relative z-10 flex w-full flex-1 items-center justify-center px-6 font-display text-base-white">
         <span className="sr-only">{`${resolved.lead} ${resolved.name}, ${resolved.role}`}</span>
 
-        <span
+        <div
           aria-hidden="true"
-          className="flex max-w-[var(--size-hero-content-width)] flex-wrap items-center justify-center gap-x-[var(--spacing-hero-headline-gap)] gap-y-2"
+          className="mx-auto flex w-full flex-col items-center leading-none"
+          style={{ maxWidth: "var(--size-abouthero-content-width)" }}
         >
-          <span className="text-heading-3">{resolved.lead}</span>
-          <span className="text-heading-1 uppercase">{resolved.name}</span>
-          <span className="text-heading-3">{resolved.role}</span>
-        </span>
+          {/* Mobile / tablet: centred stack */}
+          <div className="flex flex-col items-center text-center lg:hidden">
+            <span className="text-heading-3">{resolved.lead}</span>
+            <span className="text-heading-1 uppercase">{resolved.name}</span>
+            {roleLines.map((line) => (
+              <span key={line} className="text-heading-3">
+                {line}
+              </span>
+            ))}
+          </div>
+
+          {/* Desktop: a 3-col / 2-row grid. Row 1 holds lead + name + the first
+              role line, vertically centred together (so the first line sits on
+              the same axis as the name). Row 2 holds the remaining role line(s)
+              under the role column, separated by a large row gap. The grid's
+              full height (incl. the second line) is what gets centred by the
+              h1's items-center, so the whole headline is vertically centred. */}
+          <div
+            className="hidden lg:grid lg:grid-cols-[auto_auto_auto] lg:grid-rows-[auto_auto] lg:items-center"
+            style={{
+              columnGap: "var(--spacing-hero-headline-gap)",
+              rowGap: "var(--spacing-abouthero-role-gap)",
+            }}
+          >
+            <span className="col-start-1 row-start-1 shrink-0 text-heading-3">
+              {resolved.lead}
+            </span>
+            <span className="col-start-2 row-start-1 shrink-0 text-heading-1 uppercase">
+              {resolved.name}
+            </span>
+            <span className="col-start-3 row-start-1 whitespace-nowrap text-left text-heading-3">
+              {roleLines[0]}
+            </span>
+            {roleLines.length > 1 && (
+              <span className="col-start-3 row-start-2 flex flex-col whitespace-nowrap text-left text-heading-3">
+                {roleLines.slice(1).map((line) => (
+                  <span key={line}>{line}</span>
+                ))}
+              </span>
+            )}
+          </div>
+        </div>
       </h1>
     </section>
   );

@@ -1,4 +1,4 @@
-import AboutHero from "@/components/sections/AboutHero";
+import AboutHero from "@/components/sections/about/AboutHero";
 import AboutMotionProvider from "@/components/sections/about/AboutMotionProvider";
 import AboutIntro from "@/components/sections/about/AboutIntro";
 import AboutSceneStage from "@/components/sections/about/AboutSceneStage";
@@ -42,22 +42,47 @@ const SCENE_C: AboutSceneContent = {
   ],
 };
 
+// Overlay any CMS-provided scene fields onto the local defaults, field by field,
+// so a partially-filled document still renders cleanly.
+function mergeScene(
+  fallback: AboutSceneContent,
+  sanity?: AboutSceneContent,
+): AboutSceneContent {
+  if (!sanity) return fallback;
+  const image = (i: number) => ({
+    imageUrl: sanity.images?.[i]?.imageUrl?.trim() || fallback.images[i].imageUrl,
+    imageAlt: sanity.images?.[i]?.imageAlt?.trim() || fallback.images[i].imageAlt,
+  });
+  return {
+    headline: sanity.headline?.trim() || fallback.headline,
+    body: sanity.body?.trim() || fallback.body,
+    images: [image(0), image(1)],
+  };
+}
+
 export default async function AboutPage() {
   const sanityAboutPage = client ? await client.fetch(ABOUT_PAGE_QUERY) : null;
 
   const content = mapAboutPage(sanityAboutPage);
 
   // Hero (about-1) → Intro (about-2, System 1) → pinned scene layer A/B/C
-  // (about-3..7, Systems 2+3) → Footer CTA band (about-8/9, travel-up) → dark
+  // (about-3..7, Systems 2+3) → Footer CTA band (about-8/9) → dark
   // footer. AboutMotionProvider sets up the shared Lenis + ScrollTrigger source
-  // and the dev debug overlay.
+  // and the dev debug overlay. Content comes from Sanity, falling back to the
+  // defaults baked into each section.
   return (
     <main className="flex w-full flex-col items-center">
       <AboutMotionProvider>
         <AboutHero content={content?.hero} />
-        <AboutIntro />
-        <AboutSceneStage scenes={[SCENE_A, SCENE_B, SCENE_C]} />
-        <AboutCTA />
+        <AboutIntro content={content?.intro} />
+        <AboutSceneStage
+          scenes={[
+            mergeScene(SCENE_A, content?.sceneA),
+            mergeScene(SCENE_B, content?.sceneB),
+            mergeScene(SCENE_C, content?.sceneC),
+          ]}
+        />
+        <AboutCTA content={content?.cta} />
         <Footer />
       </AboutMotionProvider>
     </main>

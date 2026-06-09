@@ -5,6 +5,7 @@ import { contactPage } from "./documents/contactPage";
 import { faqPage } from "./documents/faqPage";
 import { homePage } from "./documents/homePage";
 import { servicesPage } from "./documents/servicesPage";
+import { aboutIntroStat } from "./objects/aboutIntroStat";
 import { contactSocial } from "./objects/contactSocial";
 import { ctaLink } from "./objects/ctaLink";
 import { destination } from "./objects/destination";
@@ -13,6 +14,8 @@ import { imageWithAlt } from "./objects/imageWithAlt";
 import { service } from "./objects/service";
 import { testimonial } from "./objects/testimonial";
 import { aboutHeroSection } from "./sections/aboutHeroSection";
+import { aboutIntroSection } from "./sections/aboutIntroSection";
+import { aboutSceneSection } from "./sections/aboutSceneSection";
 import { brandStorySection } from "./sections/brandStorySection";
 import { contactHeroSection } from "./sections/contactHeroSection";
 import { contactInfoSection } from "./sections/contactInfoSection";
@@ -35,6 +38,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     service,
     faqItem,
     contactSocial,
+    aboutIntroStat,
     heroSection,
     brandStorySection,
     howItWorksSection,
@@ -48,6 +52,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactHeroSection,
     contactInfoSection,
     aboutHeroSection,
+    aboutIntroSection,
+    aboutSceneSection,
     homePage,
     servicesPage,
     faqPage,

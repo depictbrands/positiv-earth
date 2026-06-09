@@ -5,8 +5,12 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { INTRO_LINES } from "@/lib/about/aboutMotionSpec";
-import { easeOut, rangeProgress } from "@/lib/about/motion";
+import {
+  INTRO_DURATION_MS,
+  INTRO_EASE_BEZIER,
+  INTRO_LINES,
+} from "@/lib/about/aboutMotionSpec";
+import { cubicBezier } from "@/lib/about/motion";
 import { setDebugValue } from "@/lib/about/debugStore";
 import type { AboutIntroContent } from "@/types/about-intro-content";
 
@@ -15,7 +19,7 @@ if (typeof window !== "undefined") {
 }
 
 const DEFAULT_PORTRAIT_URL =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 540"><defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="%237fa9d0"/><stop offset="1" stop-color="%23cfe0ee"/></linearGradient></defs><rect width="440" height="540" fill="url(%23sky)"/><path d="M0 360L150 230L300 360L440 270V540H0V360Z" fill="%236f7d52"/><path d="M0 430L180 340L360 430L440 380V540H0V430Z" fill="%23566441"/></svg>';
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 439 519"><defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="%237fa9d0"/><stop offset="1" stop-color="%23cfe0ee"/></linearGradient></defs><rect width="439" height="519" fill="url(%23sky)"/><path d="M0 350L150 220L300 350L439 260V519H0V350Z" fill="%236f7d52"/><path d="M0 420L180 330L360 420L439 370V519H0V420Z" fill="%23566441"/></svg>';
 
 const DEFAULT_CONTENT: AboutIntroContent = {
   stats: [
@@ -27,12 +31,29 @@ const DEFAULT_CONTENT: AboutIntroContent = {
   portraitImageAlt: "Jorge exploring a mountain-top archaeological site",
 };
 
-// Resting (end) positions for each stat, from MOTION_SPEC §4 — the about-2
-// layout System 1 lifts the lines into.
+// Resting (end) positions for each stat, from MOTION_SPEC §4 / Figma node 40:18.
 const REST_POSITIONS = INTRO_LINES.map((l) => ({
   top: `${l.endYvh}vh`,
   left: `${l.endXvw}vw`,
 }));
+
+// Per-line box width (as a % of the 1512 frame) and text alignment, straight
+// from the about-2 text boxes: line 1 662px left, line 2 498px left, line 3
+// 767px right-aligned. The width drives the exact wrap from the design.
+const STAT_LAYOUT = [
+  { width: "43.783vw", align: "left", stacked: false },
+  { width: "32.937vw", align: "left", stacked: false },
+  // Line 3 ("100+ destinations experience") is right-aligned and the two parts
+  // sit on their own lines in the design (node 40:51), not inline-wrapped.
+  { width: "50.728vw", align: "right", stacked: true },
+] as const;
+
+// Portrait box (439×519px) top-left at (448, 274) in the frame → %s of 1512×982.
+const PORTRAIT = {
+  left: "29.630vw",
+  top: "27.902vh",
+  width: "min(29.034vw, var(--size-about-intro-portrait-width))",
+} as const;
 
 type AboutIntroProps = {
   content?: AboutIntroContent;
@@ -53,13 +74,35 @@ function resolveIntroContent(content?: AboutIntroContent): AboutIntroContent {
   };
 }
 
-function Stat({ emphasis, rest }: { emphasis: string; rest: string }) {
+// A two-tone credential line (node 40:18): burnt-orange Merriweather italic
+// emphasis (96px) + Raleway SemiBold rest (64px), sharing an 80px line box.
+function Stat({
+  emphasis,
+  rest,
+  stacked = false,
+}: {
+  emphasis: string;
+  rest: string;
+  stacked?: boolean;
+}) {
+  const emphasisCls =
+    "font-display italic text-about-stat-emphasis text-[color:var(--color-about-accent)]";
+  const restCls = "font-body text-about-stat-rest text-base-black";
+
+  if (stacked) {
+    return (
+      <p className="m-0">
+        <span className={`block ${emphasisCls}`}>{emphasis}</span>
+        <span className={`block ${restCls}`}>{rest}</span>
+      </p>
+    );
+  }
+
   return (
-    <p className="text-heading-3 leading-tight">
-      <span className="font-display italic text-[color:var(--color-about-accent)]">
-        {emphasis}
-      </span>{" "}
-      <span className="font-merriweather-sans font-bold text-base-black">
+    <p className="m-0">
+      <span className={emphasisCls}>{emphasis}</span>
+      <span className={restCls}>
+        {" "}
         {rest}
       </span>
     </p>
@@ -77,23 +120,12 @@ export default function AboutIntro({ content }: AboutIntroProps) {
     const section = sectionRef.current;
     if (!section) return;
 
-    // System 1 — the three lines rise from their off-screen start (MOTION_SPEC
-    // §4 start Y/X) to their resting positions as the page scrolls hero → intro.
-    const apply = (progress: number, reduce: boolean) => {
-      const vh = window.innerHeight / 100;
-      const vw = window.innerWidth / 100;
-      INTRO_LINES.forEach((line, i) => {
-        const el = lineRefs.current[i];
-        if (!el) return;
-        const lineP = reduce
-          ? 1
-          : easeOut(rangeProgress(progress, line.stagger, 1));
-        const dy = (line.startYvh - line.endYvh) * (1 - lineP) * vh;
-        const dx = (line.startXvw - line.endXvw) * (1 - lineP) * vw;
-        el.style.transform = `translate(${dx}px, ${dy}px)`;
-      });
-      setDebugValue("1 · intro", reduce ? 1 : progress);
-    };
+    // System 1 — a one-shot transition (MOTION_SPEC §4): when the intro scrolls
+    // into view the three lines rise from their off-screen start to their resting
+    // positions over INTRO_DURATION_MS, with a custom cubic-bezier ease and a
+    // per-line stagger (a fraction of the duration). Not scrubbed.
+    const durationS = INTRO_DURATION_MS / 1000;
+    const ease = cubicBezier(...INTRO_EASE_BEZIER);
 
     const mm = gsap.matchMedia();
     mm.add(
@@ -107,23 +139,48 @@ export default function AboutIntro({ content }: AboutIntroProps) {
           isDesktop: boolean;
           reduce: boolean;
         };
+        const els = lineRefs.current.filter(
+          (el): el is HTMLDivElement => el !== null,
+        );
+
         if (!isDesktop) {
-          // Mobile stacks in normal flow — clear any transform.
-          lineRefs.current.forEach((el) => el && (el.style.transform = ""));
+          // Mobile stacks in normal flow — no transform.
+          gsap.set(els, { clearProps: "transform" });
           return;
         }
         if (reduce) {
-          apply(1, true);
+          // Reduced motion: lines appear at rest immediately, no travel.
+          gsap.set(els, { x: 0, y: 0 });
+          setDebugValue("1 · intro", 1);
           return;
         }
-        const st = ScrollTrigger.create({
-          trigger: section,
-          start: "top bottom",
-          end: "top top",
-          scrub: true,
-          onUpdate: (self) => apply(self.progress, false),
+
+        const tl = gsap.timeline({
+          paused: true,
+          onUpdate: () => setDebugValue("1 · intro", tl.progress()),
         });
-        apply(st.progress, false);
+
+        INTRO_LINES.forEach((line, i) => {
+          const el = lineRefs.current[i];
+          if (!el) return;
+          tl.fromTo(
+            el,
+            {
+              x: () => ((line.startXvw - line.endXvw) * window.innerWidth) / 100,
+              y: () => ((line.startYvh - line.endYvh) * window.innerHeight) / 100,
+            },
+            { x: 0, y: 0, duration: durationS, ease, immediateRender: true },
+            line.stagger * durationS,
+          );
+        });
+
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top 75%",
+          animation: tl,
+          toggleActions: "play none none reset",
+          invalidateOnRefresh: true,
+        });
       },
     );
 
@@ -150,14 +207,15 @@ export default function AboutIntro({ content }: AboutIntroProps) {
       </div>
 
       {/* Desktop (1512px frame): centre portrait with the three stats at their
-          MOTION_SPEC §4 resting positions, lifted into place by System 1. */}
-      <div className="relative hidden h-screen w-full lg:block">
-        <div className="absolute left-1/2 top-1/2 w-[var(--size-about-intro-portrait-width)] -translate-x-1/2 -translate-y-1/2">
+          exact about-2 (node 40:18) resting positions, lifted into place by
+          System 1. */}
+      <div className="relative hidden h-[115vh] w-full lg:block">
+        <div className="absolute" style={PORTRAIT}>
           <Image
             src={portraitImageUrl}
             alt={portraitImageAlt}
-            width={440}
-            height={540}
+            width={439}
+            height={519}
             className="h-auto w-full rounded-card-corner object-cover"
           />
         </div>
@@ -168,10 +226,16 @@ export default function AboutIntro({ content }: AboutIntroProps) {
             ref={(el) => {
               lineRefs.current[i] = el;
             }}
-            className="absolute max-w-[var(--size-about-intro-stat-width)] will-change-transform"
-            style={REST_POSITIONS[i]}
+            className={`absolute will-change-transform ${
+              STAT_LAYOUT[i].align === "right" ? "text-right" : "text-left"
+            }`}
+            style={{
+              top: REST_POSITIONS[i].top,
+              left: REST_POSITIONS[i].left,
+              width: STAT_LAYOUT[i].width,
+            }}
           >
-            <Stat {...stat} />
+            <Stat {...stat} stacked={STAT_LAYOUT[i].stacked} />
           </div>
         ))}
       </div>

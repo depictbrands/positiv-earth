@@ -107,12 +107,42 @@ export const FAQ_PAGE_QUERY = `*[_type == "faqPage" && _id == "faqPage"][0]{
   }
 }`;
 
+const ABOUT_SCENE_PROJECTION = `{
+  headline,
+  body,
+  images[] {
+    asset,
+    alt
+  }
+}`;
+
 export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "aboutPage"][0]{
   hero {
     lead,
     name,
     role,
     backgroundImage {
+      asset,
+      alt
+    }
+  },
+  intro {
+    stats[] {
+      emphasis,
+      rest
+    },
+    portrait {
+      asset,
+      alt
+    }
+  },
+  sceneA ${ABOUT_SCENE_PROJECTION},
+  sceneB ${ABOUT_SCENE_PROJECTION},
+  sceneC ${ABOUT_SCENE_PROJECTION},
+  cta {
+    heading,
+    buttonLabel,
+    image {
       asset,
       alt
     }

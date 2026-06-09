@@ -25,11 +25,19 @@ export type IntroLineMotion = {
   stagger: number; // p offset
 };
 
+// End positions are the exact about-2 (node 40:18) box top-lefts, expressed as
+// %s of the 1512×982 frame: line 1 (140,149), line 2 (931,416), line 3 (372,725).
 export const INTRO_LINES: readonly IntroLineMotion[] = [
-  { startYvh: 100, endYvh: 15, startXvw: 0, endXvw: 9, stagger: 0.0 },
-  { startYvh: 130, endYvh: 42, startXvw: 68, endXvw: 62, stagger: 0.08 },
-  { startYvh: 169, endYvh: 74, startXvw: 19, endXvw: 25, stagger: 0.16 },
+  { startYvh: 100, endYvh: 15.173, startXvw: 0, endXvw: 9.259, stagger: 0.0 },
+  { startYvh: 130, endYvh: 42.363, startXvw: 68, endXvw: 61.574, stagger: 0.08 },
+  { startYvh: 169, endYvh: 82, startXvw: 19, endXvw: 24.603, stagger: 0.16 },
 ];
+
+// §4 — System 1 plays as a one-shot Smart-Animate transition when the intro
+// enters view: custom cubic-bezier easing over a fixed duration (Figma transition
+// settings). Stagger above is interpreted as a fraction of this duration.
+export const INTRO_DURATION_MS = 1500;
+export const INTRO_EASE_BEZIER = [0.82, 0, 0.15, 1] as const;
 
 // §6 — decorative parallax images. h is the Figma image height (px); s is the
 // speed coefficient. Index-aligned with each scene's two images.
@@ -52,7 +60,3 @@ export const SCENE_IMAGE_MOTION: readonly (readonly [
     { h: 374, speed: 1.0 }, // img-3.2
   ],
 ];
-
-// §7 — footer CTA band travel-up (NOT pinned).
-export const FOOTER_BAND_H = 580; // px
-export const FOOTER_BAND_SPEED = 0.8; // < 1

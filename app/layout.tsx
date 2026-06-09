@@ -42,6 +42,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${merriweather.variable} ${merriweatherSans.variable} ${raleway.variable} ${openSans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

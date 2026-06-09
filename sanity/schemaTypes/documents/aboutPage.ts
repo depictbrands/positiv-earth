@@ -16,6 +16,31 @@ export const aboutPage = defineType({
       title: "Hero",
       type: "aboutHeroSection",
     }),
+    defineField({
+      name: "intro",
+      title: "Intro — credentials",
+      type: "aboutIntroSection",
+    }),
+    defineField({
+      name: "sceneA",
+      title: "Scene A — olive (Built for meaningful travel)",
+      type: "aboutSceneSection",
+    }),
+    defineField({
+      name: "sceneB",
+      title: "Scene B — blue (Guiding You Beyond the Itinerary)",
+      type: "aboutSceneSection",
+    }),
+    defineField({
+      name: "sceneC",
+      title: "Scene C — coral (Why Us)",
+      type: "aboutSceneSection",
+    }),
+    defineField({
+      name: "cta",
+      title: "CTA band (Let's Plan Your Trip)",
+      type: "ctaSection",
+    }),
   ],
   preview: {
     prepare() {

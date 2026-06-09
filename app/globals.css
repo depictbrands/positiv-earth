@@ -189,6 +189,7 @@
  * hero-subcopy-width    | --size-hero-subcopy-width                 | 869px
  * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
  * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
+ * abouthero-role-gap    | --spacing-abouthero-role-gap              | 32px
  * hero-subcopy          | --text-hero-subcopy                       | 20px
  * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
  * cta-content-gap       | --spacing-cta-content-gap                 | 46px
@@ -235,6 +236,7 @@
  * about-scene-b         | --color-about-scene-b                     | #7297ae (blue — MOTION_SPEC §5 Scene B)
  * about-scene-c         | --color-about-scene-c                     | #c47066 (coral — MOTION_SPEC §5 Scene C)
  * about-cta-band-height | --size-about-cta-band-height              | 580px (MOTION_SPEC §7 bandH)
+ * abouthero-content-width | --size-abouthero-content-width          | 1312px
  */
 
 @theme {
@@ -276,11 +278,10 @@
   --color-about-scene-c: #c47066;
 
   /*
-   * Burnt-orange emphasis colour for the intro stat lines (Figma about-2 —
-   * "12 years", "Psychology", "100+"). APPROXIMATED from the screenshot; no
-   * matching token existed. Confirm the exact hex from Figma Dev Mode.
+   * Burnt-orange emphasis colour for the intro stat lines (Figma about-2 /
+   * node 40:18 — "12 years", "Psychology", "100+"). Exact hex from Figma.
    */
-  --color-about-accent: #c15a34;
+  --color-about-accent: #d05a2c;
 
   --radius-header-corner: 3.125rem;
   --radius-header-active-pill-corner: 1.5625rem;
@@ -328,6 +329,7 @@
   --spacing-hero-content-gap: 3.125rem;
   --spacing-hero-search-offset-top: 44.25rem;
   --spacing-hero-headline-gap: 2.25rem;
+  --spacing-abouthero-role-gap: 2rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
   --spacing-how-it-works-copy-offset-top: 33.1875rem;
@@ -451,9 +453,10 @@
   --size-faq-heading-width: 22.25rem;
   --size-faq-list-width: 43.25rem;
   --size-about-cta-band-height: 36.25rem;
-  /* About intro (about-2) — APPROXIMATED from screenshot; confirm in Figma. */
-  --size-about-intro-portrait-width: 27.5rem;
-  --size-about-intro-stat-width: 24rem;
+  --size-abouthero-content-width: 82rem;
+  /* About intro (about-2 / Figma node 40:18). Portrait box is 439×519px; 439px
+     (27.4375rem) is the desktop max width, reached at the 1512 frame. */
+  --size-about-intro-portrait-width: 27.4375rem;
 
   --font-merriweather: var(--ff-merriweather), "Merriweather", serif;
   --font-merriweather-sans: var(--ff-merriweather-sans), "Merriweather Sans", sans-serif;
@@ -630,6 +633,23 @@
   --text-contact-info-detail--line-height: 1.25;
   --text-contact-info-detail--letter-spacing: 0em;
   --text-contact-info-detail--font-weight: 400;
+
+  /*
+   * About intro stat lines (about-2 / node 40:18). Two-tone: the emphasis is
+   * 96px Merriweather SemiBold Italic, the rest 64px Raleway SemiBold; both use
+   * an 80px line height in the design. The line-height ratios (0.8333 = 80/96,
+   * 1.25 = 80/64) keep both spans on the same 80px line box at every size, and
+   * the clamp maxes are reached at the 1512 frame.
+   */
+  --text-about-stat-emphasis: clamp(3rem, 6.35vw, 6rem);
+  --text-about-stat-emphasis--line-height: 0.8333;
+  --text-about-stat-emphasis--letter-spacing: 0em;
+  --text-about-stat-emphasis--font-weight: 600;
+
+  --text-about-stat-rest: clamp(2rem, 4.23vw, 4rem);
+  --text-about-stat-rest--line-height: 1.25;
+  --text-about-stat-rest--letter-spacing: 0em;
+  --text-about-stat-rest--font-weight: 600;
 }
 
 html {

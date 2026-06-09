@@ -17,10 +17,60 @@ export function rangeProgress(v: number, a: number, b: number): number {
 }
 
 // ease-out — MOTION_SPEC §8 cubic-bezier(0, 0, 0.2, 1), approximated by a cubic
-// ease-out. Used for System 1 text settling.
+// ease-out.
 export function easeOut(t: number): number {
   const c = clamp(t);
   return 1 - Math.pow(1 - c, 3);
+}
+
+// Builds a CSS-style cubic-bezier easing function (x1, y1, x2, y2) → (t → eased
+// value), suitable for passing straight to GSAP's `ease`. Solves x for a given t
+// via Newton-Raphson with a bisection fallback, mirroring the browser's own
+// cubic-bezier timing. Used for System 1's custom-bezier transition.
+export function cubicBezier(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+): (t: number) => number {
+  const cx = 3 * x1;
+  const bx = 3 * (x2 - x1) - cx;
+  const ax = 1 - cx - bx;
+  const cy = 3 * y1;
+  const by = 3 * (y2 - y1) - cy;
+  const ay = 1 - cy - by;
+
+  const sampleX = (t: number) => ((ax * t + bx) * t + cx) * t;
+  const sampleY = (t: number) => ((ay * t + by) * t + cy) * t;
+  const sampleDX = (t: number) => (3 * ax * t + 2 * bx) * t + cx;
+
+  const solveX = (x: number) => {
+    let t = x;
+    for (let i = 0; i < 8; i++) {
+      const dx = sampleX(t) - x;
+      if (Math.abs(dx) < 1e-6) return t;
+      const d = sampleDX(t);
+      if (Math.abs(d) < 1e-6) break;
+      t -= dx / d;
+    }
+    let lo = 0;
+    let hi = 1;
+    t = x;
+    while (lo < hi) {
+      const xv = sampleX(t);
+      if (Math.abs(xv - x) < 1e-6) break;
+      if (x > xv) lo = t;
+      else hi = t;
+      t = (lo + hi) / 2;
+    }
+    return t;
+  };
+
+  return (t: number) => {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    return sampleY(solveX(t));
+  };
 }
 
 // ---- Colour interpolation (System 2 background) -------------------------------

@@ -7,7 +7,7 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import Logo from "@/components/ui/Logo";
 
 const NAV_ITEMS = [
-  { label: "About" },
+  { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
@@ -158,7 +158,11 @@ export default function Header({ className, style }: HeaderProps) {
           aria-label="Primary"
           className="relative z-10 flex h-full items-center gap-2 text-base-white"
         >
-          <HeaderNavButton style={navCellStyle}>
+          <HeaderNavButton
+            style={navCellStyle}
+            href={NAV_ITEMS[0].href}
+            isActive={pathname === NAV_ITEMS[0].href}
+          >
             {NAV_ITEMS[0].label}
           </HeaderNavButton>
 
