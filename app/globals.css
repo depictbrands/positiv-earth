@@ -247,7 +247,7 @@
   --color-search-bar-divider: oklch(0.1913 0 89.88 / 0.12);
   --color-header-glass-surface: oklch(0.3052 0 89.88 / 0.6);
   --color-header-glass-border: oklch(1 0 89.88 / 0.18);
-  --color-header-active-pill: oklch(0.7219 0 89.88);
+  --color-header-active-pill: oklch(0.4 0 89.88);
   --color-footer-surface: var(--color-base-black);
   --color-footer-overlay: oklch(0 0 0 / 0.2);
   --color-footer-muted-text: oklch(0.8545 0 89.88);

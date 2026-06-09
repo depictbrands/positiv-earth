@@ -24,7 +24,6 @@ function cn(...values: Array<string | false | null | undefined>) {
 
 const glassStyle: CSSProperties = {
   backgroundColor: "var(--color-header-glass-surface)",
-  border: "1px solid var(--color-header-glass-border)",
   backdropFilter: "blur(var(--blur-header-glass))",
   WebkitBackdropFilter: "blur(var(--blur-header-glass))",
 };
@@ -40,7 +39,8 @@ const pillClassName =
 
 const pillVisualStyle: CSSProperties = {
   borderRadius: PILL_CORNER,
-  backgroundColor: "var(--color-header-active-pill)",
+  backgroundColor: "transparent",
+  border: "1px solid var(--color-base-white)",
 };
 
 // Every desktop item shares the active pill's footprint: pill-width plus an
