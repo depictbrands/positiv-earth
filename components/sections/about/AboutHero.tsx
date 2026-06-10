@@ -86,7 +86,7 @@ export default function AboutHero({ content }: AboutHeroProps) {
             left: "82.0767195767%",
           }}
         >
-          <QuizEntryButton>Design Your Travel</QuizEntryButton>
+          <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ export default function AboutHero({ content }: AboutHeroProps) {
         className={`fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-4 px-5 pt-5 sm:px-8 lg:hidden ${topBarTransition} ${topBarTransform}`}
       >
         <Header />
-        <QuizEntryButton>Design Your Travel</QuizEntryButton>
+        <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
       </div>
 
       {/* Hero title — Figma node 411:813. Same responsive pattern as home Hero:

@@ -237,6 +237,36 @@
  * about-scene-c         | --color-about-scene-c                     | #c47066 (coral — MOTION_SPEC §5 Scene C)
  * about-cta-band-height | --size-about-cta-band-height              | 580px (MOTION_SPEC §7 bandH)
  * abouthero-content-width | --size-abouthero-content-width          | 1312px
+ * quiz-overlay-backgroud | --color-quiz-overlay                     | rgba(24,24,24,0.8) (Figma "quiz-overlay-backgroud")
+ * quiz-bg-overlay       | --color-quiz-bg-overlay                   | rgba(0,0,0,0.3)
+ * quiz-progress         | --color-quiz-progress                     | #7297ae (Figma "blue")
+ * quiz-progress-track   | --color-quiz-progress-track               | rgba(255,255,255,0.4)
+ * quiz-toggle-knob      | --color-quiz-toggle-knob                  | #dbdbdb
+ * quiz-toggle-knob-border | --color-quiz-toggle-knob-border         | #d2d2d2
+ * quiz-title            | --text-quiz-title                         | 40px
+ * quiz-question         | --text-quiz-question                      | 32px
+ * quiz-block-width      | --size-quiz-block-width                   | 1216px
+ * quiz-block-inset      | --spacing-quiz-block-inset                | 32px
+ * quiz-options-gap      | --spacing-quiz-options-gap                | 36px
+ * quiz-prompt-gap       | --spacing-quiz-prompt-gap                 | 76px
+ * quiz-icon-size        | --size-quiz-icon-size                     | 64px
+ * quiz-image-card       | --size-quiz-image-card                    | 182px
+ * quiz-form-width       | --size-quiz-form-width                    | 820px
+ * quiz-form-row-gap     | --spacing-quiz-form-row-gap               | 40px
+ * quiz-form-col-gap     | --spacing-quiz-form-col-gap               | 30px
+ * quiz-field-gap        | --spacing-quiz-field-gap                  | 9px
+ * quiz-input-height     | --size-quiz-input-height                  | 61px
+ * quiz-adults-field-width | --size-quiz-adults-field-width          | 454px
+ * quiz-step-button      | --size-quiz-step-button                   | 40px
+ * quiz-field-label-gap  | --spacing-quiz-field-label-gap            | 15px
+ * quiz-count-row-gap    | --spacing-quiz-count-row-gap              | 54px
+ * quiz-children-row-gap | --spacing-quiz-children-row-gap           | 170px
+ * quiz-fields-stack-gap | --spacing-quiz-fields-stack-gap           | 20px
+ * quiz-toggle-gap       | --spacing-quiz-toggle-gap                 | 23px
+ * quiz-toggle-track-width | --size-quiz-toggle-track-width          | 80px
+ * quiz-toggle-track-height | --size-quiz-toggle-track-height        | 40px
+ * quiz-toggle-knob-size | --size-quiz-toggle-knob-size              | 32px
+ * quiz-toggle-inset     | --spacing-quiz-toggle-inset               | 4px
  */
 
 @theme {
@@ -282,6 +312,18 @@
    * node 40:18 — "12 years", "Psychology", "100+"). Exact hex from Figma.
    */
   --color-about-accent: #d05a2c;
+
+  /*
+   * Design-Your-Travel quiz (Figma node 584:1372). The overlay panel and page
+   * scrim are kept as the exact Figma values; the progress fill reuses the
+   * Figma "blue" swatch (same hex as --color-about-scene-b).
+   */
+  --color-quiz-overlay: oklch(0.209 0 0 / 0.8);
+  --color-quiz-bg-overlay: oklch(0 0 0 / 0.3);
+  --color-quiz-progress: #7297ae;
+  --color-quiz-progress-track: oklch(1 0 89.88 / 0.4);
+  --color-quiz-toggle-knob: #dbdbdb;
+  --color-quiz-toggle-knob-border: #d2d2d2;
 
   --radius-header-corner: 3.125rem;
   --radius-header-active-pill-corner: 1.5625rem;
@@ -457,6 +499,30 @@
   /* About intro (about-2 / Figma node 40:18). Portrait box is 439×519px; 439px
      (27.4375rem) is the desktop max width, reached at the 1512 frame. */
   --size-about-intro-portrait-width: 27.4375rem;
+
+  /* Design-Your-Travel quiz layout (Figma nodes 584:1372, 947:1426). */
+  --size-quiz-block-width: 76rem;
+  --size-quiz-icon-size: 4rem;
+  --size-quiz-image-card: 11.375rem;
+  --size-quiz-form-width: 51.25rem;
+  --size-quiz-input-height: 3.8125rem;
+  --size-quiz-adults-field-width: 28.375rem;
+  --size-quiz-step-button: 2.5rem;
+  --size-quiz-toggle-track-width: 5rem;
+  --size-quiz-toggle-track-height: 2.5rem;
+  --size-quiz-toggle-knob-size: 2rem;
+  --spacing-quiz-block-inset: 2rem;
+  --spacing-quiz-options-gap: 2.25rem;
+  --spacing-quiz-prompt-gap: 4.75rem;
+  --spacing-quiz-field-label-gap: 0.9375rem;
+  --spacing-quiz-count-row-gap: 3.375rem;
+  --spacing-quiz-children-row-gap: 10.625rem;
+  --spacing-quiz-fields-stack-gap: 1.25rem;
+  --spacing-quiz-toggle-gap: 1.4375rem;
+  --spacing-quiz-toggle-inset: 0.25rem;
+  --spacing-quiz-form-row-gap: 2.5rem;
+  --spacing-quiz-form-col-gap: 1.875rem;
+  --spacing-quiz-field-gap: 0.5625rem;
 
   --font-merriweather: var(--ff-merriweather), "Merriweather", serif;
   --font-merriweather-sans: var(--ff-merriweather-sans), "Merriweather Sans", sans-serif;
@@ -650,6 +716,23 @@
   --text-about-stat-rest--line-height: 1.25;
   --text-about-stat-rest--letter-spacing: 0em;
   --text-about-stat-rest--font-weight: 600;
+
+  /*
+   * Design-Your-Travel quiz type (Figma node 584:1372). quiz-title is the
+   * "Let's Plan Your Perfect Journey." line (40px Raleway SemiBold, 50px line);
+   * quiz-question is the per-step prompt (32px Raleway SemiBold, 40px line).
+   * Both use the 1512-frame max via clamp so they scale down fluidly. Option
+   * labels reuse --text-body-1 and the Next/Back labels reuse --text-cta-button.
+   */
+  --text-quiz-title: clamp(2rem, 2.65vw, 2.5rem);
+  --text-quiz-title--line-height: 1.25;
+  --text-quiz-title--letter-spacing: -0.02em;
+  --text-quiz-title--font-weight: 600;
+
+  --text-quiz-question: clamp(1.5rem, 2.12vw, 2rem);
+  --text-quiz-question--line-height: 1.25;
+  --text-quiz-question--letter-spacing: -0.02em;
+  --text-quiz-question--font-weight: 600;
 }
 
 html {

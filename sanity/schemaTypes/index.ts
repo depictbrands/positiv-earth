@@ -2,6 +2,7 @@ import { type SchemaTypeDefinition } from "sanity";
 
 import { aboutPage } from "./documents/aboutPage";
 import { contactPage } from "./documents/contactPage";
+import { designYourTravelPage } from "./documents/designYourTravelPage";
 import { faqPage } from "./documents/faqPage";
 import { homePage } from "./documents/homePage";
 import { servicesPage } from "./documents/servicesPage";
@@ -11,6 +12,9 @@ import { ctaLink } from "./objects/ctaLink";
 import { destination } from "./objects/destination";
 import { faqItem } from "./objects/faqItem";
 import { imageWithAlt } from "./objects/imageWithAlt";
+import { quizImageChoice } from "./objects/quizImageChoice";
+import { quizOption } from "./objects/quizOption";
+import { quizTravelerCount } from "./objects/quizTravelerCount";
 import { service } from "./objects/service";
 import { testimonial } from "./objects/testimonial";
 import { aboutHeroSection } from "./sections/aboutHeroSection";
@@ -25,6 +29,9 @@ import { faqHeroSection } from "./sections/faqHeroSection";
 import { faqSection } from "./sections/faqSection";
 import { heroSection } from "./sections/heroSection";
 import { howItWorksSection } from "./sections/howItWorksSection";
+import { quizContactFormQuestion } from "./sections/quizContactFormQuestion";
+import { quizImageQuestion } from "./sections/quizImageQuestion";
+import { quizPartyQuestion } from "./sections/quizPartyQuestion";
 import { servicesHeroSection } from "./sections/servicesHeroSection";
 import { testimonialSection } from "./sections/testimonialSection";
 import { threeServicesSection } from "./sections/threeServicesSection";
@@ -39,6 +46,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     faqItem,
     contactSocial,
     aboutIntroStat,
+    quizOption,
+    quizTravelerCount,
+    quizImageChoice,
     heroSection,
     brandStorySection,
     howItWorksSection,
@@ -54,10 +64,14 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aboutHeroSection,
     aboutIntroSection,
     aboutSceneSection,
+    quizPartyQuestion,
+    quizImageQuestion,
+    quizContactFormQuestion,
     homePage,
     servicesPage,
     faqPage,
     contactPage,
     aboutPage,
+    designYourTravelPage,
   ],
 };

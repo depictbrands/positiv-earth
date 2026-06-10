@@ -149,6 +149,51 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "aboutPage"][0
   }
 }`;
 
+export const QUIZ_PAGE_QUERY = `*[_type == "designYourTravelPage" && _id == "designYourTravelPage"][0]{
+  title,
+  backgroundImage {
+    asset,
+    alt
+  },
+  totalSteps,
+  questions[] {
+    _type,
+    _key,
+    id,
+    prompt,
+    options[] {
+      id,
+      label,
+      icon,
+      branch
+    },
+    travelerCount {
+      prompt,
+      adultsLabel,
+      adultsPlaceholder,
+      addChildrenLabel,
+      childrenLabel,
+      childAgePlaceholder
+    },
+    columns,
+    choices[] {
+      id,
+      label,
+      image {
+        asset,
+        alt
+      }
+    },
+    firstNameLabel,
+    lastNameLabel,
+    phoneLabel,
+    emailLabel,
+    countryLabel,
+    countryOptions,
+    notesLabel
+  }
+}`;
+
 export const CONTACT_PAGE_QUERY = `*[_type == "contactPage" && _id == "contactPage"][0]{
   hero {
     headline,

@@ -30,12 +30,21 @@ export const structure: StructureResolver = (S) =>
         .title("About page")
         .id("aboutPage")
         .child(S.document().schemaType("aboutPage").documentId("aboutPage")),
+      S.listItem()
+        .title("Design Your Travel page")
+        .id("designYourTravelPage")
+        .child(
+          S.document()
+            .schemaType("designYourTravelPage")
+            .documentId("designYourTravelPage"),
+        ),
       ...S.documentTypeListItems().filter(
         (item) =>
           item.getId() !== "homePage" &&
           item.getId() !== "servicesPage" &&
           item.getId() !== "faqPage" &&
           item.getId() !== "contactPage" &&
-          item.getId() !== "aboutPage",
+          item.getId() !== "aboutPage" &&
+          item.getId() !== "designYourTravelPage",
       ),
     ]);
