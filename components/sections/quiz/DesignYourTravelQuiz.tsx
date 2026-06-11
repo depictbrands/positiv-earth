@@ -171,6 +171,13 @@ export default function DesignYourTravelQuiz({
       ? question.travelerCount.prompt
       : (question?.prompt ?? "");
 
+  // Each scene shows its own decorative quote animation (repo assets in
+  // public/quiz). The four questions map 1:1 by order to quotes-motion-1..4; the
+  // traveller-count sub-scene uses the fifth file.
+  const quoteLottieSrc = inTravelerCount
+    ? "/quiz/quotes-motion-5.json"
+    : `/quiz/quotes-motion-${stepIndex + 1}.json`;
+
   return (
     <section className="relative flex min-h-[100svh] w-full flex-col overflow-hidden">
       <Image
@@ -219,6 +226,7 @@ export default function DesignYourTravelQuiz({
               stepIndex={stepIndex}
               totalSteps={content.totalSteps}
               prompt={prompt}
+              quoteLottieSrc={quoteLottieSrc}
               showBack={showBack}
               canGoNext={canGoNext}
               nextLabel={isLastStep ? "Submit" : "Next"}
@@ -251,7 +259,7 @@ export default function DesignYourTravelQuiz({
                   onRemoveChild={removeChild}
                 />
               ) : (
-                <div className="flex w-full flex-wrap items-start justify-center gap-[var(--spacing-quiz-options-gap)]">
+                <div className="grid w-full grid-cols-2 justify-items-center gap-[var(--spacing-quiz-options-gap)] lg:grid-cols-3">
                   {question.options.map((option) => (
                     <QuizOption
                       key={option.id}

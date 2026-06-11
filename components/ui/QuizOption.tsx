@@ -27,7 +27,7 @@ export default function QuizOption({
       type="button"
       aria-pressed={selected}
       onClick={() => onSelect?.(option.id)}
-      className="group flex flex-col items-center gap-[14px] rounded-card p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white"
+      className="group flex flex-col items-center gap-[14px] rounded-card-corner p-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white"
     >
       {/* 64px square, matching the Figma icon footprint (--size-quiz-icon-size). */}
       <QuizOptionIcon

@@ -9,6 +9,8 @@ type QuizSceneFrameProps = {
   totalSteps: number;
   /** Prompt shown above the body, e.g. "Who Will Be Traveling". */
   prompt: string;
+  /** Decorative quote animation for this scene (defaults to the first scene's). */
+  quoteLottieSrc?: string;
   /** Scene body (options grid, traveller-count form, …). */
   children: ReactNode;
   showBack?: boolean;
@@ -19,10 +21,10 @@ type QuizSceneFrameProps = {
   onNext?: () => void;
 };
 
-// The motion graphic (airplane + handwritten quotes) baked into the Lottie file
-// the client supplied. It is decorative and shared across every scene, so it
-// lives inline rather than in the quiz content shape.
-const QUOTE_LOTTIE_SRC = "/quiz/quotes-motion.json";
+// The motion graphic (airplane + handwritten quotes) is decorative repo art
+// (public/quiz) rather than CMS content. Each scene supplies its own file via
+// `quoteLottieSrc`; this is the fallback when one isn't passed.
+const DEFAULT_QUOTE_LOTTIE_SRC = "/quiz/quotes-motion-1.json";
 
 // Shared chrome for every quiz scene (Figma node 939:1414): the overlay panel,
 // the progress header, the prompt, the swappable body, the animated quote, and
@@ -32,6 +34,7 @@ export default function QuizSceneFrame({
   stepIndex,
   totalSteps,
   prompt,
+  quoteLottieSrc = DEFAULT_QUOTE_LOTTIE_SRC,
   children,
   showBack = false,
   canGoNext = true,
@@ -42,7 +45,7 @@ export default function QuizSceneFrame({
   const progress = Math.min(Math.max((stepIndex + 1) / totalSteps, 0), 1);
 
   return (
-    <div className="relative flex w-full flex-col rounded-card bg-quiz-overlay max-w-[var(--size-quiz-block-width)] p-[var(--spacing-quiz-block-inset)]">
+    <div className="relative flex w-full flex-col rounded-card-corner bg-quiz-overlay max-w-[var(--size-quiz-block-width)] p-[var(--spacing-quiz-block-inset)]">
       {/* Progress header */}
       <div className="flex flex-col gap-4">
         <p className="font-body text-cta-button text-base-white">
@@ -73,7 +76,7 @@ export default function QuizSceneFrame({
       {/* Animated quote (airplane + handwritten line) */}
       <div className="mt-12 flex justify-center">
         <LottiePlayer
-          src={QUOTE_LOTTIE_SRC}
+          src={quoteLottieSrc}
           ariaLabel="An animated travel quote"
           className="w-full max-w-[31.125rem]"
           style={{ aspectRatio: "2320 / 760" }}

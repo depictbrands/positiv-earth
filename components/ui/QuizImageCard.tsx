@@ -25,11 +25,11 @@ export default function QuizImageCard({
       type="button"
       aria-pressed={selected}
       onClick={() => onSelect?.(choice.id)}
-      className="group flex w-[var(--size-quiz-image-card)] max-w-full flex-col items-center gap-3 rounded-card transition-opacity hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white"
+      className="group flex w-[var(--size-quiz-image-card)] max-w-full flex-col items-center gap-3 rounded-card-corner transition-opacity hover:opacity-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white"
     >
       <span
         className={cn(
-          "relative aspect-square w-full overflow-hidden rounded-card",
+          "relative aspect-square w-full overflow-hidden rounded-card-corner",
           selected &&
             "outline outline-2 outline-offset-2 outline-base-white",
         )}

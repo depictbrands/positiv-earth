@@ -16,7 +16,7 @@ type QuizTravelerCountProps = {
 };
 
 const fieldClassName =
-  "h-[var(--size-quiz-input-height)] w-full rounded-card border border-base-white bg-transparent px-4 text-left font-body text-body-1 text-base-white placeholder:text-base-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white";
+  "h-[var(--size-quiz-input-height)] w-full rounded-card-corner border border-base-white bg-transparent px-4 text-left font-body text-body-1 text-base-white placeholder:text-base-white/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white";
 
 // The "Who Will Be Travelling?" sub-scene body (Figma nodes 947:1426 / 947:1427):
 // a number-of-adults field with an "add children" toggle, and — when the toggle
@@ -35,9 +35,9 @@ export default function QuizTravelerCount({
   onRemoveChild,
 }: QuizTravelerCountProps) {
   return (
-    <div className="flex w-full flex-col items-center gap-[var(--spacing-quiz-fields-stack-gap)]">
+    <div className="flex w-full flex-col items-start gap-[var(--spacing-quiz-fields-stack-gap)]">
       {/* Adults number + add-children toggle */}
-      <div className="flex w-full flex-wrap items-end justify-center gap-[var(--spacing-quiz-count-row-gap)]">
+      <div className="flex w-full flex-wrap items-end gap-[var(--spacing-quiz-count-row-gap)]">
         <div className="flex w-full flex-col items-start gap-[var(--spacing-quiz-field-label-gap)] max-w-[var(--size-quiz-adults-field-width)]">
           <label
             htmlFor="quiz-adults"
@@ -74,7 +74,7 @@ export default function QuizTravelerCount({
         ? childrenAges.map((age, index) => (
             <div
               key={index}
-              className="flex w-full flex-wrap items-end justify-center gap-[var(--spacing-quiz-children-row-gap)]"
+              className="flex w-full flex-wrap items-end gap-[var(--spacing-quiz-children-row-gap)]"
             >
               <div className="flex w-full flex-col items-start gap-[var(--spacing-quiz-field-label-gap)] max-w-[var(--size-quiz-adults-field-width)]">
                 <label

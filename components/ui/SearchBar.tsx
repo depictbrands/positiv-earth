@@ -182,7 +182,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <div
-      className="flex w-full max-w-[var(--size-search-bar-width)] flex-col items-stretch gap-4 rounded-card p-4 focus-within:outline lg:h-[var(--size-search-bar-height)] lg:flex-row lg:items-center lg:gap-3 lg:rounded-search-bar-corner lg:p-0 lg:px-[var(--spacing-search-bar-padding-x)]"
+      className="flex w-full max-w-[var(--size-search-bar-width)] flex-col items-stretch gap-4 rounded-card-corner p-4 focus-within:outline lg:h-[var(--size-search-bar-height)] lg:flex-row lg:items-center lg:gap-3 lg:rounded-search-bar-corner lg:p-0 lg:px-[var(--spacing-search-bar-padding-x)]"
       style={{
         backgroundColor: "var(--color-search-bar-surface)",
         boxShadow: "var(--shadow-search-bar)",

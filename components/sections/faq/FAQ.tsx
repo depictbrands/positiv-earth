@@ -84,7 +84,7 @@ function FaqRow({ item, open, onToggle, withDivider }: FaqRowProps) {
           onClick={onToggle}
           aria-expanded={open}
           aria-controls={panelId}
-          className="group flex w-full items-start justify-between gap-6 rounded-card text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-base-black focus-visible:ring-offset-4 focus-visible:ring-offset-cream-white"
+          className="group flex w-full items-start justify-between gap-6 rounded-card-corner text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-base-black focus-visible:ring-offset-4 focus-visible:ring-offset-cream-white"
         >
           <span className="font-body text-p2 text-faq-question transition-colors group-hover:text-base-black">
             {item.question}
