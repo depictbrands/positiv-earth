@@ -49,6 +49,19 @@ function Dot() {
   );
 }
 
+function HeroRule({ thick = false }: { thick?: boolean }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`block w-full rounded-s-full bg-base-white ${
+        thick
+          ? "h-[var(--size-itinerary-hero-rule-thick-height)]"
+          : "h-px"
+      }`}
+    />
+  );
+}
+
 // The itinerary page hero (Figma node 584:1071): a full-bleed image under a dark
 // overlay, the shared top bar, then a centered cluster of a country eyebrow, the
 // rule-framed trip title, and a meta line (days / nights / travellers). The meta
@@ -112,13 +125,15 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
           <Dot />
         </p>
 
-        {/* Rule-framed title */}
-        <div className="flex w-full max-w-[var(--size-itinerary-hero-content-width)] flex-col items-center gap-6">
-          <span aria-hidden="true" className="block w-full border-t border-base-white" />
-          <h1 className="font-display text-heading-2">{resolved.title}</h1>
+        {/* Rule-framed title — width follows the headline so rules scale with it */}
+        <div className="flex w-fit max-w-full flex-col items-stretch gap-6">
+          <HeroRule />
+          <h1 className="font-display text-heading-2 lg:whitespace-nowrap">
+            {resolved.title}
+          </h1>
           <div className="flex w-full flex-col gap-3">
-            <span aria-hidden="true" className="block w-full border-t border-base-white" />
-            <span aria-hidden="true" className="block w-full border-t-2 border-base-white" />
+            <HeroRule />
+            <HeroRule thick />
           </div>
         </div>
 

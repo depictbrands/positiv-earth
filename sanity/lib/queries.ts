@@ -216,3 +216,99 @@ export const CONTACT_PAGE_QUERY = `*[_type == "contactPage" && _id == "contactPa
     }
   }
 }`;
+
+const IMAGE_WITH_ALT = `{
+  asset,
+  alt
+}`;
+
+const ITINERARY_DAY_DETAIL = `{
+  city,
+  periods[] {
+    name,
+    meal,
+    mealPlace,
+    mealIncluded,
+    activity
+  }
+}`;
+
+export const ITINERARY_BY_SLUG_QUERY = `*[_type == "itinerary" && slug.current == $slug][0]{
+  title,
+  "slug": slug.current,
+  accentColor,
+  hero {
+    country,
+    title,
+    durationDays,
+    nights,
+    travelers,
+    backgroundImage ${IMAGE_WITH_ALT}
+  },
+  overview {
+    heading,
+    highlights,
+    mapImage ${IMAGE_WITH_ALT},
+    process[] {
+      title,
+      description
+    }
+  },
+  timeline {
+    heading,
+    days[] {
+      dayLabel,
+      daySummary,
+      date,
+      headline,
+      body,
+      image ${IMAGE_WITH_ALT},
+      detail ${ITINERARY_DAY_DETAIL}
+    }
+  },
+  localFood {
+    heading,
+    tagline,
+    body,
+    heroImage ${IMAGE_WITH_ALT},
+    galleryImages[] ${IMAGE_WITH_ALT}
+  },
+  accommodation {
+    heading,
+    cities[] {
+      id,
+      label,
+      hotels[] {
+        name,
+        image ${IMAGE_WITH_ALT}
+      }
+    }
+  },
+  whatsIncluded {
+    heading,
+    includesHeading,
+    notIncludesHeading,
+    includes,
+    notIncludes
+  },
+  nextItineraries {
+    headingLeading,
+    headingTrailing,
+    editorialSlugs
+  }
+}`;
+
+export const ITINERARY_SLUGS_QUERY = `*[_type == "itinerary" && defined(slug.current)]{
+  "slug": slug.current
+}`;
+
+export const HOME_DESTINATIONS_QUERY = `*[_type == "homePage" && _id == "homePage"][0].destinations.destinations[]{
+  name,
+  durationDays,
+  locations,
+  href,
+  image {
+    asset,
+    alt
+  }
+}`;

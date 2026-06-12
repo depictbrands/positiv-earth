@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 
 import Footer from "@/components/layout/Footer";
@@ -11,20 +12,28 @@ import LocalFood from "@/components/sections/itinerary/LocalFood";
 import NextItineraries from "@/components/sections/itinerary/NextItineraries";
 import Overview from "@/components/sections/itinerary/Overview";
 import RecordItineraryView from "@/components/sections/itinerary/RecordItineraryView";
+import { isSanityConfigured } from "@/sanity/env";
+import { client } from "@/sanity/lib/client";
+import { mapDestination, mapItinerary } from "@/sanity/lib/mapItinerary";
+import {
+  HOME_DESTINATIONS_QUERY,
+  ITINERARY_BY_SLUG_QUERY,
+  ITINERARY_SLUGS_QUERY,
+} from "@/sanity/lib/queries";
 import {
   normalizeItineraryAccentHex,
   type ItineraryContent,
 } from "@/types/itinerary-content";
 import type { ItineraryNextItinerariesContent } from "@/types/itinerary-next-itineraries-content";
+import type { Destination } from "@/types/destination";
 
 /**
  * Itinerary route — a reusable template for every destination itinerary.
  *
- * Each destination resolves to `/itinerary/<slug>`. Content currently comes from
- * the local `ITINERARIES` map below (the data seam); this is where a Sanity fetch
- * by slug will drop in once the itinerary document is modelled, mirroring how the
- * other routes fetch + map server-side. Any unknown slug still renders via a
- * slug-derived fallback so destination cards never dead-end.
+ * Each destination resolves to `/itinerary/<slug>`. Content is fetched from
+ * Sanity by slug; section components still fall back to local defaults when a
+ * section is omitted in the CMS. Without Sanity configured, local dev fallbacks
+ * keep destination cards from dead-ending.
  */
 
 const ITINERARIES: Record<string, ItineraryContent> = {
@@ -51,7 +60,7 @@ function titleizeSlug(slug: string): string {
     .join(" ");
 }
 
-function getItinerary(slug: string): ItineraryContent {
+function getLocalItinerary(slug: string): ItineraryContent {
   const known = ITINERARIES[slug];
   if (known) return known;
 
@@ -65,6 +74,43 @@ function getItinerary(slug: string): ItineraryContent {
       backgroundImageUrl: "",
       backgroundImageAlt: "",
     },
+  };
+}
+
+async function fetchDestinations(): Promise<Destination[]> {
+  if (!client) {
+    return DEFAULT_DESTINATIONS;
+  }
+
+  const sanityDestinations = await client.fetch(HOME_DESTINATIONS_QUERY);
+  const mapped = (sanityDestinations ?? []).map(mapDestination);
+
+  return mapped.length > 0 ? mapped : DEFAULT_DESTINATIONS;
+}
+
+async function resolveItinerary(slug: string): Promise<ItineraryContent> {
+  if (!client) {
+    return getLocalItinerary(slug);
+  }
+
+  const [sanityItinerary, destinations] = await Promise.all([
+    client.fetch(ITINERARY_BY_SLUG_QUERY, { slug }),
+    fetchDestinations(),
+  ]);
+
+  const mapped = mapItinerary(sanityItinerary);
+
+  if (!mapped) {
+    if (isSanityConfigured) {
+      notFound();
+    }
+
+    return getLocalItinerary(slug);
+  }
+
+  return {
+    ...mapped,
+    destinations,
   };
 }
 
@@ -91,19 +137,33 @@ type ItineraryPageProps = {
   params: Promise<{ slug: string }>;
 };
 
+export async function generateStaticParams() {
+  if (!client) {
+    return [];
+  }
+
+  const slugs: Array<{ slug: string }> = await client.fetch(ITINERARY_SLUGS_QUERY);
+
+  return slugs
+    .map(({ slug }) => slug?.trim())
+    .filter(Boolean)
+    .map((slug) => ({ slug }));
+}
+
 export async function generateMetadata({
   params,
 }: ItineraryPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const { hero } = getItinerary(slug);
+  const itinerary = await resolveItinerary(slug);
+
   return {
-    title: `${hero.title} | Positiv Earth`,
+    title: `${itinerary.hero.title} | Positiv Earth`,
   };
 }
 
 export default async function ItineraryPage({ params }: ItineraryPageProps) {
   const { slug } = await params;
-  const itinerary = getItinerary(slug);
+  const itinerary = await resolveItinerary(slug);
   const nextItineraries = buildNextItineraries(slug, itinerary);
   const accentColor = normalizeItineraryAccentHex(itinerary.accentColor);
   const accentStyle: CSSProperties | undefined = accentColor

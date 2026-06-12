@@ -341,40 +341,42 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
             return (
               <li
                 key={`${day.dayLabel}-${index}`}
-                className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-5"
+                className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
               >
-                {/* Rail cell with dot (desktop) */}
-                <div className="hidden lg:flex lg:w-[var(--rail-w)] lg:shrink-0 lg:items-center lg:justify-center lg:self-stretch">
-                  <span
-                    ref={(node) => {
-                      dotRefs.current[index] = node;
-                    }}
-                    className={`block size-5 rounded-full transition-colors duration-300 ${
-                      active ? "bg-itinerary-accent" : "bg-itinerary-track"
-                    }`}
-                  />
-                </div>
+                <div className="flex items-center gap-5 lg:shrink-0">
+                  {/* Rail cell with dot (desktop) */}
+                  <div className="hidden lg:flex lg:w-[var(--rail-w)] lg:shrink-0 lg:items-center lg:justify-center lg:self-stretch">
+                    <span
+                      ref={(node) => {
+                        dotRefs.current[index] = node;
+                      }}
+                      className={`block size-5 rounded-full transition-colors duration-300 ${
+                        active ? "bg-itinerary-accent" : "bg-itinerary-track"
+                      }`}
+                    />
+                  </div>
 
-                {/* Day label + summary */}
-                <div className="flex flex-col gap-4 lg:w-[var(--size-itinerary-day-label-width)] lg:shrink-0">
-                  <p
-                    className={`font-open-sans text-itinerary-day-count uppercase transition-colors duration-300 ${
-                      active ? "text-itinerary-accent" : "text-base-black"
-                    }`}
-                  >
-                    {day.dayLabel}
-                  </p>
-                  <p
-                    className={`whitespace-pre-line font-open-sans text-itinerary-day-summary transition-colors duration-300 ${
-                      active ? "text-itinerary-accent" : "text-itinerary-day-muted"
-                    }`}
-                  >
-                    {day.daySummary}
-                  </p>
+                  {/* Day label + summary */}
+                  <div className="flex flex-col gap-4 lg:w-[var(--size-itinerary-day-label-width)]">
+                    <p
+                      className={`font-open-sans text-itinerary-day-count uppercase transition-colors duration-300 ${
+                        active ? "text-itinerary-accent" : "text-base-black"
+                      }`}
+                    >
+                      {day.dayLabel}
+                    </p>
+                    <p
+                      className={`whitespace-pre-line font-open-sans text-itinerary-day-summary transition-colors duration-300 ${
+                        active ? "text-itinerary-accent" : "text-itinerary-day-muted"
+                      }`}
+                    >
+                      {day.daySummary}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Media card */}
-                <div className="relative w-full overflow-hidden rounded-card-corner lg:h-[var(--size-itinerary-card-height)] lg:w-[var(--size-itinerary-card-width)]">
+                <div className="relative w-full min-w-0 flex-1 overflow-hidden rounded-card-corner lg:h-[var(--size-itinerary-card-height)]">
                   <Image
                     src={day.imageUrl}
                     alt={day.imageAlt}

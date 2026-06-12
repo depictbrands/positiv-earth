@@ -5,6 +5,7 @@ import { contactPage } from "./documents/contactPage";
 import { designYourTravelPage } from "./documents/designYourTravelPage";
 import { faqPage } from "./documents/faqPage";
 import { homePage } from "./documents/homePage";
+import { itinerary } from "./documents/itinerary";
 import { servicesPage } from "./documents/servicesPage";
 import { aboutIntroStat } from "./objects/aboutIntroStat";
 import { contactSocial } from "./objects/contactSocial";
@@ -12,6 +13,12 @@ import { ctaLink } from "./objects/ctaLink";
 import { destination } from "./objects/destination";
 import { faqItem } from "./objects/faqItem";
 import { imageWithAlt } from "./objects/imageWithAlt";
+import { itineraryAccommodationCity } from "./objects/itineraryAccommodationCity";
+import { itineraryDay } from "./objects/itineraryDay";
+import { itineraryDayDetail } from "./objects/itineraryDayDetail";
+import { itineraryDayPeriod } from "./objects/itineraryDayPeriod";
+import { itineraryHotel } from "./objects/itineraryHotel";
+import { itineraryProcessStep } from "./objects/itineraryProcessStep";
 import { quizImageChoice } from "./objects/quizImageChoice";
 import { quizOption } from "./objects/quizOption";
 import { quizTravelerCount } from "./objects/quizTravelerCount";
@@ -29,6 +36,13 @@ import { faqHeroSection } from "./sections/faqHeroSection";
 import { faqSection } from "./sections/faqSection";
 import { heroSection } from "./sections/heroSection";
 import { howItWorksSection } from "./sections/howItWorksSection";
+import { itineraryAccommodationSection } from "./sections/itineraryAccommodationSection";
+import { itineraryHeroSection } from "./sections/itineraryHeroSection";
+import { itineraryLocalFoodSection } from "./sections/itineraryLocalFoodSection";
+import { itineraryNextItinerariesSection } from "./sections/itineraryNextItinerariesSection";
+import { itineraryOverviewSection } from "./sections/itineraryOverviewSection";
+import { itineraryTimelineSection } from "./sections/itineraryTimelineSection";
+import { itineraryWhatsIncludedSection } from "./sections/itineraryWhatsIncludedSection";
 import { quizContactFormQuestion } from "./sections/quizContactFormQuestion";
 import { quizImageQuestion } from "./sections/quizImageQuestion";
 import { quizPartyQuestion } from "./sections/quizPartyQuestion";
@@ -49,6 +63,12 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     quizOption,
     quizTravelerCount,
     quizImageChoice,
+    itineraryProcessStep,
+    itineraryDayPeriod,
+    itineraryDayDetail,
+    itineraryDay,
+    itineraryHotel,
+    itineraryAccommodationCity,
     heroSection,
     brandStorySection,
     howItWorksSection,
@@ -64,6 +84,13 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aboutHeroSection,
     aboutIntroSection,
     aboutSceneSection,
+    itineraryHeroSection,
+    itineraryOverviewSection,
+    itineraryTimelineSection,
+    itineraryLocalFoodSection,
+    itineraryAccommodationSection,
+    itineraryWhatsIncludedSection,
+    itineraryNextItinerariesSection,
     quizPartyQuestion,
     quizImageQuestion,
     quizContactFormQuestion,
@@ -73,5 +100,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactPage,
     aboutPage,
     designYourTravelPage,
+    itinerary,
   ],
 };

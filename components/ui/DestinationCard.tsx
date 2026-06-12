@@ -119,13 +119,13 @@ export default function DestinationCard({
   const copyOrientation = isNextItinerary ? "portrait" : orientation;
 
   const sizeClass = isNextItinerary
-    ? "h-[var(--size-next-itinerary-card-height)] w-[var(--size-next-itinerary-card-width)] shrink-0 snap-start"
+    ? "aspect-[458/530] w-full min-w-0"
     : orientation === "landscape"
       ? "aspect-[701/650] max-w-[var(--size-destination-card-landscape-width)]"
       : "aspect-[342/650] max-w-[var(--size-destination-card-portrait-width)]";
 
   const boxClass = isNextItinerary
-    ? `block ${sizeClass}`
+    ? `block w-full min-w-0 ${sizeClass}`
     : `block w-full mx-auto lg:max-w-none ${sizeClass}`;
 
   const card = (

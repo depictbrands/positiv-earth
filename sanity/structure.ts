@@ -38,6 +38,13 @@ export const structure: StructureResolver = (S) =>
             .schemaType("designYourTravelPage")
             .documentId("designYourTravelPage"),
         ),
+      S.listItem()
+        .title("Itineraries")
+        .child(
+          S.documentTypeList("itinerary")
+            .title("Itineraries")
+            .defaultOrdering([{ field: "title", direction: "asc" }]),
+        ),
       ...S.documentTypeListItems().filter(
         (item) =>
           item.getId() !== "homePage" &&
@@ -45,6 +52,7 @@ export const structure: StructureResolver = (S) =>
           item.getId() !== "faqPage" &&
           item.getId() !== "contactPage" &&
           item.getId() !== "aboutPage" &&
-          item.getId() !== "designYourTravelPage",
+          item.getId() !== "designYourTravelPage" &&
+          item.getId() !== "itinerary",
       ),
     ]);

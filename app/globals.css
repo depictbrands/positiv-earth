@@ -191,6 +191,7 @@
  * hero-overlay          | --color-hero-overlay                      | rgba(0,0,0,0.25)
  * itinerary-hero-overlay | --color-itinerary-hero-overlay           | rgba(0,0,0,0.4)
  * itinerary-hero-content-width | --size-itinerary-hero-content-width | 875px
+ * itinerary-hero-rule-thick-height | --size-itinerary-hero-rule-thick-height | 5px
  * itinerary-overview-width | --size-itinerary-overview-width        | 1416px
  * itinerary-overview-copy-width | --size-itinerary-overview-copy-width | 509px
  * itinerary-overview-map-width | --size-itinerary-overview-map-width | 704px
@@ -467,7 +468,7 @@
   --spacing-itinerary-whats-included-includes-heading-gap: 4.625rem;
   --spacing-itinerary-whats-included-excludes-heading-gap: 5.25rem;
   --spacing-next-itineraries-cards-gap: 1.25rem;
-  --spacing-next-itineraries-layout-gap: 1.25rem;
+  --spacing-next-itineraries-layout-gap: 6rem;
   --spacing-destinations-cta-offset-top: 111.4375rem;
   --spacing-hero-content-offset-top: 17.3125rem;
   --spacing-hero-content-gap: 3.125rem;
@@ -558,6 +559,7 @@
   --size-destinations-cta-width: 11.875rem;
   --size-destinations-cta-height: 3.5rem;
   --size-itinerary-hero-content-width: 54.6875rem;
+  --size-itinerary-hero-rule-thick-height: 0.3125rem;
   --size-itinerary-overview-width: 88.5rem;
   --size-itinerary-overview-copy-width: 31.8125rem;
   --size-itinerary-overview-map-width: 44rem;

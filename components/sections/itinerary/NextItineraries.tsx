@@ -67,14 +67,14 @@ export default function NextItineraries({
 
   return (
     <section className="w-full overflow-hidden bg-base-black">
-      <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-10 px-6 py-16 sm:px-10 lg:flex-row lg:items-start lg:gap-[var(--spacing-next-itineraries-layout-gap)] lg:px-0 lg:py-22">
+      <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-10 px-6 py-16 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:px-0 lg:py-22">
         <h2 className="shrink-0 font-display text-heading-4 text-base-white lg:w-[var(--size-next-itineraries-heading-width)]">
           <span className="block">{resolved.headingLeading}</span>
           <span className="block">{resolved.headingTrailing}</span>
         </h2>
 
         <div
-          className="grid w-full min-w-0 grid-cols-1 gap-[var(--spacing-next-itineraries-cards-gap)] sm:grid-cols-2 lg:flex-1"
+          className="grid w-full min-w-0 flex-1 grid-cols-1 gap-[var(--spacing-next-itineraries-cards-gap)] sm:grid-cols-2"
         >
           {recommended.map((destination, index) => (
             <DestinationCard

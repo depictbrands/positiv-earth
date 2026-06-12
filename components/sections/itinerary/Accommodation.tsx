@@ -188,20 +188,16 @@ export default function Accommodation({ content }: AccommodationProps) {
 
   return (
     <section className="w-full overflow-hidden bg-base-white">
-      <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-12 px-6 py-16 sm:px-10 lg:grid lg:grid-cols-[var(--size-itinerary-accommodation-nav-width)_minmax(0,1fr)] lg:items-start lg:gap-x-16 lg:gap-y-[var(--spacing-itinerary-accommodation-heading-gap)] lg:px-0 lg:py-22">
-        {/* Left: heading + city tabs; lg:contents promotes children into the grid */}
-        <div
-          className="flex w-full shrink-0 flex-col lg:contents"
-          style={{ gap: "var(--spacing-itinerary-accommodation-heading-gap)" }}
-        >
-          <h2 className="font-display text-heading-4 text-base-black lg:col-start-1 lg:row-start-1">
-            {resolved.heading}
-          </h2>
+      <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-12 px-6 py-16 sm:px-10 lg:gap-y-[var(--spacing-itinerary-accommodation-heading-gap)] lg:px-0 lg:py-22">
+        <h2 className="font-display text-heading-4 text-base-black">
+          {resolved.heading}
+        </h2>
 
+        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between">
           <div
             role="tablist"
             aria-label="Accommodation cities"
-            className="flex w-full flex-col lg:col-start-1 lg:row-start-2 lg:max-w-[var(--size-itinerary-accommodation-nav-width)]"
+            className="flex w-full shrink-0 flex-col lg:max-w-[var(--size-itinerary-accommodation-nav-width)]"
           >
             {resolved.cities.map((city) => {
               const selected = city.id === selectedCity?.id;
@@ -227,17 +223,15 @@ export default function Accommodation({ content }: AccommodationProps) {
               );
             })}
           </div>
-        </div>
 
-        {/* Right: hotel panel for selected city */}
-        {selectedCity && featuredHotel ? (
-          <div
-            id={`${baseId}-panel-${selectedCity.id}`}
-            role="tabpanel"
-            aria-labelledby={`${baseId}-tab-${selectedCity.id}`}
-            className="flex w-full flex-col lg:col-start-2 lg:row-start-2 lg:w-[var(--size-itinerary-card-width)]"
-            style={{ gap: "var(--spacing-itinerary-accommodation-grid-gap)" }}
-          >
+          {selectedCity && featuredHotel ? (
+            <div
+              id={`${baseId}-panel-${selectedCity.id}`}
+              role="tabpanel"
+              aria-labelledby={`${baseId}-tab-${selectedCity.id}`}
+              className="flex w-full min-w-0 flex-1 flex-col"
+              style={{ gap: "var(--spacing-itinerary-accommodation-grid-gap)" }}
+            >
             <HotelCard hotel={featuredHotel} featured />
 
             {gridHotels.length > 0 ? (
@@ -252,6 +246,7 @@ export default function Accommodation({ content }: AccommodationProps) {
             ) : null}
           </div>
         ) : null}
+        </div>
       </div>
     </section>
   );

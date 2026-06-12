@@ -12,6 +12,14 @@ import type { Destination } from "@/types/destination";
  * document by slug). Section content is grouped here; the page/data layer
  * fetches and maps Sanity → this type, then passes sections down.
  */
+/** CMS-configurable next-itineraries headings and editorial picks (destinations pool lives on the page). */
+export type ItineraryNextItinerariesConfig = Omit<
+  ItineraryNextItinerariesContent,
+  "destinations"
+> & {
+  destinations?: Destination[];
+};
+
 export type ItineraryContent = {
   hero: ItineraryHeroContent;
   overview?: ItineraryOverviewContent;
@@ -19,7 +27,7 @@ export type ItineraryContent = {
   localFood?: ItineraryLocalFoodContent;
   accommodation?: ItineraryAccommodationContent;
   whatsIncluded?: ItineraryWhatsIncludedContent;
-  nextItineraries?: ItineraryNextItinerariesContent;
+  nextItineraries?: ItineraryNextItinerariesConfig;
   /** Shared home-page destination list — used to build nextItineraries when not set explicitly. */
   destinations?: Destination[];
   /**
