@@ -39,6 +39,8 @@
  * navi                  | --text-nav                               | 16px
  * quick-link-footer     | --text-quick-link-footer                 | 20px
  * destination-card-scrim | --color-destination-card-scrim         | rgba(0, 0, 0, 0.4)
+ * destination-card-portrait-overlay-start | --color-destination-card-portrait-overlay-start | rgba(24, 24, 24, 0.70)
+ * destination-card-portrait-overlay-end | --color-destination-card-portrait-overlay-end | rgba(24, 24, 24, 0.00)
  * destination-card-divider | --color-destination-card-divider     | #ffffffff
  * destination-card-copy-inset | --spacing-destination-card-copy-inset | 28px
  * destination-card-copy-gap | --spacing-destination-card-copy-gap | 8px
@@ -51,8 +53,10 @@
  * destination-card-duration-label-offset-y | --spacing-destination-card-duration-label-offset-y | 18px
  * destination-card-landscape-width | --size-destination-card-landscape-width | 701px
  * destination-card-landscape-height | --size-destination-card-landscape-height | 650px
+ * destination-card-landscape-overlay-height | --size-destination-card-landscape-overlay-height | 18rem
  * destination-card-portrait-width | --size-destination-card-portrait-width | 21.375rem
  * destination-card-portrait-height | --size-destination-card-portrait-height | 40.625rem
+ * destination-card-portrait-overlay-height | --size-destination-card-portrait-overlay-height | 14.4375rem
  * search-button-width   | --size-search-button-width                | 160px
  * search-button-height  | --size-search-button-height               | 56px
  * search-button-padding-left | --spacing-search-button-padding-left  | 52px
@@ -289,6 +293,8 @@
   --color-hero-overlay: oklch(0 0 0 / 0.25);
   --color-search-button-surface: oklch(0.8297 0 89.88);
   --color-destination-card-scrim: oklch(0 0 0 / 0.4);
+  --color-destination-card-portrait-overlay-start: oklch(0.209 0 0 / 0.7);
+  --color-destination-card-portrait-overlay-end: oklch(0.209 0 0 / 0);
   --color-destination-card-divider: var(--color-base-white);
   --color-cta-overlay: oklch(0 0 0 / 0.25);
   --color-three-services-image-overlay: oklch(0 0 0 / 0.1);
@@ -418,8 +424,10 @@
   --size-destination-card-vertical-divider-height: 2rem;
   --size-destination-card-landscape-width: 43.8125rem;
   --size-destination-card-landscape-height: 40.625rem;
+  --size-destination-card-landscape-overlay-height: 18rem;
   --size-destination-card-portrait-width: 21.375rem;
   --size-destination-card-portrait-height: 40.625rem;
+  --size-destination-card-portrait-overlay-height: 18rem;
   --size-search-bar-width: 76rem;
   --size-search-bar-height: 5rem;
   --size-search-bar-segment-width: 21rem;

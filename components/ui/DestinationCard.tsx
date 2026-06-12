@@ -33,10 +33,15 @@ function DestinationCardContent({
 
       <div
         aria-hidden="true"
-        className="absolute inset-0"
+        className="absolute inset-x-0 bottom-0 w-full"
         style={{
+          height: isPortrait
+            ? "var(--size-destination-card-portrait-overlay-height)"
+            : "var(--size-destination-card-landscape-overlay-height)",
+          borderRadius:
+            "0 0 var(--radius-card-corner) var(--radius-card-corner)",
           backgroundImage:
-            "linear-gradient(to top, var(--color-destination-card-scrim), transparent)",
+            "linear-gradient(0deg, var(--color-destination-card-portrait-overlay-start) 50%, var(--color-destination-card-portrait-overlay-end) 87.08%)",
         }}
       />
 
@@ -93,11 +98,9 @@ function DestinationCardContent({
               </span>
             </span>
           </div>
-
-          <div className="w-full border-t border-destination-card-divider" />
         </div>
 
-        <p className="w-full font-open-sans text-destination-card-locations italic text-base-white">
+        <p className="w-full font-open-sans text-destination-card-locations text-base-white">
           {locations}
         </p>
       </div>

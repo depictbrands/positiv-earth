@@ -35,9 +35,9 @@ export default function QuizTravelerCount({
   onRemoveChild,
 }: QuizTravelerCountProps) {
   return (
-    <div className="flex w-full flex-col items-start gap-[var(--spacing-quiz-fields-stack-gap)]">
+    <div className="flex w-full flex-col items-center gap-[var(--spacing-quiz-fields-stack-gap)]">
       {/* Adults number + add-children toggle */}
-      <div className="flex w-full flex-wrap items-end gap-[var(--spacing-quiz-count-row-gap)]">
+      <div className="flex w-full flex-wrap items-end justify-center gap-[var(--spacing-quiz-count-row-gap)]">
         <div className="flex w-full flex-col items-start gap-[var(--spacing-quiz-field-label-gap)] max-w-[var(--size-quiz-adults-field-width)]">
           <label
             htmlFor="quiz-adults"
@@ -74,7 +74,7 @@ export default function QuizTravelerCount({
         ? childrenAges.map((age, index) => (
             <div
               key={index}
-              className="flex w-full flex-wrap items-end gap-[var(--spacing-quiz-children-row-gap)]"
+              className="flex w-full flex-wrap items-end justify-center gap-[var(--spacing-quiz-children-row-gap)]"
             >
               <div className="flex w-full flex-col items-start gap-[var(--spacing-quiz-field-label-gap)] max-w-[var(--size-quiz-adults-field-width)]">
                 <label
