@@ -8,12 +8,14 @@ const PLACEHOLDER_IMAGE =
 
 type DestinationCardProps = {
   destination: Destination;
-  orientation: "landscape" | "portrait";
+  orientation?: "landscape" | "portrait";
+  /** Home grid uses mixed portrait/landscape sizes; next-itinerary uses uniform cards. */
+  layout?: "home" | "next-itinerary";
 };
 
 function DestinationCardContent({
   destination,
-  orientation,
+  orientation = "portrait",
 }: DestinationCardProps) {
   const locations = destination.locations.join(", ");
   const isPortrait = orientation === "portrait";
@@ -21,9 +23,7 @@ function DestinationCardContent({
   const imageAlt = destination.imageAlt?.trim() || destination.name;
 
   return (
-    <article
-      className="relative h-full w-full overflow-hidden rounded-card-corner"
-    >
+    <article className="relative h-full w-full overflow-hidden rounded-card-corner">
       <Image
         src={imageUrl}
         alt={imageAlt}
@@ -80,7 +80,9 @@ function DestinationCardContent({
             <span
               aria-hidden="true"
               className="block w-px shrink-0 self-end bg-destination-card-divider"
-              style={{ height: "var(--size-destination-card-vertical-divider-height)" }}
+              style={{
+                height: "var(--size-destination-card-vertical-divider-height)",
+              }}
             />
 
             <span className="inline-flex shrink-0 items-end text-base-white">
@@ -108,27 +110,42 @@ function DestinationCardContent({
   );
 }
 
-export default function DestinationCard(props: DestinationCardProps) {
-  const sizeClass =
-    props.orientation === "landscape"
+export default function DestinationCard({
+  destination,
+  orientation = "portrait",
+  layout = "home",
+}: DestinationCardProps) {
+  const isNextItinerary = layout === "next-itinerary";
+  const copyOrientation = isNextItinerary ? "portrait" : orientation;
+
+  const sizeClass = isNextItinerary
+    ? "h-[var(--size-next-itinerary-card-height)] w-[var(--size-next-itinerary-card-width)] shrink-0 snap-start"
+    : orientation === "landscape"
       ? "aspect-[701/650] max-w-[var(--size-destination-card-landscape-width)]"
       : "aspect-[342/650] max-w-[var(--size-destination-card-portrait-width)]";
-  const boxClass = `block w-full mx-auto lg:max-w-none ${sizeClass}`;
 
-  if (!props.destination.href) {
-    return (
-      <div className={boxClass}>
-        <DestinationCardContent {...props} />
-      </div>
-    );
+  const boxClass = isNextItinerary
+    ? `block ${sizeClass}`
+    : `block w-full mx-auto lg:max-w-none ${sizeClass}`;
+
+  const card = (
+    <DestinationCardContent
+      destination={destination}
+      orientation={copyOrientation}
+      layout={layout}
+    />
+  );
+
+  if (!destination.href) {
+    return <div className={boxClass}>{card}</div>;
   }
 
   return (
     <Link
-      href={props.destination.href}
+      href={destination.href}
       className={`${boxClass} focus-visible:rounded-card-corner focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white`}
     >
-      <DestinationCardContent {...props} />
+      {card}
     </Link>
   );
 }

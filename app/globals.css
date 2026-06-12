@@ -24,6 +24,10 @@
  * Open Sans             | --font-open-sans                          | Open Sans
  * heading-1             | --text-heading-1                          | 150px
  * heading-2             | --text-heading-2                          | 96px
+ * itinerary-country-name | --text-itinerary-country-name            | 48px
+ * itinerary-meta        | --text-itinerary-meta                     | 40px
+ * itinerary-overview-step-title | --text-itinerary-overview-step-title | 16px
+ * itinerary-overview-step-text | --text-itinerary-overview-step-text | 14px
  * heading-3             | --text-heading-3                          | 70px
  * heading-4             | --text-heading-4                          | 70px
  * boby-1                | --text-body-1                            | 20px
@@ -185,6 +189,69 @@
  * how-it-works-copy-offset-top | --spacing-how-it-works-copy-offset-top | 531px
  * how-it-works-copy-gap | --spacing-how-it-works-copy-gap         | 50px
  * hero-overlay          | --color-hero-overlay                      | rgba(0,0,0,0.25)
+ * itinerary-hero-overlay | --color-itinerary-hero-overlay           | rgba(0,0,0,0.4)
+ * itinerary-hero-content-width | --size-itinerary-hero-content-width | 875px
+ * itinerary-overview-width | --size-itinerary-overview-width        | 1416px
+ * itinerary-overview-copy-width | --size-itinerary-overview-copy-width | 509px
+ * itinerary-overview-map-width | --size-itinerary-overview-map-width | 704px
+ * itinerary-overview-map-height | --size-itinerary-overview-map-height | 396px
+ * itinerary-overview-section-gap | --spacing-itinerary-overview-section-gap | 85px
+ * itinerary-overview-copy-gap | --spacing-itinerary-overview-copy-gap | 50px
+ * itinerary-accent      | --color-itinerary-accent                  | #cf3030
+ * itinerary-track       | --color-itinerary-track                   | faint timeline track
+ * itinerary-day-muted   | --color-itinerary-day-muted               | #6e6e6e
+ * itinerary-card-overlay | --color-itinerary-card-overlay           | rgba(255,255,255,0.8)
+ * itinerary-body-ink    | --color-itinerary-body-ink                | #2c2c2c
+ * itinerary-day-count   | --text-itinerary-day-count                | 32px
+ * itinerary-day-summary | --text-itinerary-day-summary              | 20px
+ * itinerary-headline    | --text-itinerary-headline                 | 24px
+ * itinerary-body        | --text-itinerary-body                     | 20px
+ * itinerary-detail-button | --text-itinerary-detail-button          | 16px
+ * itinerary-card-width  | --size-itinerary-card-width               | 937px
+ * itinerary-card-height | --size-itinerary-card-height              | 331px
+ * itinerary-card-panel-width | --size-itinerary-card-panel-width    | 606px
+ * itinerary-day-label-width | --size-itinerary-day-label-width      | 325px
+ * itinerary-row-gap     | --spacing-itinerary-row-gap               | 46px
+ * itinerary-card-inset  | --spacing-itinerary-card-inset            | 27px
+ * itinerary-card-content-gap | --spacing-itinerary-card-content-gap | 31px
+ * itinerary-card-group-gap | --spacing-itinerary-card-group-gap     | 18px
+ * itinerary-card-headline-gap | --spacing-itinerary-card-headline-gap | 9px
+ * itinerary-detail-overlay | --color-itinerary-detail-overlay        | rgba(0,0,0,0.7)
+ * itinerary-detail-city | --text-itinerary-detail-city               | 32px
+ * itinerary-detail-width | --size-itinerary-detail-width             | 1194px
+ * itinerary-detail-image-height | --size-itinerary-detail-image-height | 320px
+ * itinerary-detail-meal-min-h | --size-itinerary-detail-meal-min-h    | 50px
+ * itinerary-detail-inset | --spacing-itinerary-detail-inset          | 26px
+ * itinerary-local-food-hero-height | --size-itinerary-local-food-hero-height | 593px
+ * itinerary-local-food-gallery-width | --size-itinerary-local-food-gallery-width | 459px
+ * itinerary-local-food-gallery-height | --size-itinerary-local-food-gallery-height | 322px
+ * itinerary-local-food-copy-width | --size-itinerary-local-food-copy-width | 464px
+ * itinerary-local-food-section-gap | --spacing-itinerary-local-food-section-gap | 20px
+ * itinerary-local-food-copy-gap | --spacing-itinerary-local-food-copy-gap | 32px
+ * itinerary-local-food-heading-gap | --spacing-itinerary-local-food-heading-gap | 16px
+ * itinerary-local-food-body | --text-itinerary-local-food-body        | 16px
+ * itinerary-accommodation-city-active | --color-itinerary-accommodation-city-active | #e9e9e9
+ * itinerary-accommodation-card-overlay | --color-itinerary-accommodation-card-overlay | rgba(0,0,0,0.2)
+ * itinerary-accommodation-nav-width | --size-itinerary-accommodation-nav-width | 324px
+ * itinerary-accommodation-featured-height | --size-itinerary-accommodation-featured-height | 455px
+ * itinerary-accommodation-hotel-width | --size-itinerary-accommodation-hotel-width | 458px
+ * itinerary-accommodation-hotel-height | --size-itinerary-accommodation-hotel-height | 374px
+ * itinerary-accommodation-heading-gap | --spacing-itinerary-accommodation-heading-gap | 40px
+ * itinerary-accommodation-city-inset | --spacing-itinerary-accommodation-city-inset | 20px
+ * itinerary-accommodation-grid-gap | --spacing-itinerary-accommodation-grid-gap | 21px
+ * itinerary-accommodation-name-inset | --spacing-itinerary-accommodation-name-inset | 20px
+ * itinerary-hotel-name | --text-itinerary-hotel-name               | 32px
+ * itinerary-whats-included-width | --size-itinerary-whats-included-width | 1113px
+ * itinerary-whats-included-includes-width | --size-itinerary-whats-included-includes-width | 698px
+ * itinerary-whats-included-excludes-width | --size-itinerary-whats-included-excludes-width | 395px
+ * itinerary-whats-included-section-gap | --spacing-itinerary-whats-included-section-gap | 72px
+ * itinerary-whats-included-includes-heading-gap | --spacing-itinerary-whats-included-includes-heading-gap | 74px
+ * itinerary-whats-included-excludes-heading-gap | --spacing-itinerary-whats-included-excludes-heading-gap | 84px
+ * next-itinerary-card-width | --size-next-itinerary-card-width          | 458px
+ * next-itinerary-card-height | --size-next-itinerary-card-height        | 530px
+ * next-itineraries-heading-width | --size-next-itineraries-heading-width | 371px
+ * next-itineraries-cards-gap | --spacing-next-itineraries-cards-gap     | 20px
+ * next-itineraries-layout-gap | --spacing-next-itineraries-layout-gap   | 20px
  * hero-width            | --size-hero-width                         | 1512px
  * hero-height           | --size-hero-height                        | 982px
  * hero-content-width    | --size-hero-content-width                 | 1253px
@@ -291,6 +358,7 @@
   --color-ink-base: oklch(0.3995 0.0101 257.7);
   --color-how-it-works-overlay: oklch(1 0 89.88 / 0.3);
   --color-hero-overlay: oklch(0 0 0 / 0.25);
+  --color-itinerary-hero-overlay: oklch(0 0 0 / 0.4);
   --color-search-button-surface: oklch(0.8297 0 89.88);
   --color-destination-card-scrim: oklch(0 0 0 / 0.4);
   --color-destination-card-portrait-overlay-start: oklch(0.209 0 0 / 0.7);
@@ -303,6 +371,14 @@
   --color-faq-question: oklch(0.309 0 0);
   --color-faq-answer: oklch(0.435 0 0);
   --color-faq-divider: oklch(0.309 0 0 / 0.18);
+  --color-itinerary-accent: oklch(0.562 0.196 26.2);
+  --color-itinerary-track: oklch(0.87 0 0);
+  --color-itinerary-day-muted: oklch(0.553 0 0);
+  --color-itinerary-card-overlay: oklch(1 0 0 / 0.8);
+  --color-itinerary-body-ink: oklch(0.338 0 0);
+  --color-itinerary-detail-overlay: oklch(0 0 0 / 0.7);
+  --color-itinerary-accommodation-city-active: oklch(0.928 0 0);
+  --color-itinerary-accommodation-card-overlay: oklch(0 0 0 / 0.2);
 
   /*
    * About page scene backgrounds (MOTION_SPEC §5). Kept as the exact sRGB hex
@@ -372,6 +448,26 @@
   --spacing-destinations-grid-gap-y: 0.9375rem;
   --spacing-destinations-grid-gap-x-sm: 1rem;
   --spacing-destinations-grid-gap-x-lg: 1.125rem;
+  --spacing-itinerary-overview-section-gap: 5.3125rem;
+  --spacing-itinerary-overview-copy-gap: 3.125rem;
+  --spacing-itinerary-row-gap: 2.875rem;
+  --spacing-itinerary-card-inset: 1.6875rem;
+  --spacing-itinerary-card-content-gap: 1.9375rem;
+  --spacing-itinerary-card-group-gap: 1.125rem;
+  --spacing-itinerary-card-headline-gap: 0.5625rem;
+  --spacing-itinerary-detail-inset: 1.625rem;
+  --spacing-itinerary-local-food-section-gap: 1.25rem;
+  --spacing-itinerary-local-food-copy-gap: 2rem;
+  --spacing-itinerary-local-food-heading-gap: 1rem;
+  --spacing-itinerary-accommodation-heading-gap: 2.5rem;
+  --spacing-itinerary-accommodation-city-inset: 1.25rem;
+  --spacing-itinerary-accommodation-grid-gap: 1.3125rem;
+  --spacing-itinerary-accommodation-name-inset: 1.25rem;
+  --spacing-itinerary-whats-included-section-gap: 4.5rem;
+  --spacing-itinerary-whats-included-includes-heading-gap: 4.625rem;
+  --spacing-itinerary-whats-included-excludes-heading-gap: 5.25rem;
+  --spacing-next-itineraries-cards-gap: 1.25rem;
+  --spacing-next-itineraries-layout-gap: 1.25rem;
   --spacing-destinations-cta-offset-top: 111.4375rem;
   --spacing-hero-content-offset-top: 17.3125rem;
   --spacing-hero-content-gap: 3.125rem;
@@ -461,6 +557,32 @@
   --size-destinations-grid-width: 88.875rem;
   --size-destinations-cta-width: 11.875rem;
   --size-destinations-cta-height: 3.5rem;
+  --size-itinerary-hero-content-width: 54.6875rem;
+  --size-itinerary-overview-width: 88.5rem;
+  --size-itinerary-overview-copy-width: 31.8125rem;
+  --size-itinerary-overview-map-width: 44rem;
+  --size-itinerary-overview-map-height: 24.75rem;
+  --size-itinerary-card-width: 58.5625rem;
+  --size-itinerary-card-height: 20.6875rem;
+  --size-itinerary-card-panel-width: 37.875rem;
+  --size-itinerary-day-label-width: 20.3125rem;
+  --size-itinerary-detail-width: 74.625rem;
+  --size-itinerary-detail-image-height: 20rem;
+  --size-itinerary-detail-meal-min-h: 3.125rem;
+  --size-itinerary-local-food-hero-height: 37.0625rem;
+  --size-itinerary-local-food-gallery-width: 28.6875rem;
+  --size-itinerary-local-food-gallery-height: 20.125rem;
+  --size-itinerary-local-food-copy-width: 29rem;
+  --size-itinerary-accommodation-nav-width: 20.25rem;
+  --size-itinerary-accommodation-featured-height: 28.4375rem;
+  --size-itinerary-accommodation-hotel-width: 28.625rem;
+  --size-itinerary-accommodation-hotel-height: 23.375rem;
+  --size-itinerary-whats-included-width: 69.5625rem;
+  --size-itinerary-whats-included-includes-width: 43.625rem;
+  --size-itinerary-whats-included-excludes-width: 24.6875rem;
+  --size-next-itinerary-card-width: 28.625rem;
+  --size-next-itinerary-card-height: 33.125rem;
+  --size-next-itineraries-heading-width: 23.1875rem;
   --size-hero-width: 94.5rem;
   --size-hero-height: 61.375rem;
   --size-hero-content-width: 78.3125rem;
@@ -576,6 +698,66 @@
   --text-heading-2--line-height: 1.094;
   --text-heading-2--letter-spacing: 0em;
   --text-heading-2--font-weight: 400;
+
+  --text-itinerary-country-name: clamp(1.75rem, 3.17vw, 3rem);
+  --text-itinerary-country-name--line-height: 1.083;
+  --text-itinerary-country-name--letter-spacing: -0.02em;
+  --text-itinerary-country-name--font-weight: 300;
+
+  --text-itinerary-meta: clamp(1.5rem, 2.65vw, 2.5rem);
+  --text-itinerary-meta--line-height: 1.25;
+  --text-itinerary-meta--letter-spacing: -0.02em;
+  --text-itinerary-meta--font-weight: 600;
+
+  --text-itinerary-overview-step-title: 1rem;
+  --text-itinerary-overview-step-title--line-height: 1.5;
+  --text-itinerary-overview-step-title--letter-spacing: 0.001em;
+  --text-itinerary-overview-step-title--font-weight: 500;
+
+  --text-itinerary-overview-step-text: 0.875rem;
+  --text-itinerary-overview-step-text--line-height: 1.5;
+  --text-itinerary-overview-step-text--letter-spacing: 0.004em;
+  --text-itinerary-overview-step-text--font-weight: 400;
+
+  --text-itinerary-day-count: 2rem;
+  --text-itinerary-day-count--line-height: 0.9375;
+  --text-itinerary-day-count--letter-spacing: 0.03em;
+  --text-itinerary-day-count--font-weight: 700;
+
+  --text-itinerary-day-summary: 1.25rem;
+  --text-itinerary-day-summary--line-height: 1.25;
+  --text-itinerary-day-summary--letter-spacing: 0.03em;
+  --text-itinerary-day-summary--font-weight: 400;
+
+  --text-itinerary-headline: 1.5rem;
+  --text-itinerary-headline--line-height: 1.25;
+  --text-itinerary-headline--letter-spacing: 0.03em;
+  --text-itinerary-headline--font-weight: 600;
+
+  --text-itinerary-body: 1.25rem;
+  --text-itinerary-body--line-height: 1.25;
+  --text-itinerary-body--letter-spacing: 0em;
+  --text-itinerary-body--font-weight: 400;
+
+  --text-itinerary-detail-button: 1rem;
+  --text-itinerary-detail-button--line-height: 1.5625;
+  --text-itinerary-detail-button--letter-spacing: 0.03em;
+  --text-itinerary-detail-button--font-weight: 400;
+
+  --text-itinerary-detail-city: 2rem;
+  --text-itinerary-detail-city--line-height: 0.9375;
+  --text-itinerary-detail-city--letter-spacing: 0.03em;
+  --text-itinerary-detail-city--font-weight: 600;
+
+  --text-itinerary-local-food-body: 1rem;
+  --text-itinerary-local-food-body--line-height: 1.875;
+  --text-itinerary-local-food-body--letter-spacing: 0em;
+  --text-itinerary-local-food-body--font-weight: 600;
+
+  --text-itinerary-hotel-name: 2rem;
+  --text-itinerary-hotel-name--line-height: 1.094;
+  --text-itinerary-hotel-name--letter-spacing: -0.02em;
+  --text-itinerary-hotel-name--font-weight: 300;
 
   --text-heading-3: clamp(1.75rem, 4.63vw, 4.375rem);
   --text-heading-3--line-height: 1.1;

@@ -13,14 +13,14 @@ const PLACEHOLDER_IMAGES = [
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 343 650"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="%23a79a86"/><stop offset="1" stop-color="%23373935"/></linearGradient></defs><rect width="343" height="650" fill="url(%23g)"/><rect x="0" y="420" width="343" height="230" fill="%23000000" fill-opacity="0.18"/></svg>',
 ] as const;
 
-const DEFAULT_DESTINATIONS: Destination[] = [
+export const DEFAULT_DESTINATIONS: Destination[] = [
   {
     name: "Vietname",
     durationDays: 8,
     locations: ["Hanoi", "Halong Bay", "Hoi an", "Ho Minh City"],
     imageUrl: PLACEHOLDER_IMAGES[0],
     imageAlt: "Vietnam destination placeholder",
-    href: "#",
+    href: "/itinerary/vietnam",
   },
   {
     name: "Costa Rica",
@@ -28,7 +28,7 @@ const DEFAULT_DESTINATIONS: Destination[] = [
     locations: ["San José", "Arenal", "Manuel Antonio"],
     imageUrl: PLACEHOLDER_IMAGES[1],
     imageAlt: "Costa Rica destination placeholder",
-    href: "#",
+    href: "/itinerary/costa-rica",
   },
   {
     name: "Puerto Rico",
@@ -36,7 +36,7 @@ const DEFAULT_DESTINATIONS: Destination[] = [
     locations: ["San Juan", "El Yunque", "Vieques"],
     imageUrl: PLACEHOLDER_IMAGES[2],
     imageAlt: "Puerto Rico destination placeholder",
-    href: "#",
+    href: "/itinerary/puerto-rico",
   },
   {
     name: "Cusco Classic",
@@ -44,7 +44,7 @@ const DEFAULT_DESTINATIONS: Destination[] = [
     locations: ["Cusco", "Machu Picchu", "Vinicunca"],
     imageUrl: PLACEHOLDER_IMAGES[3],
     imageAlt: "Cusco Classic destination placeholder",
-    href: "#",
+    href: "/itinerary/cusco-machu-picchu",
   },
   {
     name: "Japan Classic",
@@ -52,7 +52,7 @@ const DEFAULT_DESTINATIONS: Destination[] = [
     locations: ["Tokyo", "Hakone", "Kyoto", "Nara", "Hiroshima"],
     imageUrl: PLACEHOLDER_IMAGES[4],
     imageAlt: "Japan Classic destination placeholder",
-    href: "#",
+    href: "/itinerary/japan-classic",
   },
   {
     name: "Sacred Valley",
@@ -60,7 +60,7 @@ const DEFAULT_DESTINATIONS: Destination[] = [
     locations: ["Lima", "Sacred Valley", "Lake Titicaca", "Machu Picchu"],
     imageUrl: PLACEHOLDER_IMAGES[5],
     imageAlt: "Sacred Valley destination placeholder",
-    href: "#",
+    href: "/itinerary/sacred-valley",
   },
 ];
 
