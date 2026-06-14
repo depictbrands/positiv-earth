@@ -250,10 +250,34 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
 
   const listRef = useRef<HTMLOListElement>(null);
   const dotRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const liRefs = useRef<Array<HTMLLIElement | null>>([]);
   const [track, setTrack] = useState({ top: 0, height: 0 });
   const [fillHeight, setFillHeight] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
+  const [mobileActive, setMobileActive] = useState(0);
   const [openDayIndex, setOpenDayIndex] = useState<number | null>(null);
+
+  // Mobile horizontal carousel: the active day is whichever slide is nearest the
+  // scroller's horizontal center. Only fires on mobile (the desktop list doesn't
+  // scroll horizontally), so it has no effect on the desktop layout.
+  const onCarouselScroll = useCallback(() => {
+    const list = listRef.current;
+    if (!list) return;
+
+    const center = list.scrollLeft + list.clientWidth / 2;
+    let nearest = 0;
+    let best = Infinity;
+    liRefs.current.forEach((li, index) => {
+      if (!li) return;
+      const liCenter = li.offsetLeft + li.offsetWidth / 2;
+      const distance = Math.abs(liCenter - center);
+      if (distance < best) {
+        best = distance;
+        nearest = index;
+      }
+    });
+    setMobileActive(nearest);
+  }, []);
 
   const measure = useCallback(() => {
     const list = listRef.current;
@@ -315,7 +339,8 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
 
         <ol
           ref={listRef}
-          className="relative mt-12 flex flex-col lg:mt-16 [--rail-w:2.5rem]"
+          onScroll={onCarouselScroll}
+          className="relative mt-12 flex snap-x snap-mandatory overflow-x-auto [scrollbar-width:none] lg:mt-16 lg:flex-col lg:snap-none lg:overflow-visible [--rail-w:2.5rem] [&::-webkit-scrollbar]:hidden"
           style={{ gap: "var(--spacing-itinerary-row-gap)" }}
         >
           {/* Scroll-driven rail (desktop): faint base track covered by the accent fill */}
@@ -341,9 +366,12 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
             return (
               <li
                 key={`${day.dayLabel}-${index}`}
-                className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
+                ref={(node) => {
+                  liRefs.current[index] = node;
+                }}
+                className="relative flex w-full shrink-0 snap-center flex-col gap-6 lg:flex-row lg:items-center lg:justify-between"
               >
-                <div className="flex items-center gap-5 lg:shrink-0">
+                <div className="hidden items-center gap-5 lg:flex lg:shrink-0">
                   {/* Rail cell with dot (desktop) */}
                   <div className="hidden lg:flex lg:w-[var(--rail-w)] lg:shrink-0 lg:items-center lg:justify-center lg:self-stretch">
                     <span
@@ -376,17 +404,19 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                 </div>
 
                 {/* Media card */}
-                <div className="relative w-full min-w-0 flex-1 overflow-hidden rounded-card-corner lg:h-[var(--size-itinerary-card-height)]">
-                  <Image
-                    src={day.imageUrl}
-                    alt={day.imageAlt}
-                    fill
-                    className="object-cover"
-                    sizes="(min-width: 1024px) 937px, 100vw"
-                  />
+                <div className="relative flex w-full min-w-0 flex-1 flex-col overflow-hidden rounded-card-corner lg:block lg:h-[var(--size-itinerary-card-height)]">
+                  <div className="relative aspect-[3/2] w-full shrink-0 lg:absolute lg:inset-0 lg:aspect-auto">
+                    <Image
+                      src={day.imageUrl}
+                      alt={day.imageAlt}
+                      fill
+                      className="object-cover"
+                      sizes="(min-width: 1024px) 937px, 100vw"
+                    />
+                  </div>
 
                   <div
-                    className="relative flex w-full flex-col bg-itinerary-card-overlay lg:absolute lg:left-0 lg:top-0 lg:h-full lg:w-[var(--size-itinerary-card-panel-width)]"
+                    className="relative flex w-full flex-1 flex-col bg-base-white lg:absolute lg:left-0 lg:top-0 lg:h-full lg:w-[var(--size-itinerary-card-panel-width)] lg:flex-none lg:bg-itinerary-card-overlay"
                     style={{
                       gap: "var(--spacing-itinerary-card-content-gap)",
                       padding: "var(--spacing-itinerary-card-inset)",
@@ -417,6 +447,35 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                       onClick={() => setOpenDayIndex(index)}
                       className="self-start shadow-search-bar"
                     />
+                  </div>
+                </div>
+
+                {/* Horizontal rail + centered day label (mobile carousel) */}
+                <div className="flex flex-col items-center gap-5 lg:hidden">
+                  <div className="flex w-full items-center">
+                    <span
+                      className={`block size-5 shrink-0 rounded-full transition-colors duration-300 ${
+                        index === mobileActive
+                          ? "bg-itinerary-accent"
+                          : "bg-itinerary-track"
+                      }`}
+                    />
+                    <span className="h-0.5 flex-1 bg-itinerary-track" />
+                  </div>
+
+                  <div className="flex flex-col items-center gap-3 text-center">
+                    <p
+                      className={`font-open-sans text-itinerary-day-count uppercase transition-colors duration-300 ${
+                        index === mobileActive
+                          ? "text-itinerary-accent"
+                          : "text-base-black"
+                      }`}
+                    >
+                      {day.dayLabel}
+                    </p>
+                    <p className="whitespace-pre-line font-open-sans text-itinerary-day-summary text-itinerary-day-muted">
+                      {day.daySummary}
+                    </p>
                   </div>
                 </div>
               </li>

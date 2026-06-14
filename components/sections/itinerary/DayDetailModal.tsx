@@ -116,7 +116,7 @@ export default function DayDetailModal({ day, onClose }: DayDetailModalProps) {
           style={{ padding: "var(--spacing-itinerary-detail-inset)" }}
         >
           <div className="flex flex-col gap-6">
-            <div className="flex flex-wrap items-center gap-x-12 gap-y-2">
+            <div className="flex items-center justify-between gap-x-6 lg:flex-wrap lg:justify-start lg:gap-x-12 lg:gap-y-2">
               <p
                 id={headingId}
                 className="font-open-sans text-itinerary-day-count uppercase text-base-black"
@@ -140,34 +140,39 @@ export default function DayDetailModal({ day, onClose }: DayDetailModalProps) {
           </div>
 
           {detail?.periods?.length ? (
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <div className="flex flex-col gap-8 md:grid md:grid-cols-3">
               {detail.periods.map((period, index) => (
-                <div key={`${period.name}-${index}`} className="flex flex-col gap-4">
-                  <h3 className="font-open-sans text-itinerary-headline text-base-black">
-                    {period.name}
-                  </h3>
+                <div
+                  key={`${period.name}-${index}`}
+                  className="flex gap-6 md:flex-col md:gap-4"
+                >
+                  <div className="flex w-2/5 shrink-0 flex-col gap-3 md:w-auto md:gap-4">
+                    <h3 className="font-open-sans text-itinerary-headline text-base-black">
+                      {period.name}
+                    </h3>
 
-                  <div
-                    className="flex flex-col"
-                    style={{ minHeight: "var(--size-itinerary-detail-meal-min-h)" }}
-                  >
-                    <p
-                      className={`font-open-sans text-itinerary-day-summary ${
-                        period.mealIncluded
-                          ? "text-itinerary-accent"
-                          : "text-base-black"
-                      }`}
+                    <div
+                      className="flex flex-col"
+                      style={{ minHeight: "var(--size-itinerary-detail-meal-min-h)" }}
                     >
-                      {period.meal}
-                    </p>
-                    {period.mealIncluded && period.mealPlace ? (
-                      <p className="font-open-sans text-itinerary-day-summary italic text-itinerary-accent">
-                        {period.mealPlace}
+                      <p
+                        className={`font-open-sans text-itinerary-day-summary ${
+                          period.mealIncluded
+                            ? "text-itinerary-accent"
+                            : "text-base-black"
+                        }`}
+                      >
+                        {period.meal}
                       </p>
-                    ) : null}
+                      {period.mealIncluded && period.mealPlace ? (
+                        <p className="font-open-sans text-itinerary-day-summary italic text-itinerary-accent">
+                          {period.mealPlace}
+                        </p>
+                      ) : null}
+                    </div>
                   </div>
 
-                  <p className="font-open-sans text-itinerary-body text-base-black">
+                  <p className="flex-1 font-open-sans text-itinerary-body text-base-black md:flex-none">
                     {period.activity}
                   </p>
                 </div>
