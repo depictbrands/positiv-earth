@@ -44,7 +44,7 @@ export const DEFAULT_DESTINATIONS: Destination[] = [
     locations: ["Cusco", "Machu Picchu", "Vinicunca"],
     imageUrl: PLACEHOLDER_IMAGES[3],
     imageAlt: "Cusco Classic destination placeholder",
-    href: "/itinerary/cusco-machu-picchu",
+    href: "/itinerary/peru-machu-picchu",
   },
   {
     name: "Japan Classic",

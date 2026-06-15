@@ -70,16 +70,24 @@ export default function HowItWorks({
     >
       <div
         className="relative flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
+        role="img"
+        aria-label={imageAlt}
       >
-        <img
-          src={imageUrl}
-          alt={imageAlt}
-          className="absolute inset-0 h-full w-full object-cover"
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-[var(--color-how-it-works-bg-fallback)] bg-no-repeat"
+          style={{
+            backgroundImage: `url("${imageUrl}")`,
+            backgroundPosition: "var(--size-how-it-works-bg-position-x) 0",
+            backgroundSize: "var(--size-how-it-works-bg-size)",
+          }}
         />
         <div
           aria-hidden="true"
-          className="absolute inset-0"
-          style={{ backgroundColor: "var(--color-how-it-works-overlay)" }}
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: "var(--gradient-how-it-works-image-fade)",
+          }}
         />
 
         <div

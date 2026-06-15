@@ -71,7 +71,7 @@ export default async function AboutPage() {
   // and the dev debug overlay. Content comes from Sanity, falling back to the
   // defaults baked into each section.
   return (
-    <main className="flex w-full flex-col items-center">
+    <main className="about-scale flex w-full flex-col items-center">
       <AboutMotionProvider>
         <AboutHero content={content?.hero} />
         <AboutIntro content={content?.intro} />

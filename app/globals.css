@@ -167,6 +167,10 @@
  * testimonial-pagination-inactive | --color-testimonial-pagination-inactive | rgba(255,255,255,0.5)
  * ink-base              | --color-ink-base                          | #404446
  * how-it-works-overlay  | --color-how-it-works-overlay              | rgba(255,255,255,0.3)
+ * how-it-works-bg-fallback | --color-how-it-works-bg-fallback       | lightgray
+ * how-it-works-bg-position-x | --size-how-it-works-bg-position-x    | -415.665px
+ * how-it-works-bg-size  | --size-how-it-works-bg-size               | 200.748% 107.536%
+ * how-it-works-image-fade | --gradient-how-it-works-image-fade      | linear-gradient(...) overlay on image
  * destinations-section-width | --size-destinations-section-width    | 1512px
  * destinations-section-height | --size-destinations-section-height  | 1905px
  * destinations-heading-offset-top | --spacing-destinations-heading-offset-top | 134px
@@ -261,7 +265,7 @@
  * hero-subcopy-width    | --size-hero-subcopy-width                 | 869px
  * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
  * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
- * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.06em
+ * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.32em
  * abouthero-role-gap    | --spacing-abouthero-role-gap              | 32px
  * hero-subcopy          | --text-hero-subcopy                       | 20px
  * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
@@ -359,6 +363,13 @@
   --color-testimonial-pagination-inactive: oklch(1 0 89.88 / 0.5);
   --color-ink-base: oklch(0.3995 0.0101 257.7);
   --color-how-it-works-overlay: oklch(1 0 89.88 / 0.3);
+  --color-how-it-works-bg-fallback: lightgray;
+  --gradient-how-it-works-image-fade: linear-gradient(
+    180deg,
+    oklch(1 0 89.88 / 0) 41.14%,
+    oklch(1 0 89.88 / 0.8) 74.75%,
+    var(--color-base-white) 100%
+  );
   --color-hero-overlay: oklch(0 0 0 / 0.25);
   --color-itinerary-hero-overlay: oklch(0 0 0 / 0.4);
   --color-search-button-surface: oklch(0.8297 0 89.88);
@@ -475,7 +486,7 @@
   --spacing-hero-content-gap: 3.125rem;
   --spacing-hero-search-offset-top: 44.25rem;
   --spacing-hero-headline-gap: 2.25rem;
-  --spacing-text-reveal-line-buffer: 0.06em;
+  --spacing-text-reveal-line-buffer: 0.32em;
   --spacing-abouthero-role-gap: 2rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
@@ -594,6 +605,8 @@
   --size-how-it-works-width: 94.5rem;
   --size-how-it-works-height: 61.375rem;
   --size-how-it-works-left-width: 58.5rem;
+  --size-how-it-works-bg-position-x: -25.9790625rem;
+  --size-how-it-works-bg-size: 200.748% 107.536%;
   --size-how-it-works-turntable-width: 44.125rem;
   --size-how-it-works-turntable-height: 43.625rem;
   --size-how-it-works-copy-width: 29.5625rem;
@@ -956,12 +969,49 @@ body {
   overflow: hidden;
   display: block;
   box-sizing: border-box;
-  padding-block: var(--spacing-text-reveal-line-buffer);
-  margin-block: calc(var(--spacing-text-reveal-line-buffer) * -1);
+  /* Top room for ascenders/diacritics that overflow tight line boxes,
+     pulled back out so line spacing is unchanged. Descender room lives on
+     `.line` (below), not here: a bottom buffer on the mask would let the
+     hidden line — which only slides down by its own height — peek through. */
+  padding-top: var(--spacing-text-reveal-line-buffer);
+  margin-top: calc(var(--spacing-text-reveal-line-buffer) * -1);
+  margin-bottom: calc(var(--spacing-text-reveal-line-buffer) * -1);
 }
 
 .text-reveal .line {
   display: block;
+  /* Descender room. Tight headings (e.g. heading-1 line-height 0.704) leave
+     glyph descenders overflowing the line box where the mask clips them.
+     Putting the buffer on the line adds to its height, so the 100% slide-up
+     fully clears the mask while descenders render at rest. */
+  padding-bottom: var(--spacing-text-reveal-line-buffer);
   will-change: transform;
   transform: translateZ(0);
+}
+
+/*
+ * About page — uniform scale-up above the 1512px design frame.
+ *
+ * The About composition positions everything in vw/vh (tuned to the 1512 frame),
+ * so it already scales fluidly with viewport width. But the shared fluid type
+ * uses clamp(min, vw, max) and a couple of elements use fixed rem caps — all of
+ * which FREEZE at the 1512 frame. On screens wider than 1512 the positions keep
+ * growing while the frozen type/sizes stay put, so the layout drifts apart.
+ *
+ * Here we re-declare those tokens — scoped to the About page only — as
+ * max(min, vw): identical to the capped values at and below 1512 (vw <= max
+ * there), but uncapped above it, so the whole composition scales up uniformly
+ * and the original design's proportions are preserved. Below-laptop layouts and
+ * every other page are untouched.
+ */
+.about-scale {
+  --text-heading-1: max(3rem, 9.92vw);
+  --text-heading-2: max(2.5rem, 6.35vw);
+  --text-heading-3: max(1.75rem, 4.63vw);
+  --text-p1: max(1.25rem, 1.323vw);
+  --text-about-stat-emphasis: max(3rem, 6.35vw);
+  --text-about-stat-rest: max(2rem, 4.23vw);
+  /* Headline gaps in AboutHero (rem) tracked to vw so they scale with the type. */
+  --spacing-hero-headline-gap: max(2.25rem, 2.381vw);
+  --spacing-abouthero-role-gap: max(2rem, 2.116vw);
 }

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import Header from "@/components/layout/Header";
+import TextReveal from "@/components/ui/TextReveal";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import QuizOption from "@/components/ui/QuizOption";
 import QuizContactForm from "@/components/sections/quiz/QuizContactForm";
@@ -217,9 +218,12 @@ export default function DesignYourTravelQuiz({
       {/* Title + quiz panel */}
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 pb-12 pt-28 lg:pt-32">
         <div className="mx-auto flex w-full flex-col gap-6 max-w-[var(--size-quiz-block-width)]">
-          <h1 className="font-body text-quiz-title text-base-white">
+          <TextReveal
+            as="h1"
+            className="font-body text-quiz-title text-base-white"
+          >
             {content.title}
-          </h1>
+          </TextReveal>
 
           {question ? (
             <QuizSceneFrame

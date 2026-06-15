@@ -49,10 +49,13 @@ const STAT_LAYOUT = [
 ] as const;
 
 // Portrait box (439×519px) top-left at (448, 274) in the frame → %s of 1512×982.
+// Width stays pure vw so it scales with the vw-positioned stat lines at every
+// width, including above the 1512 frame (uniform scale-up). The fixed-rem cap is
+// the resting design width reached exactly at 1512 (29.034vw === 27.4375rem).
 const PORTRAIT = {
   left: "29.630vw",
   top: "27.902vh",
-  width: "min(29.034vw, var(--size-about-intro-portrait-width))",
+  width: "29.034vw",
 } as const;
 
 type AboutIntroProps = {
