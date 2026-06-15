@@ -152,7 +152,7 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
                   imageRefs.current[i][j] = el;
                 }}
                 className={`pointer-events-none absolute top-1/2 hidden overflow-hidden rounded-card-corner will-change-transform lg:block ${
-                  IMAGE_SIDES[j] === "left" ? "left-[6vw]" : "right-[6vw]"
+                  IMAGE_SIDES[j] === "left" ? "left-[3vw]" : "right-[3vw]"
                 }`}
                 style={{ height: `${SCENE_IMAGE_MOTION[i][j].h}px` }}
               >
