@@ -29,6 +29,22 @@ const RING_RADIUS = 178.5;
 const LABEL_RADIUS = 206;
 const DOT_RADIUS = 5;
 
+// "Nomads Airplane" mark that leads the highlight arc. Its native viewBox is
+// 2106×1053 and the nose points right (+x), so at the top of the ring (where the
+// clockwise tangent also points right) it needs no extra rotation.
+const PLANE_VIEW_W = 2106;
+const PLANE_VIEW_H = 1053;
+const PLANE_CENTER_X = PLANE_VIEW_W / 2;
+const PLANE_CENTER_Y = PLANE_VIEW_H / 2;
+// Rendered width in viewBox units; scale keeps the native proportions.
+const PLANE_WIDTH = 52;
+const PLANE_SCALE = PLANE_WIDTH / PLANE_VIEW_W;
+const PLANE_PATHS = [
+  "M0 185.884C76.1785 173.683 146.984 162.457 224.612 150.013C318.193 220.538 417.329 295.253 511.208 365.901C641.639 345.021 760.893 326.085 886.306 306.058L673.173 34.5134C725.854 12.2368 769.772 14.1809 810.128 3.68125C857.369 -8.76249 893.255 12.602 932.705 34.0294C1063.26 104.189 1195.68 170.647 1327.44 238.442C1473.7 215.197 1619.05 191.225 1764.69 169.072C1886.18 150.68 2019.63 221.085 2070.45 327.784C1919.97 351.699 1769.78 375.611 1624.73 398.737C1593.74 427.506 1566.91 451.295 1541.48 476.544C1523.78 494.388 1482.28 549.136 1472.61 559.211C1353.11 681.63 1233.02 803.503 1113.03 925.252C1077.03 961.548 1040.48 997.114 1009.25 1027.89C952.217 1036.99 901.835 1045 853.442 1052.77C840.637 1035.35 844.441 1022.12 851.632 1006.82C903.646 895.816 932.947 775.643 985.807 664.575C990.699 654.255 1036.31 549.255 1046.34 491.416C997.995 499.126 949.915 506.793 902.042 514.429C701.184 546.469 290.67 614.688 290.67 614.688C290.67 614.688 34.0115 239.839 0 185.884Z",
+  "M306.584 608.27C322.906 602.733 801.242 529.441 1051.26 486.045C1041.28 548.709 1034.73 599.535 990.531 632.344C861.009 654.373 731.25 674.494 602.209 699.019C554.886 708.095 511.111 705.596 467.337 685.605C416.348 662.265 333.496 656.411 290.261 613.803C290.261 613.803 290.261 613.803 306.584 608.27Z",
+  "M1626.08 385.897C1767.64 363.062 1914.25 339.445 2061.25 315.832C2091.96 345.021 2103.89 381.64 2105.54 430.25C1905.65 462.433 1691.56 494.441 1493.62 526.386C1493.62 526.386 1595.76 414.304 1626.08 385.897Z",
+] as const;
+
 const ENTRY_THRESHOLD = 0.4;
 // One full clockwise turn for the intro draw and click sweeps (within the
 // 1200–1600ms brief).
@@ -418,6 +434,15 @@ export default function Turntable({
     return index === safeActiveIndex;
   };
 
+  // The plane rides the leading edge of the highlight arc. Its angle on the ring
+  // is -90° + renderFront·360°, and the clockwise tangent there is exactly
+  // renderFront·360° from the plane's native (rightward) heading.
+  const leadAngle = -90 + renderFront * 360;
+  const leadPoint = getPoint(leadAngle, RING_RADIUS);
+  const planeRotation = renderFront * 360;
+  const planeTransform = `translate(${leadPoint.x} ${leadPoint.y}) rotate(${planeRotation}) scale(${PLANE_SCALE}) translate(${-PLANE_CENTER_X} ${-PLANE_CENTER_Y})`;
+  const showPlane = renderPhase !== "idle";
+
   return (
     <div
       ref={rootRef}
@@ -467,6 +492,15 @@ export default function Turntable({
             )}
           />
         ))}
+
+        {/* Plane leading the highlight arc, pointing along the clockwise tangent. */}
+        {showPlane && (
+          <g transform={planeTransform} className="fill-base-black">
+            {PLANE_PATHS.map((d, index) => (
+              <path key={`plane-${index}`} d={d} fillRule="evenodd" clipRule="evenodd" />
+            ))}
+          </g>
+        )}
       </svg>
 
       {geometry.map((item, index) => {

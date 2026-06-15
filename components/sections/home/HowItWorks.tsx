@@ -66,7 +66,7 @@ export default function HowItWorks({
 
   return (
     <section
-      className="grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-how-it-works-height)] lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
+      className="grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-how-it-works-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
     >
       <div
         className="relative flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
@@ -93,10 +93,6 @@ export default function HowItWorks({
         <div
           className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-end gap-12 lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
         >
-          <h2 className="w-full font-display text-heading-4 text-base-white lg:whitespace-nowrap">
-            {renderHeading(content)}
-          </h2>
-
           <div className="w-full">
             <Turntable className="shrink-0" steps={content.steps} />
           </div>
@@ -104,12 +100,18 @@ export default function HowItWorks({
       </div>
 
       <div
-        className="flex w-full flex-col items-start px-6 py-16 sm:px-10 lg:w-[var(--size-how-it-works-copy-width)] lg:px-0 lg:py-0 lg:ml-[calc(var(--spacing-how-it-works-copy-offset-x)_-_var(--size-how-it-works-left-width))] lg:mt-[var(--spacing-how-it-works-copy-offset-top)]"
+        className="flex w-full flex-col items-start px-6 py-16 sm:px-10 lg:w-[var(--size-how-it-works-copy-width)] lg:px-0 lg:py-0 lg:ml-[calc(var(--spacing-how-it-works-copy-offset-x)_-_var(--size-how-it-works-left-width))]"
         style={{
           gap: "var(--spacing-how-it-works-copy-gap)",
         }}
       >
-        <p className="font-body text-p2 text-base-black">{content.body}</p>
+        <h2 className="w-full text-left font-display text-heading-4 text-base-black">
+          {renderHeading(content)}
+        </h2>
+
+        <p className="w-full text-left font-body text-p2 text-base-black">
+          {content.body}
+        </p>
 
         {cta ? (
           <Link
