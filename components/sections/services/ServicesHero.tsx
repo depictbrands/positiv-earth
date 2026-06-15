@@ -128,13 +128,13 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
           className="flex flex-1 flex-col items-center justify-center gap-2 px-6 text-center lg:hidden"
         >
           {lead ? (
-            <TextReveal className="text-heading-2">{lead}</TextReveal>
+            <TextReveal className="text-heading-3">{lead}</TextReveal>
           ) : null}
           {emphasis ? (
             <TextReveal className="text-heading-1">{emphasis}</TextReveal>
           ) : null}
           {trail ? (
-            <TextReveal className="text-heading-2">{trail}</TextReveal>
+            <TextReveal className="text-heading-3">{trail}</TextReveal>
           ) : null}
         </span>
 
@@ -144,7 +144,7 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
           className="absolute inset-0 hidden lg:block"
         >
           {lead ? (
-            <TextReveal className="absolute left-[32.14%] top-[35.39%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
+            <TextReveal className="absolute left-[32.14%] top-[35.39%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-3">
               {lead}
             </TextReveal>
           ) : null}
@@ -154,7 +154,7 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
             </TextReveal>
           ) : null}
           {trail ? (
-            <TextReveal className="absolute left-[53.47%] top-[64.61%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
+            <TextReveal className="absolute left-[53.47%] top-[64.61%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-3">
               {trail}
             </TextReveal>
           ) : null}

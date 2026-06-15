@@ -91,7 +91,7 @@ function FaqRow({ item, open, onToggle, withDivider }: FaqRowProps) {
           </span>
           <span
             className={cn(
-              "mt-3 flex text-faq-question transition-transform duration-300 ease-out group-hover:text-base-black",
+              "mt-3 flex text-faq-question transition-transform duration-300 ease-out motion-reduce:transition-none group-hover:text-base-black",
               open && "rotate-180",
             )}
           >
@@ -105,15 +105,15 @@ function FaqRow({ item, open, onToggle, withDivider }: FaqRowProps) {
         id={panelId}
         role="region"
         aria-labelledby={buttonId}
-        hidden={!open}
+        aria-hidden={!open}
         className={cn(
-          "grid transition-[grid-template-rows,opacity,margin] duration-300 ease-out",
+          "grid transition-[grid-template-rows,opacity,margin-top] duration-300 ease-out motion-reduce:transition-none",
           open
             ? "mt-[var(--spacing-faq-answer-gap)] grid-rows-[1fr] opacity-100"
-            : "grid-rows-[0fr] opacity-0",
+            : "mt-0 grid-rows-[0fr] opacity-0",
         )}
       >
-        <div className="overflow-hidden">
+        <div className="min-h-0 overflow-hidden">
           <p className="font-body text-p1 text-faq-answer">{item.answer}</p>
         </div>
       </div>
