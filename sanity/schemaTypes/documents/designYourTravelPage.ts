@@ -35,6 +35,20 @@ export const designYourTravelPage = defineType({
         defineArrayMember({ type: "quizContactFormQuestion" }),
       ],
     }),
+    defineField({
+      name: "successTitle",
+      title: "Success heading",
+      description:
+        "Heading shown after a traveller submits the quiz. Leave blank to use the built-in default.",
+      type: "string",
+    }),
+    defineField({
+      name: "successMessage",
+      title: "Success message",
+      description:
+        "Body copy shown beneath the success heading. Leave blank to use the built-in default.",
+      type: "text",
+    }),
   ],
   preview: {
     prepare() {

@@ -12,6 +12,7 @@ import QuizImageChoiceGrid from "@/components/sections/quiz/QuizImageChoiceGrid"
 import QuizSceneFrame from "@/components/sections/quiz/QuizSceneFrame";
 import QuizTravelerCount from "@/components/sections/quiz/QuizTravelerCount";
 import type { QuizContactValues, QuizContent } from "@/types/quiz-content";
+import type { QuizSubmissionPayload } from "@/types/quiz-submission";
 
 const EMPTY_CONTACT: QuizContactValues = {
   firstName: "",
@@ -54,6 +55,9 @@ export default function DesignYourTravelQuiz({
   // One entry per children line; the string is that child's age.
   const [childrenAges, setChildrenAges] = useState<string[]>([]);
   const [contact, setContact] = useState<QuizContactValues>(EMPTY_CONTACT);
+  const [submitState, setSubmitState] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
 
   const question = content.questions[stepIndex];
   const selectedId = question ? selectionByQuestion[question.id] : undefined;
@@ -115,24 +119,79 @@ export default function DesignYourTravelQuiz({
 
   const isLastStep = stepIndex === content.questions.length - 1;
 
-  // Gather every answer. No backend is wired yet, so submit logs the payload —
-  // the seam for posting to a real endpoint (mirrors SearchBar's placeholder).
-  const submit = () => {
-    console.log("Design Your Travel submission", {
-      selections: selectionByQuestion,
-      imageSelections,
-      adults,
-      addChildren,
-      childrenAges,
+  // Resolve the raw selection ids into a serialisable payload with human labels
+  // (pulled from `content`), so the persisted lead and notification email read
+  // as text rather than ids.
+  const buildPayload = (): QuizSubmissionPayload => {
+    const partyQuestion = content.questions.find((q) => q.kind === "party");
+    const partyId = partyQuestion
+      ? selectionByQuestion[partyQuestion.id]
+      : undefined;
+    const partyOption =
+      partyQuestion?.kind === "party"
+        ? partyQuestion.options.find((option) => option.id === partyId)
+        : undefined;
+
+    // Only the "group" branch opens the traveller-count sub-scene, so only then
+    // do we have an adult count to report.
+    const hasTravelers = partyOption?.branch === "group" && Number(adults) >= 1;
+
+    const interests = content.questions
+      .filter((q) => q.kind === "image-choice")
+      .map((q) => {
+        const selectedIds = imageSelections[q.id] ?? [];
+        return {
+          questionId: q.id,
+          prompt: q.prompt,
+          choices: q.choices
+            .filter((choice) => selectedIds.includes(choice.id))
+            .map((choice) => ({ id: choice.id, label: choice.label })),
+        };
+      })
+      .filter((interest) => interest.choices.length > 0);
+
+    return {
+      party: partyOption
+        ? { optionId: partyOption.id, label: partyOption.label }
+        : null,
+      travelers: hasTravelers
+        ? {
+            adults: Number(adults),
+            childrenAges: addChildren
+              ? childrenAges
+                  .map((age) => Number(age))
+                  .filter((age) => Number.isFinite(age) && age > 0)
+              : [],
+          }
+        : null,
+      interests,
       contact,
-    });
+    };
+  };
+
+  // Post every answer to the backend (persists to Sanity + emails the team).
+  const submit = async () => {
+    setSubmitState("submitting");
+    try {
+      const response = await fetch("/api/quiz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildPayload()),
+      });
+      if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+      setSubmitState("success");
+    } catch (error) {
+      console.error("Design Your Travel submission failed", error);
+      setSubmitState("error");
+    }
   };
 
   // Next advances to the following question (and the progress bar); on the last
   // step it submits instead.
   const goNext = () => {
     if (isLastStep) {
-      submit();
+      if (submitState === "submitting") return;
+      void submit();
       return;
     }
     setStepIndex((index) => index + 1);
@@ -178,6 +237,13 @@ export default function DesignYourTravelQuiz({
   const quoteLottieSrc = inTravelerCount
     ? "/quiz/quotes-motion-5.json"
     : `/quiz/quotes-motion-${stepIndex + 1}.json`;
+
+  const submitting = submitState === "submitting";
+  const nextLabel = isLastStep
+    ? submitting
+      ? "Submitting…"
+      : "Submit"
+    : "Next";
 
   return (
     <section className="relative flex min-h-[100svh] w-full flex-col overflow-hidden">
@@ -225,24 +291,44 @@ export default function DesignYourTravelQuiz({
             {content.title}
           </TextReveal>
 
-          {question ? (
+          {submitState === "success" ? (
+            <div className="flex w-full flex-col items-center gap-4 rounded-card-corner bg-quiz-overlay max-w-[var(--size-quiz-block-width)] p-[var(--spacing-quiz-block-inset)] text-center">
+              <h2 className="font-body text-quiz-question text-base-white">
+                {content.successTitle}
+              </h2>
+              <p className="font-body text-cta-button text-base-white">
+                {content.successMessage}
+              </p>
+            </div>
+          ) : question ? (
             <QuizSceneFrame
               stepIndex={stepIndex}
               totalSteps={content.totalSteps}
               prompt={prompt}
               quoteLottieSrc={quoteLottieSrc}
               showBack={showBack}
-              canGoNext={canGoNext}
-              nextLabel={isLastStep ? "Submit" : "Next"}
+              canGoNext={canGoNext && !submitting}
+              nextLabel={nextLabel}
               onBack={goBack}
               onNext={goNext}
             >
               {question.kind === "contact-form" ? (
-                <QuizContactForm
-                  content={question}
-                  values={contact}
-                  onChange={setContactField}
-                />
+                <div className="flex w-full flex-col gap-4">
+                  <QuizContactForm
+                    content={question}
+                    values={contact}
+                    onChange={setContactField}
+                  />
+                  {submitState === "error" ? (
+                    <p
+                      role="alert"
+                      className="text-center font-body text-cta-button text-base-white"
+                    >
+                      Something went wrong sending your details. Please try
+                      again.
+                    </p>
+                  ) : null}
+                </div>
               ) : question.kind === "image-choice" ? (
                 <QuizImageChoiceGrid
                   choices={question.choices}

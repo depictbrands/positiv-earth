@@ -6,6 +6,7 @@ import { designYourTravelPage } from "./documents/designYourTravelPage";
 import { faqPage } from "./documents/faqPage";
 import { homePage } from "./documents/homePage";
 import { itinerary } from "./documents/itinerary";
+import { quizSubmission } from "./documents/quizSubmission";
 import { servicesPage } from "./documents/servicesPage";
 import { aboutIntroStat } from "./objects/aboutIntroStat";
 import { contactSocial } from "./objects/contactSocial";
@@ -101,5 +102,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     aboutPage,
     designYourTravelPage,
     itinerary,
+    quizSubmission,
   ],
 };

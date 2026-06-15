@@ -67,6 +67,8 @@ type SanityQuizPage = {
   backgroundImage?: SanityImageWithAlt;
   totalSteps?: number;
   questions?: SanityQuestion[];
+  successTitle?: string;
+  successMessage?: string;
 };
 
 const ICON_VALUES: readonly QuizIcon[] = [
@@ -225,5 +227,7 @@ export function mapQuizPage(data: SanityQuizPage | null): QuizContent | null {
     backgroundImageAlt: background?.imageAlt ?? "",
     totalSteps: data.totalSteps ?? questions.length,
     questions,
+    successTitle: data.successTitle ?? "",
+    successMessage: data.successMessage ?? "",
   };
 }

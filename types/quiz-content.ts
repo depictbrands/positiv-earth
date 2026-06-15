@@ -129,4 +129,8 @@ export type QuizContent = {
   /** Total number of steps, drives the "Question X / N" label + progress bar. */
   totalSteps: number;
   questions: QuizQuestionContent[];
+  /** Heading shown in the inline thank-you state after a successful submit. */
+  successTitle: string;
+  /** Body copy shown beneath the success heading. */
+  successMessage: string;
 };

@@ -147,7 +147,12 @@ function ServiceRow({ service, reversed = false }: ServiceRowProps) {
           ) : null}
         </h3>
 
-        <p className="w-full font-body text-turntable-tag text-base-black lg:w-auto lg:flex-1">
+        <p
+          className={cn(
+            "w-full font-body text-turntable-tag text-base-black lg:w-auto lg:flex-1",
+            reversed && "text-right",
+          )}
+        >
           {service.description}
         </p>
       </div>

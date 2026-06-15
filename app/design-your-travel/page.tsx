@@ -125,6 +125,9 @@ const QUIZ_CONTENT: QuizContent = {
       notesLabel: "Additional Notes",
     },
   ],
+  successTitle: "Thank You.",
+  successMessage:
+    "Your journey is in good hands. One of our travel advisors will be in touch shortly to start shaping your perfect trip.",
 };
 
 // Server component data layer: fetch the quiz from Sanity, map it to the typed
@@ -145,6 +148,8 @@ export default async function DesignYourTravelPage() {
         questions: mapped.questions.length
           ? mapped.questions
           : QUIZ_CONTENT.questions,
+        successTitle: mapped.successTitle || QUIZ_CONTENT.successTitle,
+        successMessage: mapped.successMessage || QUIZ_CONTENT.successMessage,
       }
     : QUIZ_CONTENT;
 

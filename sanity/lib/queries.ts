@@ -191,7 +191,9 @@ export const QUIZ_PAGE_QUERY = `*[_type == "designYourTravelPage" && _id == "des
     countryLabel,
     countryOptions,
     notesLabel
-  }
+  },
+  successTitle,
+  successMessage
 }`;
 
 export const CONTACT_PAGE_QUERY = `*[_type == "contactPage" && _id == "contactPage"][0]{
