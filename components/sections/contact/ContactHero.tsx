@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
+import TextReveal from "@/components/ui/TextReveal";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { ContactHeroContent } from "@/types/contact-hero-content";
 
@@ -87,9 +88,12 @@ export default function ContactHero({ content }: ContactHeroProps) {
 
       {/* Centered hero title */}
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white">
-        <h1 className="font-display text-heading-2 text-base-white">
+        <TextReveal
+          as="h1"
+          className="font-display text-heading-2 text-base-white"
+        >
           {resolved.headline}
-        </h1>
+        </TextReveal>
       </div>
     </section>
   );

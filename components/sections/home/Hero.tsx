@@ -5,6 +5,7 @@ import Image from "next/image";
 import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import SearchBar from "@/components/ui/SearchBar";
+import TextReveal from "@/components/ui/TextReveal";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { HeroContent } from "@/types/hero-content";
 
@@ -115,16 +116,16 @@ export default function Hero({ content }: HeroProps) {
               className="flex flex-wrap items-center justify-center"
               style={{ gap: "var(--spacing-hero-headline-gap)" }}
             >
-              <span className="font-display text-heading-3 uppercase text-base-white">
+              <TextReveal className="font-display text-heading-3 uppercase text-base-white">
                 {resolved.headline.pre}
-              </span>
-              <span className="font-display text-heading-1 text-base-white">
+              </TextReveal>
+              <TextReveal className="font-display text-heading-1 text-base-white">
                 {resolved.headline.emphasis}
-              </span>
+              </TextReveal>
             </div>
-            <span className="font-display text-heading-3 uppercase text-base-white">
+            <TextReveal className="font-display text-heading-3 uppercase text-base-white">
               {resolved.headline.post}
-            </span>
+            </TextReveal>
           </div>
 
           {/* Desktop: staggered composition matching Figma (node 584:688) */}
@@ -133,12 +134,12 @@ export default function Hero({ content }: HeroProps) {
               className="col-start-1 row-start-1 flex items-center"
               style={{ gap: "var(--spacing-hero-headline-gap)" }}
             >
-              <span className="font-display text-heading-3 uppercase text-base-white">
+              <TextReveal className="font-display text-heading-3 uppercase text-base-white">
                 {resolved.headline.pre}
-              </span>
-              <span className="font-display text-heading-1 text-base-white">
+              </TextReveal>
+              <TextReveal className="font-display text-heading-1 text-base-white">
                 {resolved.headline.emphasis}
-              </span>
+              </TextReveal>
             </div>
             {/*
               Staggered offset from Figma (node 584:688): "WAY TO SEE THE WORLD"
@@ -146,7 +147,7 @@ export default function Hero({ content }: HeroProps) {
               frame. Authored in vw so it scales in lockstep with the vw-based
               display type, capped at the design value (1vw = 15.12px at 1512px).
             */}
-            <span
+            <TextReveal
               className="col-start-1 row-start-1 whitespace-nowrap font-display text-heading-3 uppercase text-base-white"
               style={{
                 marginLeft: "min(28.9vw, 27.3125rem)",
@@ -154,7 +155,7 @@ export default function Hero({ content }: HeroProps) {
               }}
             >
               {resolved.headline.post}
-            </span>
+            </TextReveal>
           </div>
         </div>
 

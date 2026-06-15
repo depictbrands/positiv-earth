@@ -261,6 +261,7 @@
  * hero-subcopy-width    | --size-hero-subcopy-width                 | 869px
  * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
  * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
+ * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.06em
  * abouthero-role-gap    | --spacing-abouthero-role-gap              | 32px
  * hero-subcopy          | --text-hero-subcopy                       | 20px
  * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
@@ -474,6 +475,7 @@
   --spacing-hero-content-gap: 3.125rem;
   --spacing-hero-search-offset-top: 44.25rem;
   --spacing-hero-headline-gap: 2.25rem;
+  --spacing-text-reveal-line-buffer: 0.06em;
   --spacing-abouthero-role-gap: 2rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
@@ -936,4 +938,30 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   overflow-x: hidden;
+}
+
+/* Line-by-line slide-up text reveal (SplitType + GSAP) */
+.text-reveal {
+  display: inline-block;
+  max-width: 100%;
+  visibility: hidden;
+}
+
+.text-reveal[data-reveal-ready] {
+  visibility: visible;
+}
+
+.text-reveal .line-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  box-sizing: border-box;
+  padding-block: var(--spacing-text-reveal-line-buffer);
+  margin-block: calc(var(--spacing-text-reveal-line-buffer) * -1);
+}
+
+.text-reveal .line {
+  display: block;
+  will-change: transform;
+  transform: translateZ(0);
 }

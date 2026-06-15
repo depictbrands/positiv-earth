@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
+import TextReveal from "@/components/ui/TextReveal";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { AboutHeroContent } from "@/types/about-hero-content";
 
@@ -112,12 +113,14 @@ export default function AboutHero({ content }: AboutHeroProps) {
         >
           {/* Mobile / tablet: centred stack */}
           <div className="flex flex-col items-center text-center lg:hidden">
-            <span className="text-heading-3">{resolved.lead}</span>
-            <span className="text-heading-1 uppercase">{resolved.name}</span>
+            <TextReveal className="text-heading-3">{resolved.lead}</TextReveal>
+            <TextReveal className="text-heading-1 uppercase">
+              {resolved.name}
+            </TextReveal>
             {roleLines.map((line) => (
-              <span key={line} className="text-heading-3">
+              <TextReveal key={line} className="text-heading-3">
                 {line}
-              </span>
+              </TextReveal>
             ))}
           </div>
 
@@ -134,19 +137,19 @@ export default function AboutHero({ content }: AboutHeroProps) {
               rowGap: "var(--spacing-abouthero-role-gap)",
             }}
           >
-            <span className="col-start-1 row-start-1 shrink-0 text-heading-3">
+            <TextReveal className="col-start-1 row-start-1 shrink-0 text-heading-3">
               {resolved.lead}
-            </span>
-            <span className="col-start-2 row-start-1 shrink-0 text-heading-1 uppercase">
+            </TextReveal>
+            <TextReveal className="col-start-2 row-start-1 shrink-0 text-heading-1 uppercase">
               {resolved.name}
-            </span>
-            <span className="col-start-3 row-start-1 whitespace-nowrap text-left text-heading-3">
+            </TextReveal>
+            <TextReveal className="col-start-3 row-start-1 whitespace-nowrap text-left text-heading-3">
               {roleLines[0]}
-            </span>
+            </TextReveal>
             {roleLines.length > 1 && (
               <span className="col-start-3 row-start-2 flex flex-col whitespace-nowrap text-left text-heading-3">
                 {roleLines.slice(1).map((line) => (
-                  <span key={line}>{line}</span>
+                  <TextReveal key={line}>{line}</TextReveal>
                 ))}
               </span>
             )}

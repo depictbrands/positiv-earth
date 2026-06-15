@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
+import TextReveal from "@/components/ui/TextReveal";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { ServicesHeroContent } from "@/types/services-hero-content";
 
@@ -126,9 +127,15 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
           aria-hidden="true"
           className="flex flex-1 flex-col items-center justify-center gap-2 px-6 text-center lg:hidden"
         >
-          {lead ? <span className="text-heading-2">{lead}</span> : null}
-          {emphasis ? <span className="text-heading-1">{emphasis}</span> : null}
-          {trail ? <span className="text-heading-2">{trail}</span> : null}
+          {lead ? (
+            <TextReveal className="text-heading-2">{lead}</TextReveal>
+          ) : null}
+          {emphasis ? (
+            <TextReveal className="text-heading-1">{emphasis}</TextReveal>
+          ) : null}
+          {trail ? (
+            <TextReveal className="text-heading-2">{trail}</TextReveal>
+          ) : null}
         </span>
 
         {/* Desktop: staggered diagonal composition */}
@@ -137,19 +144,19 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
           className="absolute inset-0 hidden lg:block"
         >
           {lead ? (
-            <span className="absolute left-[32.14%] top-[35.39%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
+            <TextReveal className="absolute left-[32.14%] top-[35.39%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
               {lead}
-            </span>
+            </TextReveal>
           ) : null}
           {emphasis ? (
-            <span className="absolute left-[50.23%] top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-1">
+            <TextReveal className="absolute left-[50.23%] top-1/2 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-1">
               {emphasis}
-            </span>
+            </TextReveal>
           ) : null}
           {trail ? (
-            <span className="absolute left-[53.47%] top-[64.61%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
+            <TextReveal className="absolute left-[53.47%] top-[64.61%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-2">
               {trail}
-            </span>
+            </TextReveal>
           ) : null}
         </span>
       </h1>
