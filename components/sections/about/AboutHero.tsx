@@ -114,7 +114,7 @@ export default function AboutHero({ content }: AboutHeroProps) {
           {/* Mobile / tablet: centred stack */}
           <div className="flex flex-col items-center text-center lg:hidden">
             <TextReveal className="text-heading-3">{resolved.lead}</TextReveal>
-            <TextReveal className="text-heading-1 uppercase">
+            <TextReveal className="text-heading-1">
               {resolved.name}
             </TextReveal>
             {roleLines.map((line) => (
@@ -140,7 +140,7 @@ export default function AboutHero({ content }: AboutHeroProps) {
             <TextReveal className="col-start-1 row-start-1 shrink-0 text-heading-3">
               {resolved.lead}
             </TextReveal>
-            <TextReveal className="col-start-2 row-start-1 shrink-0 text-heading-1 uppercase">
+            <TextReveal className="col-start-2 row-start-1 shrink-0 text-heading-1">
               {resolved.name}
             </TextReveal>
             <TextReveal className="col-start-3 row-start-1 whitespace-nowrap text-left text-heading-3">
