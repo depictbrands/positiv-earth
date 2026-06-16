@@ -52,7 +52,7 @@ const navCellStyle: CSSProperties = {
 };
 
 const navButtonClassName =
-  "relative z-10 inline-flex items-center justify-center font-body text-nav text-base-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white";
+  "relative font-body text-nav text-base-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white";
 
 type HeaderNavButtonProps = {
   children: ReactNode;
@@ -70,6 +70,15 @@ type HeaderNavButtonProps = {
 };
 
 const PILL_OFFSET_NEG = `calc(-1 * ${PILL_OFFSET})`;
+
+const outerClassByVariant: Record<
+  NonNullable<HeaderNavButtonProps["variant"]>,
+  string
+> = {
+  fixed:
+    "group relative flex h-full w-full items-center justify-center",
+  menu: "group relative flex w-full items-center",
+};
 
 const pillInsetByVariant: Record<
   NonNullable<HeaderNavButtonProps["variant"]>,
@@ -92,44 +101,54 @@ function HeaderNavButton({
   buttonClassName,
   style,
 }: HeaderNavButtonProps) {
-  const wrapperClassName =
-    variant === "menu"
-      ? "group relative"
-      : "group relative flex h-full items-center justify-center";
-
   const pillStyle: CSSProperties = {
     ...pillVisualStyle,
     ...pillInsetByVariant[variant],
   };
 
-  return (
-    <div className={cn(wrapperClassName, className)} style={style}>
-      <span
-        aria-hidden="true"
-        className={cn(pillClassName, isActive && "opacity-100")}
-        style={pillStyle}
-      />
+  const interactiveClassName = cn(
+    outerClassByVariant[variant],
+    navButtonClassName,
+    buttonClassName,
+    className,
+  );
 
-      {href ? (
-        <Link
-          href={href}
-          aria-current={isActive ? "page" : undefined}
-          className={cn(navButtonClassName, buttonClassName)}
-          onClick={onNavigate}
-        >
-          {children}
-        </Link>
-      ) : (
-        <button
-          type="button"
-          aria-current={isActive ? "page" : undefined}
-          className={cn(navButtonClassName, buttonClassName)}
-          onClick={onNavigate}
-        >
-          {children}
-        </button>
-      )}
-    </div>
+  const label = <span className="relative z-10">{children}</span>;
+
+  const pill = (
+    <span
+      aria-hidden="true"
+      className={cn(pillClassName, isActive && "opacity-100")}
+      style={pillStyle}
+    />
+  );
+
+  if (href) {
+    return (
+      <Link
+        href={href}
+        aria-current={isActive ? "page" : undefined}
+        className={interactiveClassName}
+        style={style}
+        onClick={onNavigate}
+      >
+        {pill}
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      aria-current={isActive ? "page" : undefined}
+      className={interactiveClassName}
+      style={style}
+      onClick={onNavigate}
+    >
+      {pill}
+      {label}
+    </button>
   );
 }
 

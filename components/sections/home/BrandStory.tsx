@@ -19,7 +19,7 @@ const DEFAULT_CONTENT: BrandStoryContent = {
   imageAlt: "Traveler smiling at a mountain destination",
   cta: {
     label: "About PositivEarth",
-    href: "#",
+    href: "/about",
   },
 };
 

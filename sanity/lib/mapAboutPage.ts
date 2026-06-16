@@ -35,6 +35,7 @@ type SanityAboutPage = {
   cta?: {
     heading?: string;
     buttonLabel?: string;
+    buttonHref?: string;
     image?: SanityImageWithAlt;
   };
 };
@@ -108,6 +109,7 @@ function mapCtaSection(cta: NonNullable<SanityAboutPage["cta"]>): CTAContent {
   return {
     heading: cta.heading ?? "",
     buttonLabel: cta.buttonLabel ?? "",
+    buttonHref: cta.buttonHref?.trim() || "/contact",
     imageUrl: image?.imageUrl ?? "",
     imageAlt: image?.imageAlt ?? "",
   };

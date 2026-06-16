@@ -65,6 +65,7 @@ type SanityHomePage = {
   cta?: {
     heading?: string;
     buttonLabel?: string;
+    buttonHref?: string;
     image?: SanityImageWithAlt;
   };
 };
@@ -206,6 +207,7 @@ function mapCtaSection(
   return {
     heading: section.heading ?? "",
     buttonLabel: section.buttonLabel ?? "",
+    buttonHref: section.buttonHref?.trim() || "/contact",
     imageUrl: image?.imageUrl ?? "",
     imageAlt: image?.imageAlt ?? "",
   };

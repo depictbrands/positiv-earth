@@ -9,6 +9,7 @@ const DEFAULT_IMAGE_URL =
 const DEFAULT_CONTENT: CTAContent = {
   heading: "Let's Plan Your Trip",
   buttonLabel: "Book Free Consultation",
+  buttonHref: "/contact",
   imageUrl: DEFAULT_IMAGE_URL,
   imageAlt: "Andes mountain under a bright blue sky",
 };
@@ -23,6 +24,7 @@ function resolveCtaContent(content?: CTAContent): CTAContent {
     ...content,
     heading: content?.heading?.trim() || DEFAULT_CONTENT.heading,
     buttonLabel: content?.buttonLabel?.trim() || DEFAULT_CONTENT.buttonLabel,
+    buttonHref: content?.buttonHref?.trim() || DEFAULT_CONTENT.buttonHref,
     imageUrl: content?.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl,
     imageAlt: content?.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt,
   };
@@ -61,7 +63,9 @@ export default function AboutCTA({ content }: AboutCTAProps) {
           {headItalic ? <span className="italic"> {headItalic}</span> : null}
         </h2>
 
-        <QuizEntryButton>{resolved.buttonLabel}</QuizEntryButton>
+        <QuizEntryButton href={resolved.buttonHref}>
+          {resolved.buttonLabel}
+        </QuizEntryButton>
       </div>
     </section>
   );

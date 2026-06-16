@@ -63,6 +63,7 @@ export const HOME_PAGE_QUERY = `*[_type == "homePage" && _id == "homePage"][0]{
   cta {
     heading,
     buttonLabel,
+    buttonHref,
     image {
       asset,
       alt
@@ -142,6 +143,7 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "aboutPage"][0
   cta {
     heading,
     buttonLabel,
+    buttonHref,
     image {
       asset,
       alt

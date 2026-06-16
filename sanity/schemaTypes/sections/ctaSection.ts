@@ -16,6 +16,12 @@ export const ctaSection = defineType({
       type: "string",
     }),
     defineField({
+      name: "buttonHref",
+      title: "Button URL",
+      type: "string",
+      description: "Relative path for internal links, e.g. /contact",
+    }),
+    defineField({
       name: "image",
       title: "Background image",
       type: "imageWithAlt",
