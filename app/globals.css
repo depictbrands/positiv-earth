@@ -1015,3 +1015,138 @@ body {
   --spacing-hero-headline-gap: max(2.25rem, 2.381vw);
   --spacing-abouthero-role-gap: max(2rem, 2.116vw);
 }
+
+/*
+ * Home page — uniform scale-up above the 1512px design frame.
+ *
+ * Like .about-scale above, but for the Home route. Every Home section and the
+ * primitives it composes (destination/testimonial cards, search bar, turntable,
+ * buttons, header) size themselves from `var(--token)`, so re-declaring those
+ * tokens on the page root cascades the change everywhere without touching a
+ * single component.
+ *
+ * Each token below is re-expressed as max(<design value>, <vw>) — where the vw
+ * equals the design value at exactly 1512px (1vw = 15.12px there). At and below
+ * the 1512 frame the design value wins, so laptop and smaller layouts are
+ * byte-for-byte unchanged; above 1512 the vw wins, so heights, widths, gaps,
+ * card sizes and type all grow in lockstep and the design's proportions hold.
+ * (Negative offsets use min() so "more negative = larger" still scales up.)
+ * The shared dark Footer is intentionally left capped, matching .about-scale.
+ */
+.home-scale {
+  /* Display + body type (clamp/fixed → uncapped above 1512) */
+  --text-heading-1: max(3rem, 9.92vw);
+  --text-heading-3: max(1.75rem, 4.63vw);
+  --text-heading-4: max(2.25rem, 4.63vw);
+  --text-p1: max(1.25rem, 1.323vw);
+  --text-p2: max(1.5rem, 2.38vw);
+  --text-hero-subcopy: max(1.25rem, 1.323vw);
+  --text-destination-card-title: max(1.75rem, 2.38vw);
+  --text-destination-card-duration: max(1.75rem, 2.38vw);
+  --text-destination-card-duration-label: max(0.875rem, 0.926vw);
+  --text-destination-card-locations: max(1.5rem, 1.587vw);
+  --text-turntable-tag: max(1.5rem, 1.587vw);
+  --text-testimonial-card-name: max(1.25rem, 1.323vw);
+  --text-testimonial-card-quote: max(1rem, 1.058vw);
+  --text-cta-button: max(1.25rem, 1.323vw);
+  --text-search-bar: max(1rem, 1.058vw);
+  --text-nav: max(1rem, 1.058vw);
+  --text-header-logo: max(1.5rem, 1.587vw);
+
+  /* Section heights */
+  --size-hero-height: max(61.375rem, 64.947vw);
+  --size-brand-story-height: max(55rem, 58.201vw);
+  --size-how-it-works-height: max(61.375rem, 64.947vw);
+  --size-testimonial-section-height: max(53.4375rem, 56.547vw);
+  --size-cta-height: max(44.4375rem, 47.024vw);
+
+  /* Container + element widths */
+  --size-hero-content-width: max(78.3125rem, 82.87vw);
+  --size-hero-subcopy-width: max(54.3125rem, 57.474vw);
+  --size-brand-story-copy-width: max(43.4375rem, 45.965vw);
+  --size-brand-story-body-width: max(34.6875rem, 36.706vw);
+  --size-how-it-works-left-width: max(58.5rem, 61.905vw);
+  --size-how-it-works-turntable-width: max(44.125rem, 46.693vw);
+  --size-how-it-works-copy-width: max(29.5625rem, 31.283vw);
+  --size-destinations-grid-width: max(88.875rem, 94.048vw);
+  --size-destinations-cta-width: max(11.875rem, 12.566vw);
+  --size-destinations-cta-height: max(3.5rem, 3.704vw);
+  --size-testimonial-section-inner-width: max(76rem, 80.423vw);
+  --size-cta-heading-width: max(66.5625rem, 70.437vw);
+  --size-search-bar-width: max(76rem, 80.423vw);
+
+  /* Destination card geometry */
+  --size-destination-card-landscape-width: max(43.8125rem, 46.362vw);
+  --size-destination-card-portrait-width: max(21.375rem, 22.619vw);
+  --size-destination-card-landscape-overlay-height: max(18rem, 19.048vw);
+  --size-destination-card-portrait-overlay-height: max(18rem, 19.048vw);
+  --size-destination-card-copy-width: max(24.1875rem, 25.595vw);
+  --size-destination-card-title-width: max(18.4375rem, 19.51vw);
+  --size-destination-card-vertical-divider-height: max(2rem, 2.116vw);
+
+  /* Testimonial card + pagination geometry */
+  --size-testimonial-card-width: max(24rem, 25.397vw);
+  --size-testimonial-card-height: max(19.1875rem, 20.304vw);
+  --size-testimonial-card-avatar-size: max(4rem, 4.233vw);
+  --size-testimonial-pagination-width: max(2.5rem, 2.646vw);
+  --size-testimonial-pagination-height: max(0.5rem, 0.529vw);
+  --size-testimonial-pagination-dot-size: max(0.5rem, 0.529vw);
+
+  /* Search bar + button geometry */
+  --size-search-bar-height: max(5rem, 5.291vw);
+  --size-search-bar-segment-width: max(21rem, 22.222vw);
+  --size-search-bar-divider-height: max(5rem, 5.291vw);
+  --size-search-bar-icon-size: max(1.5rem, 1.587vw);
+  --size-search-button-width: max(10rem, 10.582vw);
+  --size-search-button-height: max(3.5rem, 3.704vw);
+
+  /* Header geometry */
+  --size-header-height: max(3.5rem, 3.704vw);
+  --size-header-active-pill-width: max(6.1875rem, 6.548vw);
+  --size-header-active-pill-height: max(2.875rem, 3.042vw);
+
+  /* Section + element spacing */
+  --spacing-hero-content-gap: max(3.125rem, 3.307vw);
+  --spacing-hero-headline-gap: max(2.25rem, 2.381vw);
+  --spacing-brand-story-offset-x: max(3rem, 3.175vw);
+  --spacing-brand-story-copy-gap: max(4.1875rem, 4.431vw);
+  --spacing-brand-story-body-gap: max(1.25rem, 1.323vw);
+  --spacing-how-it-works-turntable-gap: max(9.0625rem, 9.59vw);
+  --spacing-how-it-works-copy-offset-x: max(61.9375rem, 65.542vw);
+  --spacing-how-it-works-copy-gap: max(3.125rem, 3.307vw);
+  --spacing-destinations-heading-offset-top: max(8.375rem, 8.862vw);
+  --spacing-destinations-grid-gap-y: max(0.9375rem, 0.992vw);
+  --spacing-destinations-grid-gap-x-sm: max(1rem, 1.058vw);
+  --spacing-destinations-grid-gap-x-lg: max(1.125rem, 1.19vw);
+  --spacing-testimonial-section-offset-top: max(9.6875rem, 10.251vw);
+  --spacing-testimonial-section-gap: max(3.4375rem, 3.638vw);
+  --spacing-testimonial-section-stack-gap: max(5.5rem, 5.82vw);
+  --spacing-testimonial-section-cards-gap: max(2rem, 2.116vw);
+  --spacing-testimonial-pagination-gap: max(0.5rem, 0.529vw);
+  --spacing-destination-card-copy-inset: max(1.75rem, 1.852vw);
+  --spacing-destination-card-copy-gap: max(0.5rem, 0.529vw);
+  --spacing-destination-card-title-gap: max(0.375rem, 0.397vw);
+  --spacing-destination-card-header-gap: max(1rem, 1.058vw);
+  --spacing-destination-card-duration-label-offset-x: max(0.2rem, 0.212vw);
+  --spacing-testimonial-card-inset-x: max(2rem, 2.116vw);
+  --spacing-testimonial-card-inset-top: max(2.125rem, 2.249vw);
+  --spacing-testimonial-card-gap: max(0.6875rem, 0.728vw);
+  --spacing-cta-content-gap: max(2.875rem, 3.042vw);
+  --spacing-search-bar-padding-x: max(1.5rem, 1.587vw);
+  --spacing-search-bar-segment-gap: max(1rem, 1.058vw);
+  --spacing-search-button-padding-left: max(3.25rem, 3.439vw);
+  --spacing-search-button-padding-right: max(3.3125rem, 3.505vw);
+  --spacing-search-button-padding-y: max(0.9375rem, 0.992vw);
+  --spacing-header-active-pill-offset: max(0.3125rem, 0.331vw);
+
+  /* Corner radii (track element growth) */
+  --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-search-bar-corner: max(5rem, 5.291vw);
+  --radius-search-button-corner: max(3rem, 3.175vw);
+  --radius-header-corner: max(3.125rem, 3.307vw);
+  --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
+
+  /* HowItWorks background offset: negative, so min() keeps the more-negative
+     (larger) value above 1512 while leaving <=1512 untouched. */
+  --size-how-it-works-bg-position-x: min(-25.9790625rem, -27.491vw);
+}

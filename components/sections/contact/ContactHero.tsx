@@ -86,14 +86,15 @@ export default function ContactHero({ content }: ContactHeroProps) {
         <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
       </div>
 
-      {/* Centered hero title */}
+      {/* Centered hero title — sr-only h1 carries the readable title; the
+          TextReveal line is visual/decorative only. */}
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white">
-        <TextReveal
-          as="h1"
-          className="font-display text-heading-2 text-base-white"
-        >
-          {resolved.headline}
-        </TextReveal>
+        <h1 className="sr-only">{resolved.headline}</h1>
+        <div aria-hidden="true">
+          <TextReveal className="font-display text-heading-2 text-base-white">
+            {resolved.headline}
+          </TextReveal>
+        </div>
       </div>
     </section>
   );

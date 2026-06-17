@@ -45,6 +45,10 @@ function resolveHeroContent(content?: HeroContent): HeroContent {
   };
 }
 
+function heroHeadlineText(headline: HeroContent["headline"]): string {
+  return `${headline.pre} ${headline.emphasis} ${headline.post}`;
+}
+
 export default function Hero({ content }: HeroProps) {
   const resolved = resolveHeroContent(content);
   const navHidden = useHideOnScroll();
@@ -106,7 +110,10 @@ export default function Hero({ content }: HeroProps) {
         className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white"
         style={{ gap: "var(--spacing-hero-content-gap)" }}
       >
+        <h1 className="sr-only">{heroHeadlineText(resolved.headline)}</h1>
+
         <div
+          aria-hidden="true"
           className="mx-auto flex w-full flex-col items-center leading-none"
           style={{ maxWidth: "var(--size-hero-content-width)" }}
         >

@@ -17,7 +17,7 @@ export default async function Home() {
   const content = mapHomePage(sanityHomePage);
 
   return (
-    <main className="flex w-full flex-col items-center">
+    <main className="home-scale flex w-full flex-col items-center">
       <Hero content={content?.hero} />
       <BrandStory content={content?.brandStory} />
       <HowItWorks content={content?.howItWorks} />

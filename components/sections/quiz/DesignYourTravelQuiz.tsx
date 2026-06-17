@@ -284,12 +284,12 @@ export default function DesignYourTravelQuiz({
       {/* Title + quiz panel */}
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 pb-12 pt-28 lg:pt-32">
         <div className="mx-auto flex w-full flex-col gap-6 max-w-[var(--size-quiz-block-width)]">
-          <TextReveal
-            as="h1"
-            className="font-body text-quiz-title text-base-white"
-          >
-            {content.title}
-          </TextReveal>
+          <h1 className="sr-only">{content.title}</h1>
+          <div aria-hidden="true">
+            <TextReveal className="font-body text-quiz-title text-base-white">
+              {content.title}
+            </TextReveal>
+          </div>
 
           {submitState === "success" ? (
             <div className="flex w-full flex-col items-center gap-4 rounded-card-corner bg-quiz-overlay max-w-[var(--size-quiz-block-width)] p-[var(--spacing-quiz-block-inset)] text-center">
