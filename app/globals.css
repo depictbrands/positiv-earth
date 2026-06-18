@@ -844,7 +844,7 @@
   --text-hero-subcopy: 1.25rem;
   --text-hero-subcopy--line-height: 1.875rem;
   --text-hero-subcopy--letter-spacing: 0.03em;
-  --text-hero-subcopy--font-weight: 500;
+  --text-hero-subcopy--font-weight: 600;
   --text-hero-subcpy--font-family: var(--font-body);
 
   --text-footer-logo: clamp(2rem, 2.65vw, 2.5rem);

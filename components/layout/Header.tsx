@@ -159,53 +159,44 @@ export default function Header({ className, style }: HeaderProps) {
   const closeMenu = () => setOpen(false);
 
   return (
-    <header className={cn("relative", className)} style={style}>
-      {/* Desktop: glass pill navigation */}
+    <header className={cn("relative lg:w-full", className)} style={style}>
+      {/* Desktop: logo pinned left, glass pill nav centered in the viewport */}
       <div
-        className="relative hidden lg:block lg:w-fit lg:max-w-full"
+        className="relative hidden lg:flex lg:w-full lg:items-center lg:px-8"
         style={{
           height: "var(--size-header-height)",
         }}
       >
+        <Logo variant="header" priority className="relative z-10 shrink-0" />
+
         <div
-          aria-hidden="true"
-          className="absolute inset-0 rounded-header-corner"
-          style={glassStyle}
-        />
-
-        <nav
-          aria-label="Primary"
-          className="relative z-10 flex h-full items-center gap-2 text-base-white"
+          className="absolute left-1/2 top-0 -translate-x-1/2"
+          style={{ height: "var(--size-header-height)" }}
         >
-          <HeaderNavButton
-            style={navCellStyle}
-            href={NAV_ITEMS[0].href}
-            isActive={pathname === NAV_ITEMS[0].href}
-          >
-            {NAV_ITEMS[0].label}
-          </HeaderNavButton>
+          <div className="relative h-full w-fit max-w-full">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 rounded-header-corner"
+              style={glassStyle}
+            />
 
-          <HeaderNavButton
-            style={navCellStyle}
-            href={NAV_ITEMS[1].href}
-            isActive={pathname === NAV_ITEMS[1].href}
-          >
-            {NAV_ITEMS[1].label}
-          </HeaderNavButton>
-
-          <Logo variant="header" priority className="shrink-0" />
-
-          {NAV_ITEMS.slice(2).map((item) => (
-            <HeaderNavButton
-              key={item.label}
-              style={navCellStyle}
-              href={"href" in item ? item.href : undefined}
-              isActive={"href" in item ? pathname === item.href : false}
+            <nav
+              aria-label="Primary"
+              className="relative z-10 flex h-full items-center gap-2 text-base-white"
             >
-              {item.label}
-            </HeaderNavButton>
-          ))}
-        </nav>
+              {NAV_ITEMS.map((item) => (
+                <HeaderNavButton
+                  key={item.label}
+                  style={navCellStyle}
+                  href={item.href}
+                  isActive={pathname === item.href}
+                >
+                  {item.label}
+                </HeaderNavButton>
+              ))}
+            </nav>
+          </div>
+        </div>
       </div>
 
       {/* Mobile / tablet: compact glass bar with a toggleable menu */}

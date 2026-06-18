@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 type QuizEntryButtonProps = {
   children: ReactNode;
@@ -14,7 +14,11 @@ type QuizEntryButtonProps = {
 // come from the --*-glass design tokens (see globals.css).
 // Hover: a white fill and black label slide up from the bottom in sync.
 const baseClassName =
-  "group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-glass-border bg-glass-surface px-6 py-3 text-center font-body text-cta-button text-base-white shadow-glass backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white group-hover:focus-visible:outline-base-black disabled:cursor-not-allowed disabled:opacity-50";
+  "group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-glass-border bg-glass-surface px-6 text-center font-body text-cta-button text-base-white shadow-glass backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white group-hover:focus-visible:outline-base-black disabled:cursor-not-allowed disabled:opacity-50";
+
+const baseStyle: CSSProperties = {
+  height: "var(--size-header-height)",
+};
 
 function QuizEntryButtonContent({ children }: { children: ReactNode }) {
   return (
@@ -43,7 +47,7 @@ export default function QuizEntryButton({
 }: QuizEntryButtonProps) {
   if (href && !disabled) {
     return (
-      <Link href={href} onClick={onClick} className={baseClassName}>
+      <Link href={href} onClick={onClick} className={baseClassName} style={baseStyle}>
         <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
       </Link>
     );
@@ -55,6 +59,7 @@ export default function QuizEntryButton({
       onClick={onClick}
       disabled={disabled}
       className={baseClassName}
+      style={baseStyle}
     >
       <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
     </button>
