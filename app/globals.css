@@ -192,6 +192,7 @@
  * how-it-works-copy-offset-x | --spacing-how-it-works-copy-offset-x | 991px
  * how-it-works-copy-offset-top | --spacing-how-it-works-copy-offset-top | 531px
  * how-it-works-copy-gap | --spacing-how-it-works-copy-gap         | 50px
+ * how-it-works-body-gap | --spacing-how-it-works-body-gap         | 24px
  * hero-overlay          | --color-hero-overlay                      | rgba(0,0,0,0.25)
  * itinerary-hero-overlay | --color-itinerary-hero-overlay           | rgba(0,0,0,0.4)
  * itinerary-hero-content-width | --size-itinerary-hero-content-width | 875px
@@ -454,8 +455,8 @@
   --spacing-footer-submit-padding-x: 1.5rem;
   --spacing-footer-submit-padding-y: 0.75rem;
   --spacing-brand-story-offset-x: 3rem;
-  --spacing-brand-story-copy-gap: 4.1875rem;
-  --spacing-brand-story-body-gap: 1.25rem;
+  --spacing-brand-story-copy-gap: 4rem;
+  --spacing-brand-story-body-gap: 1.5rem;
   --spacing-destinations-heading-offset-top: 8.375rem;
   --spacing-destinations-cards-offset-top: 20.5rem;
   --spacing-destinations-grid-gap-y: 0.9375rem;
@@ -491,7 +492,8 @@
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
   --spacing-how-it-works-copy-offset-top: 33.1875rem;
-  --spacing-how-it-works-copy-gap: 3.125rem;
+  --spacing-how-it-works-copy-gap: 4rem;
+  --spacing-how-it-works-body-gap: 1.5rem;
   --spacing-testimonial-section-offset-top: 9.6875rem;
   --spacing-testimonial-section-gap: 3.4375rem;
   --spacing-testimonial-section-stack-gap: 5.5rem;
@@ -1114,6 +1116,7 @@ body {
   --spacing-how-it-works-turntable-gap: max(9.0625rem, 9.59vw);
   --spacing-how-it-works-copy-offset-x: max(61.9375rem, 65.542vw);
   --spacing-how-it-works-copy-gap: max(3.125rem, 3.307vw);
+  --spacing-how-it-works-body-gap: max(1.5rem, 1.587vw);
   --spacing-destinations-heading-offset-top: max(8.375rem, 8.862vw);
   --spacing-destinations-grid-gap-y: max(0.9375rem, 0.992vw);
   --spacing-destinations-grid-gap-x-sm: max(1rem, 1.058vw);

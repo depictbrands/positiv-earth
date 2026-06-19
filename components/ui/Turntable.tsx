@@ -30,8 +30,8 @@ const LABEL_RADIUS = 206;
 const DOT_RADIUS = 5;
 
 // "Nomads Airplane" mark that leads the highlight arc. Its native viewBox is
-// 2106×1053 and the nose points right (+x), so at the top of the ring (where the
-// clockwise tangent also points right) it needs no extra rotation.
+// 2106×1053 and the nose points right (+x). It keeps a fixed 0° heading while
+// riding the ring so it does not spin with the clockwise tangent.
 const PLANE_VIEW_W = 2106;
 const PLANE_VIEW_H = 1053;
 const PLANE_CENTER_X = PLANE_VIEW_W / 2;
@@ -434,13 +434,11 @@ export default function Turntable({
     return index === safeActiveIndex;
   };
 
-  // The plane rides the leading edge of the highlight arc. Its angle on the ring
-  // is -90° + renderFront·360°, and the clockwise tangent there is exactly
-  // renderFront·360° from the plane's native (rightward) heading.
+  // The plane rides the leading edge of the highlight arc at a fixed orientation
+  // (no rotation) while tracing the ring.
   const leadAngle = -90 + renderFront * 360;
   const leadPoint = getPoint(leadAngle, RING_RADIUS);
-  const planeRotation = renderFront * 360;
-  const planeTransform = `translate(${leadPoint.x} ${leadPoint.y}) rotate(${planeRotation}) scale(${PLANE_SCALE}) translate(${-PLANE_CENTER_X} ${-PLANE_CENTER_Y})`;
+  const planeTransform = `translate(${leadPoint.x} ${leadPoint.y}) scale(${PLANE_SCALE}) translate(${-PLANE_CENTER_X} ${-PLANE_CENTER_Y})`;
   const showPlane = renderPhase !== "idle";
 
   return (
@@ -493,7 +491,7 @@ export default function Turntable({
           />
         ))}
 
-        {/* Plane leading the highlight arc, pointing along the clockwise tangent. */}
+        {/* Plane leading the highlight arc at a fixed heading. */}
         {showPlane && (
           <g transform={planeTransform} className="fill-base-black">
             {PLANE_PATHS.map((d, index) => (

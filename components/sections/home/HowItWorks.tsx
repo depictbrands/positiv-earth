@@ -66,7 +66,7 @@ export default function HowItWorks({
 
   return (
     <section
-      className="grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-how-it-works-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
+      className="grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-brand-story-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
     >
       <div
         className="relative flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
@@ -109,19 +109,26 @@ export default function HowItWorks({
           {renderHeading(content)}
         </h2>
 
-        <p className="w-full text-left font-body text-p2 text-base-black">
-          {content.body}
-        </p>
+        <div
+          className="flex w-full flex-col items-start"
+          style={{
+            gap: "var(--spacing-how-it-works-body-gap)",
+          }}
+        >
+          <p className="w-full text-left font-body text-p1 text-base-black">
+            {content.body}
+          </p>
 
-        {cta ? (
-          <Link
-            href={cta.href}
-            className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
-            style={{ filter: "invert(1)" }}
-          >
-            <MoreDetailButton>{cta.label}</MoreDetailButton>
-          </Link>
-        ) : null}
+          {cta ? (
+            <Link
+              href={cta.href}
+              className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
+              style={{ filter: "invert(1)" }}
+            >
+              <MoreDetailButton>{cta.label}</MoreDetailButton>
+            </Link>
+          ) : null}
+        </div>
       </div>
     </section>
   );
