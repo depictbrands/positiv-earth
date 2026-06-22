@@ -9,8 +9,7 @@
  * search-bar-corner     | --radius-search-bar-corner                | 80px
  * search-button-corner  | --radius-search-button-corner             | 48px
  * search-button-surface | --color-search-button-surface             | #c7c7c7
- * search-bar-surface    | --color-search-bar-surface                | #f2f1f1
- * search-bar-ink-light  | --color-search-bar-ink-light              | #6c7072
+ * search-bar-ink-light  | --color-search-bar-ink-light              | #5C6163
  * search-bar-divider    | --color-search-bar-divider                | rgba(20, 20, 20, 0.12)
  * search-bar-shadow     | --shadow-search-bar                       | 0px 0px 1px 0px rgba(20,20,20,0.08), 0px 1px 8px 2px rgba(20,20,20,0.08)
  * header-glass-surface  | --color-header-glass-surface              | rgba(47, 47, 47, 0.6)
@@ -350,8 +349,7 @@
 @theme {
   --color-base-black: oklch(0.209 0 0);
   --color-base-white: oklch(1 0 0);
-  --color-search-bar-surface: oklch(0.9589 0.0011 17.18);
-  --color-search-bar-ink-light: oklch(0.5424 0.0058 228.89);
+  --color-search-bar-ink-light: oklch(0.4889 0.0070 223.55);
   --color-search-bar-divider: oklch(0.1913 0 89.88 / 0.12);
   --color-header-glass-surface: oklch(0.3052 0 89.88 / 0.6);
   --color-header-glass-border: oklch(1 0 89.88 / 0.18);

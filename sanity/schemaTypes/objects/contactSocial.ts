@@ -14,6 +14,8 @@ export const contactSocial = defineType({
           { title: "Instagram", value: "Instagram" },
           { title: "TikTok", value: "TikTok" },
           { title: "WhatsApp", value: "WhatsApp" },
+          { title: "Facebook", value: "Facebook" },
+          { title: "LinkedIn", value: "LinkedIn" },
         ],
       },
     }),

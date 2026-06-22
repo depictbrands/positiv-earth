@@ -1,4 +1,9 @@
-export type ContactSocialPlatform = "Instagram" | "TikTok" | "WhatsApp";
+export type ContactSocialPlatform =
+  | "Instagram"
+  | "TikTok"
+  | "WhatsApp"
+  | "Facebook"
+  | "LinkedIn";
 
 export type ContactSocialLink = {
   platform: ContactSocialPlatform;

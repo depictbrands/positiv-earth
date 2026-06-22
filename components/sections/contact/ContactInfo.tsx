@@ -20,6 +20,8 @@ const DEFAULT_CONTENT: ContactInfoContent = {
     { platform: "Instagram", url: "#" },
     { platform: "TikTok", url: "#" },
     { platform: "WhatsApp", url: "#" },
+    { platform: "Facebook", url: "#" },
+    { platform: "LinkedIn", url: "#" },
   ],
   photos: [
     {
@@ -175,7 +177,7 @@ export default function ContactInfo({ content }: ContactInfoProps) {
             </div>
 
             <div
-              className="flex items-center text-contact-detail-ink"
+              className="flex flex-wrap items-center text-contact-detail-ink"
               style={{ gap: "var(--spacing-contact-info-social-gap)" }}
             >
               {resolved.socials.map((social) => (
