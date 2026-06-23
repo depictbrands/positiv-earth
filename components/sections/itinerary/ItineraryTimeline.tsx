@@ -327,6 +327,13 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
     };
   }, [measure, days.length]);
 
+  useEffect(() => {
+    onCarouselScroll();
+  }, [onCarouselScroll, days.length]);
+
+  const mobileFillPercent =
+    days.length > 0 ? ((mobileActive + 1) / days.length) * 100 : 0;
+
   const openDay = openDayIndex !== null ? days[openDayIndex] : null;
 
   return (
@@ -452,15 +459,27 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
 
                 {/* Horizontal rail + centered day label (mobile carousel) */}
                 <div className="flex flex-col items-center gap-5 lg:hidden">
-                  <div className="flex w-full items-center">
-                    <span
-                      className={`block size-5 shrink-0 rounded-full transition-colors duration-300 ${
-                        index === mobileActive
-                          ? "bg-itinerary-accent"
-                          : "bg-itinerary-track"
+                  <div className="relative w-full py-2.5">
+                    <div
+                      className={`pointer-events-none absolute top-1/2 h-0.5 -translate-y-1/2 ${
+                        index === 0 ? "left-1/2 right-0" : "inset-x-0"
                       }`}
-                    />
-                    <span className="h-0.5 flex-1 bg-itinerary-track" />
+                    >
+                      <span className="absolute inset-0 bg-itinerary-track" />
+                      <span
+                        className="absolute inset-y-0 left-0 bg-itinerary-accent transition-[width] duration-300 ease-out"
+                        style={{ width: `${mobileFillPercent}%` }}
+                      />
+                    </div>
+                    <div className="relative z-10 flex justify-center">
+                      <span
+                        className={`block size-5 rounded-full transition-colors duration-300 ${
+                          index === mobileActive
+                            ? "bg-itinerary-accent"
+                            : "bg-itinerary-track"
+                        }`}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex flex-col items-center gap-3 text-center">

@@ -118,7 +118,10 @@ export default function Hero({ content }: HeroProps) {
           style={{ maxWidth: "var(--size-hero-content-width)" }}
         >
           {/* Mobile / tablet: centered stack */}
-          <div className="flex flex-col items-center lg:hidden">
+          <div
+            className="flex flex-col items-center lg:hidden"
+            style={{ gap: "var(--spacing-hero-headline-post-gap)" }}
+          >
             <div
               className="flex flex-wrap items-center justify-center"
               style={{ gap: "var(--spacing-hero-headline-gap)" }}

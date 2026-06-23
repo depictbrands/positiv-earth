@@ -271,6 +271,7 @@
  * hero-subcopy-width    | --size-hero-subcopy-width                 | 869px
  * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
  * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
+ * hero-headline-post-gap | --spacing-hero-headline-post-gap         | 40px
  * hero-headline-post-offset-x | --spacing-hero-headline-post-offset-x | 437px
  * hero-headline-post-offset-y | --spacing-hero-headline-post-offset-y | 145px
  * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.32em
@@ -512,6 +513,7 @@
   --spacing-hero-content-gap: 3.125rem;
   --spacing-hero-search-offset-top: 44.25rem;
   --spacing-hero-headline-gap: 2.25rem;
+  --spacing-hero-headline-post-gap: 2.5rem;
   --spacing-hero-headline-post-offset-x: 27.3125rem;
   --spacing-hero-headline-post-offset-y: 9.0625rem;
   --spacing-text-reveal-line-buffer: 0.32em;
@@ -1177,6 +1179,7 @@ body {
   /* Section + element spacing */
   --spacing-hero-content-gap: max(3.125rem, 3.307vw);
   --spacing-hero-headline-gap: max(2.25rem, 2.381vw);
+  --spacing-hero-headline-post-gap: max(2.5rem, 2.645vw);
   --spacing-hero-headline-post-offset-x: max(27.3125rem, 28.901vw);
   --spacing-hero-headline-post-offset-y: max(9.0625rem, 9.59vw);
   --spacing-brand-story-offset-x: max(3rem, 3.175vw);

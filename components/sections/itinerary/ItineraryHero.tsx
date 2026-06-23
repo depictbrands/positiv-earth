@@ -41,11 +41,11 @@ function resolveContent(content?: ItineraryHeroContent): ItineraryHeroContent {
 
 // Small decorative dot used to flank the country eyebrow and separate the meta
 // items (Figma ellipses 76 / 77). Purely decorative.
-function Dot() {
+function Dot({ className }: { className?: string }) {
   return (
     <span
       aria-hidden="true"
-      className="block size-2.5 shrink-0 rounded-full bg-base-white"
+      className={`block size-2.5 shrink-0 rounded-full bg-base-white ${className ?? ""}`}
     />
   );
 }
@@ -104,10 +104,10 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
         <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
       </div>
 
-      {/* Hero content cluster — bottom-left of viewport */}
-      <div className="relative z-10 flex w-full flex-1 flex-col items-start justify-end gap-[var(--spacing-itinerary-local-food-heading-gap)] pb-[var(--spacing-itinerary-hero-inset-bottom)] pl-[var(--spacing-itinerary-hero-inset-x)] text-left text-base-white">
+      {/* Hero content cluster — bottom-left on desktop; fluid insets on mobile */}
+      <div className="relative z-10 flex w-full max-w-full flex-1 flex-col items-start justify-end gap-4 px-6 pb-12 pt-24 text-left text-base-white sm:px-10 sm:pb-16 lg:max-w-[var(--size-itinerary-hero-content-width)] lg:gap-[var(--spacing-itinerary-local-food-heading-gap)] lg:px-0 lg:pb-[var(--spacing-itinerary-hero-inset-bottom)] lg:pl-[var(--spacing-itinerary-hero-inset-x)] lg:pt-0">
         {/* Country eyebrow */}
-        <p className="flex items-center gap-6 font-body italic text-itinerary-country-name">
+        <p className="flex items-center gap-4 font-body italic text-itinerary-country-name lg:gap-6">
           <Dot />
           <TextReveal className="font-body italic text-itinerary-country-name">
             {resolved.country}
@@ -115,18 +115,18 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
           <Dot />
         </p>
 
-        {/* Title — width follows the headline */}
-        <div className="flex w-fit max-w-full flex-col items-stretch gap-6">
+        {/* Title — wraps on mobile, single line on desktop */}
+        <div className="flex w-full max-w-full flex-col items-stretch gap-4 lg:w-fit lg:gap-6">
           <TextReveal
             as="h1"
-            className="font-display text-heading-2 lg:whitespace-nowrap"
+            className="max-w-full font-display text-heading-2 lg:whitespace-nowrap"
           >
             {resolved.title}
           </TextReveal>
         </div>
 
-        {/* Meta line — numbers in the display serif, labels in the body sans */}
-        <p className="flex flex-wrap items-center justify-start gap-4 uppercase text-itinerary-meta">
+        {/* Meta line — stacks on narrow screens, inline from sm up */}
+        <p className="flex flex-col items-start gap-3 uppercase text-itinerary-meta sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <TextReveal className="uppercase text-itinerary-meta">
             <span>
               <span className="font-display">{resolved.durationDays}</span>{" "}
@@ -135,7 +135,7 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
               <span className="font-body">nights</span>
             </span>
           </TextReveal>
-          <Dot />
+          <Dot className="hidden sm:block" />
           <TextReveal className="uppercase text-itinerary-meta">
             <span>
               <span className="font-display">{resolved.travelers}</span>{" "}

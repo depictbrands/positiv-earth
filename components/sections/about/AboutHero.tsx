@@ -114,7 +114,12 @@ export default function AboutHero({ content }: AboutHeroProps) {
           {/* Mobile / tablet: centred stack */}
           <div className="flex flex-col items-center text-center lg:hidden">
             <TextReveal className="text-heading-3">{resolved.lead}</TextReveal>
-            <TextReveal className="text-heading-1">
+            <TextReveal
+              className="text-heading-1"
+              style={{
+                marginBlock: "calc(var(--spacing-abouthero-role-gap) / 2)",
+              }}
+            >
               {resolved.name}
             </TextReveal>
             {roleLines.map((line) => (
