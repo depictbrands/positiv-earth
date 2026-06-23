@@ -11,10 +11,10 @@ export const itineraryOverviewSection = defineType({
       type: "string",
     }),
     defineField({
-      name: "highlights",
-      title: "Highlights",
+      name: "accordionItems",
+      title: "Accordion items",
       type: "array",
-      of: [defineArrayMember({ type: "string" })],
+      of: [defineArrayMember({ type: "itineraryOverviewAccordionItem" })],
     }),
     defineField({
       name: "mapImage",

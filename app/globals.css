@@ -196,12 +196,18 @@
  * itinerary-hero-overlay | --color-itinerary-hero-overlay           | rgba(0,0,0,0.4)
  * itinerary-hero-content-width | --size-itinerary-hero-content-width | 875px
  * itinerary-hero-rule-thick-height | --size-itinerary-hero-rule-thick-height | 5px
+ * itinerary-hero-inset-x | --spacing-itinerary-hero-inset-x       | 96px
+ * itinerary-hero-inset-bottom | --spacing-itinerary-hero-inset-bottom | 96px
  * itinerary-overview-width | --size-itinerary-overview-width        | 1416px
  * itinerary-overview-copy-width | --size-itinerary-overview-copy-width | 509px
  * itinerary-overview-map-width | --size-itinerary-overview-map-width | 704px
  * itinerary-overview-map-height | --size-itinerary-overview-map-height | 396px
  * itinerary-overview-section-gap | --spacing-itinerary-overview-section-gap | 85px
  * itinerary-overview-copy-gap | --spacing-itinerary-overview-copy-gap | 50px
+ * itinerary-overview-accordion-item-gap | --spacing-itinerary-overview-accordion-item-gap | 24px
+ * itinerary-overview-accordion-body-gap | --spacing-itinerary-overview-accordion-body-gap | 20px
+ * itinerary-overview-accordion-trigger-padding-bottom | --spacing-itinerary-overview-accordion-trigger-padding-bottom | 16px
+ * itinerary-overview-accordion-icon | --size-itinerary-overview-accordion-icon | 24px
  * itinerary-accent      | --color-itinerary-accent                  | #cf3030
  * itinerary-track       | --color-itinerary-track                   | faint timeline track
  * itinerary-day-muted   | --color-itinerary-day-muted               | #6e6e6e
@@ -266,6 +272,7 @@
  * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
  * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
  * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.32em
+ * text-reveal-line-buffer-italic | --spacing-text-reveal-line-buffer-italic | 0.5em
  * abouthero-role-gap    | --spacing-abouthero-role-gap              | 32px
  * hero-subcopy          | --text-hero-subcopy                       | 20px
  * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
@@ -475,6 +482,9 @@
   --spacing-destinations-grid-gap-x-lg: 1.125rem;
   --spacing-itinerary-overview-section-gap: 5.3125rem;
   --spacing-itinerary-overview-copy-gap: 3.125rem;
+  --spacing-itinerary-overview-accordion-item-gap: 1.5rem;
+  --spacing-itinerary-overview-accordion-body-gap: 1.25rem;
+  --spacing-itinerary-overview-accordion-trigger-padding-bottom: 1rem;
   --spacing-itinerary-row-gap: 2.875rem;
   --spacing-itinerary-card-inset: 1.6875rem;
   --spacing-itinerary-card-content-gap: 1.9375rem;
@@ -484,6 +494,8 @@
   --spacing-itinerary-local-food-section-gap: 1.25rem;
   --spacing-itinerary-local-food-copy-gap: 2rem;
   --spacing-itinerary-local-food-heading-gap: 1rem;
+  --spacing-itinerary-hero-inset-x: 6rem;
+  --spacing-itinerary-hero-inset-bottom: 6rem;
   --spacing-itinerary-accommodation-heading-gap: 2.5rem;
   --spacing-itinerary-accommodation-city-inset: 1.25rem;
   --spacing-itinerary-accommodation-grid-gap: 1.3125rem;
@@ -499,6 +511,7 @@
   --spacing-hero-search-offset-top: 44.25rem;
   --spacing-hero-headline-gap: 2.25rem;
   --spacing-text-reveal-line-buffer: 0.32em;
+  --spacing-text-reveal-line-buffer-italic:0.5em;
   --spacing-abouthero-role-gap: 2rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
@@ -592,6 +605,7 @@
   --size-itinerary-overview-copy-width: 31.8125rem;
   --size-itinerary-overview-map-width: 44rem;
   --size-itinerary-overview-map-height: 24.75rem;
+  --size-itinerary-overview-accordion-icon: 1.5rem;
   --size-itinerary-card-width: 58.5625rem;
   --size-itinerary-card-height: 20.6875rem;
   --size-itinerary-card-panel-width: 37.875rem;
@@ -994,6 +1008,22 @@ body {
   padding-top: var(--spacing-text-reveal-line-buffer);
   margin-top: calc(var(--spacing-text-reveal-line-buffer) * -1);
   margin-bottom: calc(var(--spacing-text-reveal-line-buffer) * -1);
+}
+
+/* Italic reveals (e.g. the itinerary country eyebrow): slanted glyphs spill
+   outside the line box — the caps sit higher and the trailing edge of letters
+   like "u" leans past their advance width — so the mask's `overflow: hidden`
+   clips their tops and right edge. Give italic line masks extra room on the
+   top and sides; equal negative margins pull it back out so layout (and the
+   flanking dots) stay put. Bottom room stays on `.line` (descenders) to avoid
+   letting the hidden line peek through the mask. */
+.text-reveal.italic .line-wrapper {
+  padding-top: var(--spacing-text-reveal-line-buffer-italic);
+  padding-left: var(--spacing-text-reveal-line-buffer-italic);
+  padding-right: var(--spacing-text-reveal-line-buffer-italic);
+  margin-top: calc(var(--spacing-text-reveal-line-buffer-italic) * -1);
+  margin-left: calc(var(--spacing-text-reveal-line-buffer-italic) * -1);
+  margin-right: calc(var(--spacing-text-reveal-line-buffer-italic) * -1);
 }
 
 .text-reveal .line {

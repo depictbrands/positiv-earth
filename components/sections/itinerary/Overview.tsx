@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import ExpeditionOverviewAccordion from "@/components/ui/ExpeditionOverviewAccordion";
 import type {
   ItineraryOverviewContent,
   ItineraryProcessStep,
@@ -35,13 +36,27 @@ const DEFAULT_PROCESS: ItineraryProcessStep[] = [
 
 const DEFAULT_CONTENT: ItineraryOverviewContent = {
   heading: "Expedition Overview",
-  highlights: [
-    "Cusco, Machu Picchu, Rainbow Mountain",
-    "Original Inca Trail hike",
-    "Sacred Valley villages and markets",
-    "Ollantaytambo, Sacsayhuamán, Moray terraces",
-    "Pachamanca feast and cooking class",
-    "Vinicunca’s high-altitude mineral colors",
+  accordionItems: [
+    {
+      title: "The Expedition at a Glance",
+      body:
+        "Cusco, Machu Picchu, Rainbow Mountain, and the original Inca Trail — a curated route through Peru's most iconic landscapes and living culture.",
+    },
+    {
+      title: "Where You'll Wander",
+      body:
+        "Sacred Valley villages and markets, Ollantaytambo, Sacsayhuamán, Moray terraces, and Vinicunca's high-altitude mineral colors.",
+    },
+    {
+      title: "Moments You'll Carry Home",
+      body:
+        "A Pachamanca feast and cooking class, guided trail days, and time in communities where Andean traditions are still part of daily life.",
+    },
+    {
+      title: "Good to Know Before You Set Out",
+      body:
+        "Altitude, pacing, and trail permits are built into the itinerary. Your advisor will walk you through preparation before you depart.",
+    },
   ],
   mapImageUrl: "/itinerary/peru-map.png",
   mapImageAlt: "Illustrated map of the Peru route with key stops",
@@ -55,8 +70,9 @@ type OverviewProps = {
 function resolveContent(content?: ItineraryOverviewContent): ItineraryOverviewContent {
   return {
     heading: content?.heading?.trim() || DEFAULT_CONTENT.heading,
-    highlights:
-      content?.highlights?.length ? content.highlights : DEFAULT_CONTENT.highlights,
+    accordionItems: content?.accordionItems?.length
+      ? content.accordionItems
+      : DEFAULT_CONTENT.accordionItems,
     mapImageUrl: content?.mapImageUrl?.trim() || DEFAULT_CONTENT.mapImageUrl,
     mapImageAlt: content?.mapImageAlt?.trim() || DEFAULT_CONTENT.mapImageAlt,
     process: content?.process?.length ? content.process : DEFAULT_CONTENT.process,
@@ -64,7 +80,7 @@ function resolveContent(content?: ItineraryOverviewContent): ItineraryOverviewCo
 }
 
 // Itinerary "Overview" section (Figma node 584:1098): on a black canvas, an
-// "Expedition Overview" heading with highlight bullets sits beside an illustrated
+// "Expedition Overview" heading with expandable panels sits beside an illustrated
 // route map, with a horizontal process timeline (Connect → Reflect) below.
 // Presentational — content arrives via props.
 export default function Overview({ content }: OverviewProps) {
@@ -87,11 +103,7 @@ export default function Overview({ content }: OverviewProps) {
               {resolved.heading}
             </h2>
 
-            <ul className="w-full list-disc space-y-6 ps-8 font-body text-p1 text-base-white">
-              {resolved.highlights.map((highlight, index) => (
-                <li key={`${highlight}-${index}`}>{highlight}</li>
-              ))}
-            </ul>
+            <ExpeditionOverviewAccordion items={resolved.accordionItems} />
           </div>
 
           <div className="relative aspect-[704/396] w-full lg:aspect-auto lg:h-[var(--size-itinerary-overview-map-height)] lg:w-[var(--size-itinerary-overview-map-width)] lg:shrink-0">

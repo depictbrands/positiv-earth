@@ -58,7 +58,6 @@ export default function HowItWorks({
   content = DEFAULT_CONTENT,
 }: HowItWorksProps) {
   const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
-  const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
   const ctaLabel = content.cta?.label?.trim() || DEFAULT_CONTENT.cta?.label;
   const ctaHref = content.cta?.href?.trim() || DEFAULT_CONTENT.cta?.href;
   const cta =
@@ -66,30 +65,28 @@ export default function HowItWorks({
 
   return (
     <section
-      className="grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-brand-story-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
+      className="relative grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-brand-story-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
     >
       <div
-        className="relative flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
-        role="img"
-        aria-label={imageAlt}
-      >
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[var(--color-how-it-works-bg-fallback)] bg-no-repeat"
-          style={{
-            backgroundImage: `url("${imageUrl}")`,
-            backgroundPosition: "var(--size-how-it-works-bg-position-x) 0",
-            backgroundSize: "var(--size-how-it-works-bg-size)",
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: "var(--gradient-how-it-works-image-fade)",
-          }}
-        />
+        aria-hidden="true"
+        className="absolute inset-0 bg-[var(--color-how-it-works-bg-fallback)] bg-no-repeat"
+        style={{
+          backgroundImage: `url("${imageUrl}")`,
+          backgroundPosition: "var(--size-how-it-works-bg-position-x) 0",
+          backgroundSize: "var(--size-how-it-works-bg-size)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: "var(--gradient-how-it-works-image-fade)",
+        }}
+      />
 
+      <div
+        className="relative z-10 flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
+      >
         <div
           className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-end gap-12 lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
         >
@@ -100,7 +97,7 @@ export default function HowItWorks({
       </div>
 
       <div
-        className="flex w-full flex-col items-start px-6 py-16 sm:px-10 lg:w-[var(--size-how-it-works-copy-width)] lg:px-0 lg:py-0 lg:ml-[calc(var(--spacing-how-it-works-copy-offset-x)_-_var(--size-how-it-works-left-width))]"
+        className="relative z-10 flex w-full flex-col items-start px-6 py-16 sm:px-10 lg:w-[var(--size-how-it-works-copy-width)] lg:px-0 lg:py-0 lg:ml-[calc(var(--spacing-how-it-works-copy-offset-x)_-_var(--size-how-it-works-left-width))]"
         style={{
           gap: "var(--spacing-how-it-works-copy-gap)",
         }}

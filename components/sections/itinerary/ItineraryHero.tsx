@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
+import TextReveal from "@/components/ui/TextReveal";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { ItineraryHeroContent } from "@/types/itinerary-hero-content";
 
@@ -49,22 +50,9 @@ function Dot() {
   );
 }
 
-function HeroRule({ thick = false }: { thick?: boolean }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`block w-full rounded-s-full bg-base-white ${
-        thick
-          ? "h-[var(--size-itinerary-hero-rule-thick-height)]"
-          : "h-px"
-      }`}
-    />
-  );
-}
-
 // The itinerary page hero (Figma node 584:1071): a full-bleed image under a dark
-// overlay, the shared top bar, then a centered cluster of a country eyebrow, the
-// rule-framed trip title, and a meta line (days / nights / travellers). The meta
+// overlay, the shared top bar, then a bottom-left cluster of a country eyebrow,
+// the trip title, and a meta line (days / nights / travellers). The meta
 // numbers use the display serif while the labels use the body sans, matching the
 // Figma mixed-font treatment. Presentational — content comes in via props.
 export default function ItineraryHero({ content }: ItineraryHeroProps) {
@@ -116,40 +104,44 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
         <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
       </div>
 
-      {/* Centered hero cluster */}
-      <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center gap-10 px-6 py-28 text-center text-base-white lg:gap-14 lg:py-32">
+      {/* Hero content cluster — bottom-left of viewport */}
+      <div className="relative z-10 flex w-full flex-1 flex-col items-start justify-end gap-[var(--spacing-itinerary-local-food-heading-gap)] pb-[var(--spacing-itinerary-hero-inset-bottom)] pl-[var(--spacing-itinerary-hero-inset-x)] text-left text-base-white">
         {/* Country eyebrow */}
         <p className="flex items-center gap-6 font-body italic text-itinerary-country-name">
           <Dot />
-          <span>{resolved.country}</span>
+          <TextReveal className="font-body italic text-itinerary-country-name">
+            {resolved.country}
+          </TextReveal>
           <Dot />
         </p>
 
-        {/* Rule-framed title — width follows the headline so rules scale with it */}
+        {/* Title — width follows the headline */}
         <div className="flex w-fit max-w-full flex-col items-stretch gap-6">
-          <HeroRule />
-          <h1 className="font-display text-heading-2 lg:whitespace-nowrap">
+          <TextReveal
+            as="h1"
+            className="font-display text-heading-2 lg:whitespace-nowrap"
+          >
             {resolved.title}
-          </h1>
-          <div className="flex w-full flex-col gap-3">
-            <HeroRule />
-            <HeroRule thick />
-          </div>
+          </TextReveal>
         </div>
 
         {/* Meta line — numbers in the display serif, labels in the body sans */}
-        <p className="flex flex-wrap items-center justify-center gap-4 uppercase text-itinerary-meta">
-          <span>
-            <span className="font-display">{resolved.durationDays}</span>{" "}
-            <span className="font-body">days</span>{" "}
-            <span className="font-display">{resolved.nights}</span>{" "}
-            <span className="font-body">nights</span>
-          </span>
+        <p className="flex flex-wrap items-center justify-start gap-4 uppercase text-itinerary-meta">
+          <TextReveal className="uppercase text-itinerary-meta">
+            <span>
+              <span className="font-display">{resolved.durationDays}</span>{" "}
+              <span className="font-body">days</span>{" "}
+              <span className="font-display">{resolved.nights}</span>{" "}
+              <span className="font-body">nights</span>
+            </span>
+          </TextReveal>
           <Dot />
-          <span>
-            <span className="font-display">{resolved.travelers}</span>{" "}
-            <span className="font-body">travelers</span>
-          </span>
+          <TextReveal className="uppercase text-itinerary-meta">
+            <span>
+              <span className="font-display">{resolved.travelers}</span>{" "}
+              <span className="font-body">travelers</span>
+            </span>
+          </TextReveal>
         </p>
       </div>
     </section>

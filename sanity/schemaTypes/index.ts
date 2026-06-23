@@ -19,6 +19,7 @@ import { itineraryDay } from "./objects/itineraryDay";
 import { itineraryDayDetail } from "./objects/itineraryDayDetail";
 import { itineraryDayPeriod } from "./objects/itineraryDayPeriod";
 import { itineraryHotel } from "./objects/itineraryHotel";
+import { itineraryOverviewAccordionItem } from "./objects/itineraryOverviewAccordionItem";
 import { itineraryProcessStep } from "./objects/itineraryProcessStep";
 import { quizImageChoice } from "./objects/quizImageChoice";
 import { quizOption } from "./objects/quizOption";
@@ -64,6 +65,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     quizOption,
     quizTravelerCount,
     quizImageChoice,
+    itineraryOverviewAccordionItem,
     itineraryProcessStep,
     itineraryDayPeriod,
     itineraryDayDetail,

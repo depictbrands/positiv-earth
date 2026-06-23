@@ -251,7 +251,10 @@ export const ITINERARY_BY_SLUG_QUERY = `*[_type == "itinerary" && slug.current =
   },
   overview {
     heading,
-    highlights,
+    accordionItems[] {
+      title,
+      body
+    },
     mapImage ${IMAGE_WITH_ALT},
     process[] {
       title,

@@ -38,7 +38,7 @@ type SanityItinerary = {
   };
   overview?: {
     heading?: string;
-    highlights?: string[];
+    accordionItems?: Array<{ title?: string; body?: string }>;
     mapImage?: SanityImageWithAlt;
     process?: Array<{ title?: string; description?: string }>;
   };
@@ -139,7 +139,10 @@ function mapOverview(
 
   return {
     heading: section.heading ?? "",
-    highlights: section.highlights ?? [],
+    accordionItems: (section.accordionItems ?? []).map((item) => ({
+      title: item.title ?? "",
+      body: item.body ?? "",
+    })),
     mapImageUrl: mappedMapImage?.imageUrl ?? "",
     mapImageAlt: mappedMapImage?.imageAlt ?? "",
     process: (section.process ?? []).map((step) => ({
