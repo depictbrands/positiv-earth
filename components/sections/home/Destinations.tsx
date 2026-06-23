@@ -100,7 +100,7 @@ export default function Destinations({
           style={{ gap: "var(--spacing-destinations-grid-gap-y)" }}
         >
           <div
-            className="grid grid-cols-1 justify-items-center lg:[grid-template-columns:342fr_342fr_701fr] lg:justify-items-stretch"
+            className="grid w-full grid-cols-1 justify-items-stretch lg:[grid-template-columns:342fr_342fr_701fr] lg:justify-items-stretch"
             style={{ gap: "var(--spacing-destinations-grid-gap-x-sm)" }}
           >
             {firstRow.map((destination, index) => (
@@ -113,7 +113,7 @@ export default function Destinations({
           </div>
 
           <div
-            className="grid grid-cols-1 justify-items-center lg:[grid-template-columns:701fr_342fr_342fr] lg:justify-items-stretch"
+            className="grid w-full grid-cols-1 justify-items-stretch lg:[grid-template-columns:701fr_342fr_342fr] lg:justify-items-stretch"
             style={{ gap: "var(--spacing-destinations-grid-gap-x-lg)" }}
           >
             {secondRow.map((destination, index) => (

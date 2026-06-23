@@ -94,7 +94,7 @@
  * footer-overlay        | --color-footer-overlay                    | rgba(0, 0, 0, 0.2)
  * footer-muted-text     | --color-footer-muted-text                 | #cfcfcf
  * footer-divider        | --color-footer-divider                    | rgba(255, 255, 255, 0.4)
- * footer-form-placeholder | --color-footer-form-placeholder         | rgba(255, 255, 255, 0.6)
+ * footer-form-placeholder | --color-footer-form-placeholder         | #ffffffff
  * testimonial-card-name | --text-testimonial-card-name           | 20px
  * testimonial-card-quote | --text-testimonial-card-quote         | 16px
  * footer-width          | --size-footer-width                       | 1512px
@@ -276,11 +276,19 @@
  * three-services-width  | --size-three-services-width               | 1512px
  * three-services-top    | --spacing-three-services-top              | 101px
  * three-services-bottom | --spacing-three-services-bottom           | 247px
- * three-services-row-gap | --spacing-three-services-row-gap         | 125px
- * three-services-caption-gap | --spacing-three-services-caption-gap | 18px
- * three-services-caption-inset | --spacing-three-services-caption-inset | 42px
- * three-services-title-lift | --spacing-three-services-title-lift   | 88px (one heading-4 line)
- * three-services-image-overlay | --color-three-services-image-overlay | rgba(0,0,0,0.1)
+ * three-services-row-gap | --spacing-three-services-row-gap         | 200px (desktop)
+ * three-services-row-gap-mobile | --spacing-three-services-row-gap-mobile | 64px
+ * three-services-caption-gap | --spacing-three-services-caption-gap | 16px
+ * three-services-card-pad-x | --spacing-three-services-card-pad-x   | 26px
+ * three-services-card-pad-y | --spacing-three-services-card-pad-y   | 22px
+ * three-services-card-stack-gap | --spacing-three-services-card-stack-gap | 20px (mobile gap below photo)
+ * three-services-card-width | --size-three-services-card-width      | 912px
+ * three-services-card-min-height | --size-three-services-card-min-height | 209px
+ * three-services-text-width | --size-three-services-text-width      | 832px (inner text block, narrower than card)
+ * three-services-olive   | --color-three-services-olive              | #e5daac (Figma "olive")
+ * three-services-blue    | --color-three-services-blue               | #b9d5e6 (Figma "blue")
+ * three-services-coral   | --color-three-services-coral              | #d9a59e (Figma "coral")
+ * three-services-image-overlay | --color-three-services-image-overlay | rgba(0,0,0,0.2) (gradient end)
  * cream-white           | --color-cream-white                       | #f4efe9
  * contact-detail-ink    | --color-contact-detail-ink                | #373737
  * contact-info-detail   | --text-contact-info-detail                | 36px
@@ -358,7 +366,7 @@
   --color-footer-overlay: oklch(0 0 0 / 0.2);
   --color-footer-muted-text: oklch(0.8545 0 89.88);
   --color-footer-divider: oklch(1 0 89.88 / 0.4);
-  --color-footer-form-placeholder: oklch(1 0 89.88 / 0.6);
+  --color-footer-form-placeholder: var(--color-base-white);
   --color-testimonial-pagination-inactive: oklch(1 0 89.88 / 0.5);
   --color-ink-base: oklch(0.3995 0.0101 257.7);
   --color-how-it-works-overlay: oklch(1 0 89.88 / 0.3);
@@ -377,7 +385,12 @@
   --color-destination-card-portrait-overlay-end: oklch(0.209 0 0 / 0);
   --color-destination-card-divider: var(--color-base-white);
   --color-cta-overlay: oklch(0 0 0 / 0.25);
-  --color-three-services-image-overlay: oklch(0 0 0 / 0.1);
+  --color-three-services-image-overlay: oklch(0 0 0 / 0.2);
+  /* Three-services caption-card swatches (Figma vars olive / blue / coral).
+     Kept as exact sRGB hex from Dev Mode. */
+  --color-three-services-olive: #e5daac;
+  --color-three-services-blue: #b9d5e6;
+  --color-three-services-coral: #d9a59e;
   --color-cream-white: oklch(0.954 0.011 65.1);
   --color-contact-detail-ink: oklch(0.338 0 0);
   --color-faq-question: oklch(0.309 0 0);
@@ -512,15 +525,17 @@
   --spacing-cta-content-gap: 2.875rem;
   --spacing-three-services-top: 6.3125rem;
   --spacing-three-services-bottom: 15.4375rem;
-  --spacing-three-services-row-gap: 7.8125rem;
-  --spacing-three-services-caption-gap: 1.125rem;
-  --spacing-three-services-caption-inset: 2.625rem;
-  --spacing-three-services-title-lift: clamp(2.83rem, 5.82vw, 5.5rem);
+  --spacing-three-services-row-gap: 12.5rem;
+  --spacing-three-services-row-gap-mobile: 4rem;
+  --spacing-three-services-caption-gap: 1rem;
+  --spacing-three-services-card-pad-x: 1.625rem;
+  --spacing-three-services-card-pad-y: 1.375rem;
+  --spacing-three-services-card-stack-gap: 1.25rem;
   --spacing-contact-info-block-offset: 9.125rem;
   --spacing-contact-info-side-offset: 3rem;
-  --spacing-contact-info-column-gap: 2.25rem;
-  --spacing-contact-info-details-gap: 2.5rem;
-  --spacing-contact-info-detail-gap: 2.8125rem;
+  --spacing-contact-info-column-gap: 2rem;
+  --spacing-contact-info-details-gap: 1rem;
+  --spacing-contact-info-detail-gap: 1rem;
   --spacing-contact-info-photo-offset-x: 25.75rem;
   --spacing-contact-info-photo-offset-y: 15.5rem;
   --spacing-contact-info-social-gap: 1.0625rem;
@@ -631,13 +646,16 @@
   --size-cta-heading-width: 66.5625rem;
   --size-services-hero-heading-width: 36.1875rem;
   --size-three-services-width: 94.5rem;
+  --size-three-services-card-width: 57rem;
+  --size-three-services-card-min-height: 13.0625rem;
+  --size-three-services-text-width: 44rem;
   --size-contact-info-width: 88.5rem;
   --size-contact-info-photos-width: 50.3125rem;
   --size-contact-info-photos-height: 44.75rem;
   --size-contact-info-photo-width: 24.5625rem;
   --size-contact-info-photo-height: 29.25rem;
   --size-contact-info-column-width: 33.25rem;
-  --size-contact-info-social-icon: 2.25rem;
+  --size-contact-info-social-icon: 2rem;
   --size-faq-width: 94.5rem;
   --size-faq-heading-width: 22.25rem;
   --size-faq-list-width: 43.25rem;

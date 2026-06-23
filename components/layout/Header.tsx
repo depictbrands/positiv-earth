@@ -244,8 +244,11 @@ export default function Header({ className, style }: HeaderProps) {
           <nav
             id="mobile-nav"
             aria-label="Primary"
-            className="absolute left-0 z-30 mt-2 flex min-w-48 flex-col gap-1 rounded-[var(--radius-header-active-pill-corner)] p-2 text-base-white"
-            style={glassStyle}
+            className="absolute left-0 z-30 mt-2 flex min-w-48 flex-col rounded-[var(--radius-header-active-pill-corner)] p-2 text-base-white"
+            style={{
+              ...glassStyle,
+              gap: "calc(4 * var(--spacing-header-active-pill-offset))",
+            }}
           >
             {NAV_ITEMS.map((item) => (
               <HeaderNavButton

@@ -85,12 +85,11 @@ function FooterField({
 }) {
   return (
     <label className={cn("flex flex-col text-base-white", className)}>
-      <span className="font-open-sans text-footer-form-label">{label}</span>
+      <span className="font-raleway text-footer-form-label">{label}</span>
       {placeholder ? (
         <span
-          className="font-open-sans text-footer-form-placeholder"
+          className="font-raleway text-footer-form-placeholder"
           style={{
-            color: "var(--color-footer-form-placeholder)",
             marginTop: "var(--spacing-footer-form-message-gap)",
           }}
         >
@@ -271,7 +270,7 @@ export default function Footer({ className }: FooterProps) {
 
             <button
               type="button"
-              className="mt-10 inline-flex w-full items-center justify-center rounded-search-button-corner border border-base-white bg-transparent font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white sm:w-[var(--size-footer-submit-width)]"
+              className="mt-10 inline-flex w-auto min-w-[var(--size-footer-submit-width)] items-center justify-center self-end whitespace-nowrap rounded-search-button-corner border border-base-white bg-transparent font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
               style={{
                 paddingInline: "var(--spacing-footer-submit-padding-x)",
                 paddingBlock: "var(--spacing-footer-submit-padding-y)",

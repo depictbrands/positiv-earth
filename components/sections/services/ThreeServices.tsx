@@ -1,3 +1,8 @@
+"use client";
+
+import { useLayoutEffect, useRef } from "react";
+
+import { initPhotoReveal } from "@/lib/photoReveal";
 import type {
   Service,
   ThreeServicesContent,
@@ -42,41 +47,44 @@ const DEFAULT_CONTENT: ThreeServicesContent = {
   ],
 };
 
-// First word renders white (over the photo); the remainder renders black.
-function splitTitle(title: string): [string, string] {
-  const trimmed = title.trim();
-  const spaceIndex = trimmed.indexOf(" ");
-  if (spaceIndex === -1) {
-    return [trimmed, ""];
-  }
-  return [trimmed.slice(0, spaceIndex), trimmed.slice(spaceIndex + 1)];
-}
+// Caption-card swatches, cycled by row order (Figma olive / blue / coral).
+const CARD_COLORS = [
+  "var(--color-three-services-olive)",
+  "var(--color-three-services-blue)",
+  "var(--color-three-services-coral)",
+];
 
 type ServiceRowProps = {
   service: Service;
-  // Even rows mirror the layout: image to the right, title straddling the
-  // image's bottom-right, description to the left.
+  cardColor: string;
+  // Even rows mirror the layout: photo to the right, caption card overlapping
+  // the photo's inner edge from the left.
   reversed?: boolean;
+  // Keep the title on a single line on desktop (mobile cards still wrap).
+  noWrapTitle?: boolean;
 };
 
-function ServiceRow({ service, reversed = false }: ServiceRowProps) {
-  const [leadWord, restWords] = splitTitle(service.title);
+function ServiceRow({
+  service,
+  cardColor,
+  reversed = false,
+  noWrapTitle = false,
+}: ServiceRowProps) {
+  const photoRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => initPhotoReveal(photoRef.current), []);
 
   return (
-    <article
-      className={cn(
-        "relative flex flex-col",
-        reversed ? "items-end" : "items-start",
-      )}
-    >
-      {/* Photo — full width on mobile, 80.42% (1216/1512) on desktop, rounded
-          only on the inner corner so it bleeds to the outer edge. */}
+    <article className="relative flex w-full flex-col">
+      {/* Photo — full width on mobile; on desktop ~76% of the 1512 frame, hugging
+          one margin so the caption card can overhang the opposite edge. */}
       <div
+        ref={photoRef}
         className={cn(
-          "relative z-10 aspect-[608/339] w-full overflow-hidden lg:w-[80.42%]",
+          "relative z-0 aspect-[1150/678] w-full overflow-hidden rounded-[var(--radius-card-corner)]",
           reversed
-            ? "rounded-l-[var(--radius-card-corner)]"
-            : "rounded-r-[var(--radius-card-corner)]",
+            ? "lg:ml-auto lg:mr-[1.59%] lg:w-[75.99%]"
+            : "lg:ml-[1.59%] lg:w-[76.26%]",
         )}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -85,76 +93,43 @@ function ServiceRow({ service, reversed = false }: ServiceRowProps) {
           alt={service.imageAlt}
           className="block h-full w-full object-cover"
         />
-        {reversed ? (
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 z-[1]"
-            style={{
-              backgroundColor: "var(--color-three-services-image-overlay)",
-            }}
-          />
-        ) : null}
-        {/* Lead word aligns horizontally with the black line in the h3 below. */}
-        <span
+        <div
           aria-hidden="true"
-          className={cn(
-            "absolute bottom-0 z-10 font-display text-heading-4 text-base-white",
-            reversed
-              ? "right-0 w-max text-left lg:mr-[var(--spacing-three-services-caption-inset)]"
-              : "left-0 lg:ml-[var(--spacing-three-services-caption-inset)]",
-          )}
-        >
-          {reversed ? (
-            leadWord
-          ) : (
-            <>
-              {/* Match the h3 width so the lead word's right edge lines up with the black word. */}
-              {restWords ? (
-                <span
-                  className="block opacity-0 select-none"
-                  aria-hidden="true"
-                >
-                  {restWords}
-                </span>
-              ) : null}
-              <span className="block text-right">{leadWord}</span>
-            </>
-          )}
-        </span>
+          className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--color-three-services-image-overlay)]"
+        />
       </div>
 
-      {/* Caption lifts up by one title line so the black remainder drops just
-          below the photo while the white lead word stays on the image above. */}
+      {/* Caption card — stacks full-width below the photo on mobile and is
+          vertically centered over the photo's inner edge on desktop. */}
       <div
         className={cn(
-          "relative z-0 flex w-full flex-col gap-[var(--spacing-three-services-caption-gap)] mt-[calc(var(--spacing-three-services-title-lift)*-1)] lg:items-end lg:px-[var(--spacing-three-services-caption-inset)]",
-          reversed ? "items-end lg:flex-row-reverse" : "items-start lg:flex-row",
+          "relative z-10 mt-[var(--spacing-three-services-card-stack-gap)] flex w-full min-h-[var(--size-three-services-card-min-height)] flex-col justify-center items-start rounded-[var(--radius-card-corner)] px-[var(--spacing-three-services-card-pad-x)] py-[var(--spacing-three-services-card-pad-y)] text-left lg:absolute lg:top-1/2 lg:mt-0 lg:w-[60%] lg:max-w-[var(--size-three-services-card-width)] lg:-translate-y-1/2",
+          reversed
+            ? "lg:left-[1.59%] lg:items-end lg:text-right"
+            : "lg:right-[1.59%]",
         )}
+        style={{ backgroundColor: cardColor }}
       >
-        <h3
-          aria-label={service.title}
+        <div
           className={cn(
-            "shrink-0 font-display text-heading-4",
-            reversed ? "text-left" : "text-right",
+            "flex w-full flex-col items-start gap-[var(--spacing-three-services-caption-gap)]",
+            reversed && "lg:items-end",
           )}
         >
-          {/* Invisible spacer keeps the black line aligned with the design grid. */}
-          <span className="block opacity-0 select-none" aria-hidden="true">
-            {leadWord}
-          </span>
-          {restWords ? (
-            <span className="block text-base-black">{restWords}</span>
-          ) : null}
-        </h3>
-
-        <p
-          className={cn(
-            "w-full font-body text-turntable-tag text-base-black lg:w-auto lg:flex-1",
-            reversed && "text-right",
-          )}
-        >
-          {service.description}
-        </p>
+          <h3
+            className={cn(
+              "font-display text-heading-4 text-base-black",
+              noWrapTitle && "lg:whitespace-nowrap",
+            )}
+          >
+            {service.title}
+          </h3>
+          {/* Body keeps the narrow cap; the heading uses full card width and
+              shares the same edge as the body via the wrapper's alignment. */}
+          <p className="w-full font-body text-turntable-tag text-base-black lg:max-w-[var(--size-three-services-text-width)]">
+            {service.description}
+          </p>
+        </div>
       </div>
     </article>
   );
@@ -173,12 +148,14 @@ export default function ThreeServices({
 
   return (
     <section className="w-full bg-base-white">
-      <div className="mx-auto flex w-full max-w-[var(--size-three-services-width)] flex-col gap-[var(--spacing-three-services-row-gap)] px-6 pt-[var(--spacing-three-services-top)] pb-[var(--spacing-three-services-bottom)] sm:px-8 lg:px-0">
+      <div className="mx-auto flex w-full max-w-[var(--size-three-services-width)] flex-col gap-[var(--spacing-three-services-row-gap-mobile)] px-6 pt-[var(--spacing-three-services-top)] pb-[var(--spacing-three-services-bottom)] sm:px-8 lg:gap-[var(--spacing-three-services-row-gap)] lg:px-0">
         {services.map((service, index) => (
           <ServiceRow
             key={`${service.title}-${index}`}
             service={service}
+            cardColor={CARD_COLORS[index % CARD_COLORS.length]}
             reversed={index % 2 === 1}
+            noWrapTitle={index < 2}
           />
         ))}
       </div>

@@ -122,7 +122,9 @@ export default function DestinationCard({
     ? "aspect-[458/530] w-full min-w-0"
     : orientation === "landscape"
       ? "aspect-[701/650] max-w-[var(--size-destination-card-landscape-width)]"
-      : "aspect-[342/650] max-w-[var(--size-destination-card-portrait-width)]";
+      : layout === "home"
+        ? "aspect-[701/650] max-w-[var(--size-destination-card-landscape-width)] lg:aspect-[342/650] lg:max-w-[var(--size-destination-card-portrait-width)]"
+        : "aspect-[342/650] max-w-[var(--size-destination-card-portrait-width)]";
 
   const boxClass = isNextItinerary
     ? `block w-full min-w-0 ${sizeClass}`
