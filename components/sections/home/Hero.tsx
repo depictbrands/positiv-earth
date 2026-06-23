@@ -151,14 +151,13 @@ export default function Hero({ content }: HeroProps) {
             {/*
               Staggered offset from Figma (node 584:688): "WAY TO SEE THE WORLD"
               sits 437px right / 145px down from "A MORE Meaningful" at the 1512px
-              frame. Authored in vw so it scales in lockstep with the vw-based
-              display type, capped at the design value (1vw = 15.12px at 1512px).
+              frame. Tokenised so .home-scale can uncap above 1512 like the type.
             */}
             <TextReveal
               className="col-start-1 row-start-1 whitespace-nowrap font-display text-heading-3 uppercase text-base-white"
               style={{
-                marginLeft: "min(28.9vw, 27.3125rem)",
-                marginTop: "min(9.59vw, 9.0625rem)",
+                marginLeft: "var(--spacing-hero-headline-post-offset-x)",
+                marginTop: "var(--spacing-hero-headline-post-offset-y)",
               }}
             >
               {resolved.headline.post}

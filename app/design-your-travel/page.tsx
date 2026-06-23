@@ -154,7 +154,7 @@ export default async function DesignYourTravelPage() {
     : QUIZ_CONTENT;
 
   return (
-    <main className="w-full">
+    <main className="quiz-scale w-full">
       <DesignYourTravelQuiz content={content} />
     </main>
   );

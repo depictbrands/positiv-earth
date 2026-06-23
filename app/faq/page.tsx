@@ -11,7 +11,7 @@ export default async function FAQPage() {
   const content = mapFaqPage(sanityFaqPage);
 
   return (
-    <main className="flex w-full flex-col items-center">
+    <main className="faq-scale flex w-full flex-col items-center">
       <FAQHero content={content?.hero} />
       <FAQ content={content?.faq} />
       <Footer />

@@ -30,7 +30,7 @@ export type IntroLineMotion = {
 export const INTRO_LINES: readonly IntroLineMotion[] = [
   { startYvh: 100, endYvh: 15.173, startXvw: 0, endXvw: 9.259, stagger: 0.0 },
   { startYvh: 130, endYvh: 42.363, startXvw: 68, endXvw: 61.574, stagger: 0.08 },
-  { startYvh: 169, endYvh: 82, startXvw: 19, endXvw: 24.603, stagger: 0.16 },
+  { startYvh: 169, endYvh: 85, startXvw: 19, endXvw: 24.603, stagger: 0.16 },
 ];
 
 // §4 — System 1 plays as a one-shot Smart-Animate transition when the intro

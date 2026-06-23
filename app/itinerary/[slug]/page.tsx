@@ -172,7 +172,7 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
 
   return (
     <main
-      className="flex w-full flex-col items-center"
+      className="itinerary-scale flex w-full flex-col items-center"
       style={accentStyle}
     >
       <RecordItineraryView slug={slug} />

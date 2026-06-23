@@ -13,7 +13,7 @@ export default async function ContactPage() {
   const content = mapContactPage(sanityContactPage);
 
   return (
-    <main className="flex w-full flex-col items-center">
+    <main className="contact-scale flex w-full flex-col items-center">
       <ContactHero content={content?.hero} />
       <ContactInfo content={content?.info} />
       <Footer />

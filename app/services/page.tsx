@@ -13,7 +13,7 @@ export default async function ServicesPage() {
   const content = mapServicesPage(sanityServicesPage);
 
   return (
-    <main className="flex w-full flex-col items-center">
+    <main className="services-scale flex w-full flex-col items-center">
       <ServicesHero content={content?.hero} />
       <ThreeServices content={content?.threeServices} />
       <Footer />

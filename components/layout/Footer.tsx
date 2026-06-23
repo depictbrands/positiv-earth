@@ -113,7 +113,7 @@ function FooterField({
 export default function Footer({ className }: FooterProps) {
   return (
     <footer
-      className={cn("relative w-full overflow-hidden", className)}
+      className={cn("footer-scale relative w-full overflow-hidden", className)}
       style={{
         backgroundColor: "var(--color-footer-surface)",
       }}
