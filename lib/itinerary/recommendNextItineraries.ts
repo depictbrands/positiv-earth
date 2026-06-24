@@ -121,6 +121,9 @@ export function pickNextItinerariesFallback(
   limit = NEXT_ITINERARY_RECOMMENDATION_COUNT,
 ): Destination[] {
   return destinations
-    .filter((destination) => slugFromItineraryHref(destination.href) !== currentSlug)
+    .filter((destination) => {
+      const slug = slugFromItineraryHref(destination.href);
+      return Boolean(slug) && slug !== currentSlug;
+    })
     .slice(0, limit);
 }

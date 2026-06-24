@@ -20,6 +20,7 @@ import {
   ITINERARY_BY_SLUG_QUERY,
   ITINERARY_SLUGS_QUERY,
 } from "@/sanity/lib/queries";
+import { slugFromItineraryHref } from "@/lib/itinerary/recommendNextItineraries";
 import {
   normalizeItineraryAccentHex,
   type ItineraryContent,
@@ -77,6 +78,87 @@ function getLocalItinerary(slug: string): ItineraryContent {
   };
 }
 
+function normalizeDestinationName(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+const DEFAULT_DESTINATIONS_BY_SLUG = new Map<string, Destination>(
+  DEFAULT_DESTINATIONS.flatMap((destination) => {
+    const slug = slugFromItineraryHref(destination.href);
+    return slug ? [[slug, destination] as const] : [];
+  }),
+);
+
+const DEFAULT_DESTINATIONS_BY_NAME = new Map<string, Destination>(
+  DEFAULT_DESTINATIONS.map(
+    (destination) =>
+      [normalizeDestinationName(destination.name), destination] as const,
+  ),
+);
+
+function findDefaultDestinationFallback(
+  destination: Destination,
+): Destination | undefined {
+  const slug = slugFromItineraryHref(destination.href);
+  if (slug) {
+    const bySlug = DEFAULT_DESTINATIONS_BY_SLUG.get(slug);
+    if (bySlug) return bySlug;
+  }
+
+  return DEFAULT_DESTINATIONS_BY_NAME.get(
+    normalizeDestinationName(destination.name),
+  );
+}
+
+function mergeDestinationFields(
+  primary: Destination,
+  secondary: Destination,
+): Destination {
+  return {
+    name: primary.name?.trim() || secondary.name,
+    durationDays: primary.durationDays || secondary.durationDays,
+    locations: primary.locations.length
+      ? primary.locations
+      : secondary.locations,
+    href: primary.href?.trim() || secondary.href,
+    imageUrl: primary.imageUrl?.trim() || secondary.imageUrl,
+    imageAlt:
+      primary.imageAlt?.trim() || secondary.imageAlt?.trim() || secondary.name,
+  };
+}
+
+function enrichDestinationWithFallback(destination: Destination): Destination {
+  const fallback = findDefaultDestinationFallback(destination);
+  return fallback ? mergeDestinationFields(destination, fallback) : destination;
+}
+
+function destinationPoolKey(destination: Destination): string {
+  const slug = slugFromItineraryHref(destination.href);
+  if (slug) return slug;
+
+  return normalizeDestinationName(destination.name);
+}
+
+/** Sanity picks first; local defaults fill gaps so Next Itineraries never dead-ends. */
+function mergeDestinationPools(...pools: Destination[][]): Destination[] {
+  const merged = new Map<string, Destination>();
+
+  for (const pool of pools) {
+    for (const destination of pool) {
+      const key = destinationPoolKey(destination);
+      const existing = merged.get(key);
+      merged.set(
+        key,
+        existing
+          ? mergeDestinationFields(existing, destination)
+          : destination,
+      );
+    }
+  }
+
+  return Array.from(merged.values());
+}
+
 async function fetchDestinations(): Promise<Destination[]> {
   if (!client) {
     return DEFAULT_DESTINATIONS;
@@ -84,8 +166,9 @@ async function fetchDestinations(): Promise<Destination[]> {
 
   const sanityDestinations = await client.fetch(HOME_DESTINATIONS_QUERY);
   const mapped = (sanityDestinations ?? []).map(mapDestination);
+  const fromSanity = mapped.map(enrichDestinationWithFallback);
 
-  return mapped.length > 0 ? mapped : DEFAULT_DESTINATIONS;
+  return mergeDestinationPools(fromSanity, DEFAULT_DESTINATIONS);
 }
 
 async function resolveItinerary(slug: string): Promise<ItineraryContent> {
@@ -119,10 +202,13 @@ function buildNextItineraries(
   itinerary: ItineraryContent,
 ): ItineraryNextItinerariesContent {
   const configured = itinerary.nextItineraries;
-  const allDestinations = itinerary.destinations ?? DEFAULT_DESTINATIONS;
-  const currentHref = `/itinerary/${slug}`;
-  const destinations = (configured?.destinations ?? allDestinations).filter(
-    (destination) => destination.href !== currentHref,
+  const allDestinations = mergeDestinationPools(
+    (configured?.destinations ?? []).map(enrichDestinationWithFallback),
+    (itinerary.destinations ?? []).map(enrichDestinationWithFallback),
+    DEFAULT_DESTINATIONS,
+  ).filter((destination) => Boolean(slugFromItineraryHref(destination.href)));
+  const destinations = allDestinations.filter(
+    (destination) => slugFromItineraryHref(destination.href) !== slug,
   );
 
   return {
