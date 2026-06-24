@@ -18,7 +18,7 @@ export default function MoreDetailButton({
       disabled={disabled}
       className="inline-flex flex-col items-start gap-1 text-base-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
     >
-      <span className="flex items-center gap-2.5">
+      <span className="flex items-center gap-2.5 mt-4">
         <span className="font-body text-cta-button">{children}</span>
         <svg
           aria-hidden="true"

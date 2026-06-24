@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 
 import MoreDetailButton from "@/components/ui/MoreDetailButton";
@@ -48,6 +51,7 @@ function renderHeading(content: BrandStoryContent) {
 export default function BrandStory({
   content = DEFAULT_CONTENT,
 }: BrandStoryProps) {
+  const [expanded, setExpanded] = useState(false);
   const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
   const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
   const ctaLabel = content.cta?.label?.trim() || DEFAULT_CONTENT.cta?.label;
@@ -75,9 +79,41 @@ export default function BrandStory({
             gap: "var(--spacing-brand-story-body-gap)",
           }}
         >
-          <p className="font-body text-p1 text-base-white">
-            {content.body.join(" ")}
-          </p>
+          <div className="flex w-full flex-col items-start">
+            <p
+              className={`font-body text-p1 text-base-white ${
+                expanded ? "" : "line-clamp-3"
+              }`}
+            >
+              {content.body.join(" ")}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setExpanded((value) => !value)}
+              aria-expanded={expanded}
+              className="mt-4 inline-flex items-center gap-2.5 font-body text-cta-button text-base-white transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+            >
+              <span>{expanded ? "Less detail" : "More detail"}</span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 20 20"
+                className={`size-5 shrink-0 transition-transform ${
+                  expanded ? "rotate-180" : ""
+                }`}
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 7.5L10 12.5L15 7.5"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
 
           {cta ? (
             <Link
