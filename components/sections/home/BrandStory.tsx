@@ -120,7 +120,7 @@ export default function BrandStory({
               href={cta.href}
               className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
             >
-              <MoreDetailButton>{cta.label}</MoreDetailButton>
+              <MoreDetailButton variant="dark">{cta.label}</MoreDetailButton>
             </Link>
           ) : null}
         </div>

@@ -4,19 +4,25 @@ type MoreDetailButtonProps = {
   children: ReactNode;
   disabled?: boolean;
   onClick?: () => void;
+  /** `dark` = white label for dark sections; `light` = black label for light sections. */
+  variant?: "light" | "dark";
 };
 
 export default function MoreDetailButton({
   children,
   disabled = false,
   onClick,
+  variant = "dark",
 }: MoreDetailButtonProps) {
+  const variantClassName =
+    variant === "light" ? "text-base-black" : "text-base-white";
+
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="inline-flex flex-col items-start gap-1 text-base-white transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+      className={`inline-flex flex-col items-start gap-1 transition-opacity disabled:cursor-not-allowed disabled:opacity-50 ${variantClassName}`}
     >
       <span className="flex items-center gap-2.5 mt-4">
         <span className="font-body text-cta-button">{children}</span>

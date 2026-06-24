@@ -120,9 +120,8 @@ export default function HowItWorks({
             <Link
               href={cta.href}
               className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
-              style={{ filter: "invert(1)" }}
             >
-              <MoreDetailButton>{cta.label}</MoreDetailButton>
+              <MoreDetailButton variant="light">{cta.label}</MoreDetailButton>
             </Link>
           ) : null}
         </div>

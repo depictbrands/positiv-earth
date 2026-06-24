@@ -520,7 +520,7 @@ export default function Turntable({
             className={cn(
               "absolute rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-black disabled:pointer-events-none",
               textAlign,
-              lit ? "opacity-100" : "opacity-40",
+              lit ? "opacity-100" : "opacity-65",
             )}
             style={item.labelStyle}
           >

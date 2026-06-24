@@ -3,31 +3,56 @@ import type { CSSProperties, ReactNode } from "react";
 
 type QuizEntryButtonProps = {
   children: ReactNode;
+  /** Accessible name; defaults to string `children` when omitted. */
+  ariaLabel?: string;
   /** When set, the control renders as a link to this route instead of a button. */
   href?: string;
   disabled?: boolean;
   onClick?: () => void;
 };
 
-// Apple-style liquid glass: heavy backdrop blur + saturation boost, a bright
-// hairline border, a specular top highlight and soft depth shadow. All values
-// come from the --*-glass design tokens (see globals.css).
-// Hover: a white fill and black label slide up from the bottom in sync.
+// Liquid glass: transparent root with a ::before fill (see globals.css
+// .quiz-entry-button), backdrop blur, hairline border, drop shadow. Hover:
+// white fill and black label slide up from the bottom in sync.
 const baseClassName =
-  "group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-glass-border bg-glass-surface px-6 text-center font-body text-cta-button text-base-white shadow-glass backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white group-hover:focus-visible:outline-base-black disabled:cursor-not-allowed disabled:opacity-50";
+  "quiz-entry-button group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-glass-border bg-transparent px-6 text-center font-body text-cta-button text-base-white backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] disabled:cursor-not-allowed disabled:opacity-50";
 
 const baseStyle: CSSProperties = {
   height: "var(--size-header-height)",
 };
 
-function QuizEntryButtonContent({ children }: { children: ReactNode }) {
+function resolveAriaLabel(
+  ariaLabel: string | undefined,
+  children: ReactNode,
+): string | undefined {
+  const explicit = ariaLabel?.trim();
+  if (explicit) return explicit;
+
+  if (typeof children === "string") {
+    const fromChildren = children.trim();
+    return fromChildren || undefined;
+  }
+
+  return undefined;
+}
+
+function QuizEntryButtonContent({
+  children,
+  hideLabelFromAssistiveTech,
+}: {
+  children: ReactNode;
+  hideLabelFromAssistiveTech: boolean;
+}) {
   return (
     <>
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 translate-y-full bg-base-white transition-transform duration-300 ease-out group-hover:translate-y-0 group-disabled:translate-y-full"
+        className="pointer-events-none absolute inset-0 z-[1] translate-y-full bg-base-white transition-transform duration-300 ease-out group-hover:translate-y-0 group-disabled:translate-y-full"
       />
-      <span className="relative z-10 inline-grid overflow-hidden">
+      <span
+        aria-hidden={hideLabelFromAssistiveTech ? true : undefined}
+        className="relative z-10 inline-grid overflow-hidden"
+      >
         <span className="col-start-1 row-start-1 transition-transform duration-300 ease-out group-hover:-translate-y-full group-disabled:translate-y-0">
           {children}
         </span>
@@ -41,14 +66,25 @@ function QuizEntryButtonContent({ children }: { children: ReactNode }) {
 
 export default function QuizEntryButton({
   children,
+  ariaLabel,
   href,
   disabled = false,
   onClick,
 }: QuizEntryButtonProps) {
+  const resolvedAriaLabel = resolveAriaLabel(ariaLabel, children);
+
   if (href && !disabled) {
     return (
-      <Link href={href} onClick={onClick} className={baseClassName} style={baseStyle}>
-        <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
+      <Link
+        href={href}
+        onClick={onClick}
+        aria-label={resolvedAriaLabel}
+        className={baseClassName}
+        style={baseStyle}
+      >
+        <QuizEntryButtonContent hideLabelFromAssistiveTech={Boolean(resolvedAriaLabel)}>
+          {children}
+        </QuizEntryButtonContent>
       </Link>
     );
   }
@@ -58,10 +94,13 @@ export default function QuizEntryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
+      aria-label={resolvedAriaLabel}
       className={baseClassName}
       style={baseStyle}
     >
-      <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
+      <QuizEntryButtonContent hideLabelFromAssistiveTech={Boolean(resolvedAriaLabel)}>
+        {children}
+      </QuizEntryButtonContent>
     </button>
   );
 }
