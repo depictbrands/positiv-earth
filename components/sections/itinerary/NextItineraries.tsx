@@ -66,9 +66,15 @@ export default function NextItineraries({
   }
 
   return (
-    <section className="w-full overflow-hidden bg-base-black">
+    <section
+      aria-labelledby="next-itineraries-heading"
+      className="w-full overflow-hidden bg-base-black"
+    >
       <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-10 px-6 py-16 sm:px-10 lg:flex-row lg:items-start lg:justify-between lg:px-0 lg:py-22">
-        <h2 className="shrink-0 font-display text-heading-4 text-base-white lg:w-[var(--size-next-itineraries-heading-width)]">
+        <h2
+          id="next-itineraries-heading"
+          className="shrink-0 font-display text-heading-4 text-base-white lg:w-[var(--size-next-itineraries-heading-width)]"
+        >
           <span className="block">{resolved.headingLeading}</span>
           <span className="block">{resolved.headingTrailing}</span>
         </h2>

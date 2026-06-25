@@ -72,7 +72,10 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
   const topBarTransform = navHidden ? "-translate-y-[200%]" : "translate-y-0";
 
   return (
-    <section className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]">
+    <section
+      aria-labelledby="services-hero-heading"
+      className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]"
+    >
       <Image
         src={resolved.backgroundImageUrl}
         alt={resolved.backgroundImageAlt}
@@ -87,31 +90,22 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
         style={{ backgroundColor: "var(--color-hero-overlay)" }}
       />
 
-      {/* Top bar — desktop: nav centered at the top, quiz button pinned right.
-          Both pin to the viewport and hide/reveal with scroll direction. */}
-      <div className="hidden lg:block">
-        <div
-          className={`fixed inset-x-0 top-6 z-50 flex justify-center ${topBarTransition} ${topBarTransform}`}
-        >
-          <Header />
-        </div>
-
-        <div
-          className={`fixed top-6 z-50 ${topBarTransition} ${topBarTransform}`}
-          style={{
-            left: "82.0767195767%",
-          }}
-        >
-          <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
-        </div>
-      </div>
-
-      {/* Top bar — mobile / tablet: pinned, hides/reveals with scroll direction */}
+      {/* Top bar — single Header landmark; layout responds inside Header.tsx */}
       <div
-        className={`fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-4 px-5 pt-5 sm:px-8 lg:hidden ${topBarTransition} ${topBarTransform}`}
+        className={`fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
       >
-        <Header />
-        <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
+        <div className="relative w-full">
+          <div className="flex items-start justify-between gap-4 lg:block">
+            <div className="min-w-0 flex-1 lg:w-full lg:flex lg:justify-center">
+              <Header />
+            </div>
+            <div className="shrink-0 lg:absolute lg:top-0 lg:left-[82.0767195767%]">
+              <QuizEntryButton href="/design-your-travel">
+                Design Your Travel
+              </QuizEntryButton>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Hero title — staggered display composition (Figma node 731:429/432/433):
@@ -119,7 +113,10 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
           desktop percentages reproduce each word's center point within the
           1512×982 frame so the layout scales fluidly; below lg it collapses to a
           centered stack. A single sr-only <h1> carries the full title. */}
-      <h1 className="relative z-10 flex w-full flex-1 flex-col font-display text-base-white">
+      <h1
+        id="services-hero-heading"
+        className="relative z-10 flex w-full flex-1 flex-col font-display text-base-white"
+      >
         <span className="sr-only">{resolved.headline}</span>
 
         {/* Mobile / tablet: centered stack */}

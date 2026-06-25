@@ -88,7 +88,10 @@ export default function Overview({ content }: OverviewProps) {
   const lastStep = resolved.process.length - 1;
 
   return (
-    <section className="w-full overflow-hidden bg-base-black text-base-white">
+    <section
+      aria-labelledby="itinerary-overview-heading"
+      className="w-full overflow-hidden bg-base-black text-base-white"
+    >
       <div
         className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col px-6 py-16 sm:px-10 lg:px-0 lg:py-22"
         style={{ gap: "var(--spacing-itinerary-overview-section-gap)" }}
@@ -99,7 +102,10 @@ export default function Overview({ content }: OverviewProps) {
             className="flex w-full flex-col lg:w-[var(--size-itinerary-overview-copy-width)]"
             style={{ gap: "var(--spacing-itinerary-overview-copy-gap)" }}
           >
-            <h2 className="w-full font-body text-p2 text-base-white">
+            <h2
+              id="itinerary-overview-heading"
+              className="w-full font-body text-p2 text-base-white"
+            >
               {resolved.heading}
             </h2>
 

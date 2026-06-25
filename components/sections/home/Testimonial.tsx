@@ -45,6 +45,8 @@ export default function Testimonial({
 }: TestimonialSectionProps) {
   return (
     <section
+      aria-labelledby={content.heading ? "testimonial-heading" : undefined}
+      aria-label={content.heading ? undefined : "Testimonials"}
       className="flex w-full justify-center overflow-hidden bg-base-black px-6 py-20 text-base-white sm:px-10 lg:min-h-[var(--size-testimonial-section-height)] lg:px-0 lg:pb-0 lg:pt-[var(--spacing-testimonial-section-offset-top)]"
     >
       <div
@@ -57,7 +59,10 @@ export default function Testimonial({
           className="flex w-full flex-col items-start gap-12 lg:[gap:var(--spacing-testimonial-section-stack-gap)]"
         >
           {content.heading ? (
-            <h2 className="w-full text-center font-display text-heading-4 text-base-white">
+            <h2
+              id="testimonial-heading"
+              className="w-full text-center font-display text-heading-4 text-base-white"
+            >
               {content.heading}
             </h2>
           ) : null}
@@ -84,7 +89,7 @@ export default function Testimonial({
         </div>
 
         <div
-          aria-label="Testimonial pagination"
+          aria-hidden="true"
           className="flex items-center justify-center"
           style={{
             width: "var(--size-testimonial-pagination-width)",

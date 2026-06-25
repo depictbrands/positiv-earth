@@ -82,7 +82,10 @@ export default function LocalFood({ content }: LocalFoodProps) {
   const resolved = resolveContent(content);
 
   return (
-    <section className="w-full overflow-hidden bg-base-white">
+    <section
+      aria-labelledby="itinerary-local-food-heading"
+      className="w-full overflow-hidden bg-base-white"
+    >
       <div
         className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col px-6 py-16 sm:px-10 lg:px-0 lg:py-22"
         style={{ gap: "var(--spacing-itinerary-local-food-section-gap)" }}
@@ -97,7 +100,10 @@ export default function LocalFood({ content }: LocalFoodProps) {
               className="flex w-full flex-col items-center lg:items-start"
               style={{ gap: "var(--spacing-itinerary-local-food-heading-gap)" }}
             >
-              <h2 className="font-display text-heading-4 uppercase text-base-black">
+              <h2
+                id="itinerary-local-food-heading"
+                className="font-display text-heading-4 uppercase text-base-black"
+              >
                 {resolved.heading}
               </h2>
               <p className="font-body font-light text-p1 text-base-black">

@@ -89,9 +89,15 @@ export default function Destinations({
   const secondRow = content.destinations.slice(3, 6);
 
   return (
-    <section className="w-full overflow-hidden bg-base-white">
+    <section
+      aria-labelledby="destinations-heading"
+      className="w-full overflow-hidden bg-base-white"
+    >
       <div className="mx-auto flex w-full max-w-[var(--size-destinations-grid-width)] flex-col items-center px-6 py-20 sm:px-10 lg:px-0 lg:py-[var(--spacing-destinations-heading-offset-top)]">
-        <h2 className="text-center font-display text-heading-4 text-base-black">
+        <h2
+          id="destinations-heading"
+          className="text-center font-display text-heading-4 text-base-black"
+        >
           {content.heading}
         </h2>
 
@@ -128,13 +134,7 @@ export default function Destinations({
 
         <Link
           href="#"
-          className="mt-12 inline-flex items-center justify-center rounded-search-button-corner border font-body text-cta-button transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-ink-base)] lg:mt-20"
-          style={{
-            width: "var(--size-destinations-cta-width)",
-            height: "var(--size-destinations-cta-height)",
-            color: "var(--color-ink-base)",
-            borderColor: "var(--color-ink-base)",
-          }}
+          className="focus-ring-ink mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center rounded-search-button-corner border border-[var(--color-ink-base)] font-body text-cta-button text-[var(--color-ink-base)] transition-opacity hover:opacity-80 active:opacity-70 lg:mt-20"
         >
           All Trips
         </Link>

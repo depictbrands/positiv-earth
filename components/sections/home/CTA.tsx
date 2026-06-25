@@ -33,7 +33,10 @@ function resolveCtaContent(content?: CTAContent): CTAContent {
 export default function CTA({ content }: CTAProps) {
   const resolved = resolveCtaContent(content);
   return (
-    <section className="relative flex w-full items-center justify-center overflow-hidden px-6 py-24 sm:px-10 lg:min-h-[var(--size-cta-height)] lg:py-0">
+    <section
+      aria-labelledby="home-cta-heading"
+      className="relative flex w-full items-center justify-center overflow-hidden px-6 py-24 sm:px-10 lg:min-h-[var(--size-cta-height)] lg:py-0"
+    >
       <Image
         src={resolved.imageUrl}
         alt={resolved.imageAlt}
@@ -51,7 +54,10 @@ export default function CTA({ content }: CTAProps) {
         className="relative z-10 flex flex-col items-center text-center"
         style={{ gap: "var(--spacing-cta-content-gap)" }}
       >
-        <h2 className="font-display text-heading-4 text-base-white lg:max-w-[var(--size-cta-heading-width)] lg:whitespace-nowrap">
+        <h2
+          id="home-cta-heading"
+          className="font-display text-heading-4 text-base-white lg:max-w-[var(--size-cta-heading-width)] lg:whitespace-nowrap"
+        >
           {resolved.heading}
         </h2>
 

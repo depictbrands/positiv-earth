@@ -19,6 +19,7 @@ type TextRevealProps = {
   children: ReactNode;
   className?: string;
   as?: ElementType;
+  id?: string;
   style?: CSSProperties;
 };
 
@@ -35,6 +36,7 @@ export default function TextReveal({
   children,
   className,
   as: Component = "span",
+  id,
   style,
 }: TextRevealProps) {
   const ref = useRef<HTMLElement>(null);
@@ -48,6 +50,7 @@ export default function TextReveal({
   return (
     <Component
       ref={ref as never}
+      id={id}
       className={cn("text-reveal", className)}
       style={style}
     >

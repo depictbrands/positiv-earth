@@ -139,14 +139,23 @@ function SearchInputSegment({
   value: string;
 }) {
   return (
-    <label
+    <div
       className="flex w-full items-center lg:w-[var(--size-search-bar-segment-width)]"
       style={{
         gap: "var(--spacing-search-bar-segment-gap)",
       }}
     >
+      <input
+        type="text"
+        aria-label={placeholder}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className="focus-ring-ink order-2 min-w-0 w-full bg-transparent font-body text-search-bar text-base-black caret-[var(--color-base-black)] placeholder:font-body placeholder:text-search-bar placeholder:text-[var(--color-search-bar-ink-light)]"
+      />
       <span
-        className="shrink-0"
+        aria-hidden="true"
+        className="order-1 shrink-0"
         style={{
           width: "var(--size-search-bar-icon-size)",
           height: "var(--size-search-bar-icon-size)",
@@ -155,19 +164,7 @@ function SearchInputSegment({
       >
         <SegmentIcon kind={icon} />
       </span>
-      <input
-        type="text"
-        aria-label={placeholder}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        className="w-full bg-transparent font-body text-search-bar outline-none placeholder:font-body placeholder:text-search-bar placeholder:text-[var(--color-search-bar-ink-light)]"
-        style={{
-          color: "var(--color-base-black)",
-          caretColor: "var(--color-base-black)",
-        }}
-      />
-    </label>
+    </div>
   );
 }
 
@@ -182,13 +179,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <div
-      className="flex w-full max-w-[var(--size-search-bar-width)] flex-col items-stretch gap-4 rounded-card-corner bg-base-white p-4 focus-within:outline lg:h-[var(--size-search-bar-height)] lg:flex-row lg:items-center lg:gap-3 lg:rounded-search-bar-corner lg:p-0 lg:px-[var(--spacing-search-bar-padding-x)]"
-      style={{
-        boxShadow: "var(--shadow-search-bar)",
-        outlineColor: "var(--color-base-black)",
-        outlineOffset: "var(--spacing-search-bar-focus-ring-offset)",
-        outlineWidth: "var(--size-search-bar-focus-ring-width)",
-      }}
+      className="flex w-full max-w-[var(--size-search-bar-width)] flex-col items-stretch gap-4 rounded-card-corner bg-base-white p-4 shadow-[var(--shadow-search-bar)] lg:h-[var(--size-search-bar-height)] lg:flex-row lg:items-center lg:gap-3 lg:rounded-search-bar-corner lg:p-0 lg:px-[var(--spacing-search-bar-padding-x)]"
     >
       <SearchInputSegment
         icon="where"

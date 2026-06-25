@@ -64,7 +64,10 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
   const topBarTransform = navHidden ? "-translate-y-[200%]" : "translate-y-0";
 
   return (
-    <section className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]">
+    <section
+      aria-labelledby="itinerary-hero-heading"
+      className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]"
+    >
       <Image
         src={resolved.backgroundImageUrl}
         alt={resolved.backgroundImageAlt}
@@ -79,29 +82,22 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
         style={{ backgroundColor: "var(--color-itinerary-hero-overlay)" }}
       />
 
-      {/* Top bar — desktop: nav centered, quiz button pinned right. Both pin to
-          the viewport and hide/reveal with scroll direction (matches heroes). */}
-      <div className="hidden lg:block">
-        <div
-          className={`fixed inset-x-0 top-6 z-50 flex justify-center ${topBarTransition} ${topBarTransform}`}
-        >
-          <Header />
-        </div>
-
-        <div
-          className={`fixed top-6 z-50 ${topBarTransition} ${topBarTransform}`}
-          style={{ left: "82.0767195767%" }}
-        >
-          <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
-        </div>
-      </div>
-
-      {/* Top bar — mobile / tablet */}
+      {/* Top bar — single Header landmark; layout responds inside Header.tsx */}
       <div
-        className={`fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-4 px-5 pt-5 sm:px-8 lg:hidden ${topBarTransition} ${topBarTransform}`}
+        className={`fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
       >
-        <Header />
-        <QuizEntryButton href="/design-your-travel">Design Your Travel</QuizEntryButton>
+        <div className="relative w-full">
+          <div className="flex items-start justify-between gap-4 lg:block">
+            <div className="min-w-0 flex-1 lg:w-full lg:flex lg:justify-center">
+              <Header />
+            </div>
+            <div className="shrink-0 lg:absolute lg:top-0 lg:left-[82.0767195767%]">
+              <QuizEntryButton href="/design-your-travel">
+                Design Your Travel
+              </QuizEntryButton>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Hero content cluster — bottom-left on desktop; fluid insets on mobile */}
@@ -119,6 +115,7 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
         <div className="flex w-full max-w-full flex-col items-stretch gap-4 lg:w-fit lg:gap-6">
           <TextReveal
             as="h1"
+            id="itinerary-hero-heading"
             className="max-w-full font-display text-heading-2 lg:whitespace-nowrap"
           >
             {resolved.title}

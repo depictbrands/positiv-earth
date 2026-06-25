@@ -181,7 +181,7 @@ export default function Header({ className, style }: HeaderProps) {
             />
 
             <nav
-              aria-label="Primary"
+              aria-label="Main navigation"
               className="relative z-10 flex h-full items-center gap-2 text-base-white"
             >
               {NAV_ITEMS.map((item) => (
@@ -243,7 +243,7 @@ export default function Header({ className, style }: HeaderProps) {
         {open ? (
           <nav
             id="mobile-nav"
-            aria-label="Primary"
+            aria-label="Main navigation menu"
             className="absolute left-0 z-30 mt-2 flex min-w-48 flex-col rounded-[var(--radius-header-active-pill-corner)] p-2 text-base-white"
             style={{
               ...glassStyle,

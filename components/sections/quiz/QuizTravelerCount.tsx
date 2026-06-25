@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import QuizIconButton from "@/components/ui/QuizIconButton";
 import QuizToggle from "@/components/ui/QuizToggle";
 import type { QuizTravelerCountContent } from "@/types/quiz-content";
@@ -34,6 +36,8 @@ export default function QuizTravelerCount({
   onAddChild,
   onRemoveChild,
 }: QuizTravelerCountProps) {
+  const addChildrenLabelId = useId();
+
   return (
     <div className="flex w-full flex-col items-center gap-[var(--spacing-quiz-fields-stack-gap)]">
       {/* Adults number + add-children toggle */}
@@ -61,9 +65,12 @@ export default function QuizTravelerCount({
           <QuizToggle
             checked={addChildren}
             onChange={onAddChildrenChange}
-            label={content.addChildrenLabel}
+            labelledById={addChildrenLabelId}
           />
-          <span className="whitespace-nowrap font-body text-body-1 text-base-white">
+          <span
+            id={addChildrenLabelId}
+            className="whitespace-nowrap font-body text-body-1 text-base-white"
+          >
             {content.addChildrenLabel}
           </span>
         </div>

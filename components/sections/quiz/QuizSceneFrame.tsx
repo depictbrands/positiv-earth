@@ -73,11 +73,10 @@ export default function QuizSceneFrame({
         <div className="w-full">{children}</div>
       </div>
 
-      {/* Animated quote (airplane + handwritten line) */}
-      <div className="mt-12 flex justify-center">
+      {/* Animated quote (airplane + handwritten line) — decorative */}
+      <div aria-hidden="true" className="mt-12 flex justify-center">
         <LottiePlayer
           src={quoteLottieSrc}
-          ariaLabel="An animated travel quote"
           className="w-full max-w-[31.125rem]"
           style={{ aspectRatio: "2320 / 760" }}
         />

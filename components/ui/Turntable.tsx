@@ -512,20 +512,20 @@ export default function Turntable({
               : "text-right";
 
         return (
-          <button
-            key={item.label}
-            type="button"
-            aria-current={isActive ? "step" : undefined}
-            onClick={handleNodeClick(index)}
-            className={cn(
-              "absolute rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-black disabled:pointer-events-none",
-              textAlign,
-              lit ? "opacity-100" : "opacity-65",
-            )}
-            style={item.labelStyle}
-          >
-            {item.label}
-          </button>
+          <div key={item.label} className="absolute" style={item.labelStyle}>
+            <button
+              type="button"
+              aria-current={isActive ? "step" : undefined}
+              onClick={handleNodeClick(index)}
+              className={cn(
+                "focus-ring-ink rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 disabled:pointer-events-none",
+                textAlign,
+                lit ? "opacity-100" : "opacity-65",
+              )}
+            >
+              {item.label}
+            </button>
+          </div>
         );
       })}
     </div>

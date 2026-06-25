@@ -187,9 +187,15 @@ export default function Accommodation({ content }: AccommodationProps) {
   const gridHotels = selectedCity?.hotels.slice(1) ?? [];
 
   return (
-    <section className="w-full overflow-hidden bg-base-white">
+    <section
+      aria-labelledby="itinerary-accommodation-heading"
+      className="w-full overflow-hidden bg-base-white"
+    >
       <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-12 px-6 py-16 sm:px-10 lg:gap-y-[var(--spacing-itinerary-accommodation-heading-gap)] lg:px-0 lg:py-22">
-        <h2 className="font-display text-heading-4 text-base-black">
+        <h2
+          id="itinerary-accommodation-heading"
+          className="font-display text-heading-4 text-base-black"
+        >
           {resolved.heading}
         </h2>
 

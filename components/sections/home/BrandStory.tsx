@@ -61,6 +61,7 @@ export default function BrandStory({
 
   return (
     <section
+      aria-labelledby="brand-story-heading"
       className="grid w-full grid-cols-1 overflow-hidden bg-base-black text-base-white lg:min-h-[var(--size-brand-story-height)] lg:[grid-template-columns:782fr_730fr]"
     >
       <div
@@ -69,7 +70,10 @@ export default function BrandStory({
           gap: "var(--spacing-brand-story-copy-gap)",
         }}
       >
-        <h2 className="font-display text-heading-4 text-base-white lg:max-w-[var(--size-brand-story-copy-width)]">
+        <h2
+          id="brand-story-heading"
+          className="font-display text-heading-4 text-base-white lg:max-w-[var(--size-brand-story-copy-width)]"
+        >
           {renderHeading(content)}
         </h2>
 

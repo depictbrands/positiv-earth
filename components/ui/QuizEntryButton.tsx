@@ -3,7 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 
 type QuizEntryButtonProps = {
   children: ReactNode;
-  /** Accessible name; defaults to string `children` when omitted. */
+  /** Explicit accessible name when `children` is not plain text. */
   ariaLabel?: string;
   /** When set, the control renders as a link to this route instead of a button. */
   href?: string;
@@ -28,35 +28,29 @@ function resolveAriaLabel(
   const explicit = ariaLabel?.trim();
   if (explicit) return explicit;
 
+  // String children supply the visible label; avoid duplicating it in aria-label.
   if (typeof children === "string") {
-    const fromChildren = children.trim();
-    return fromChildren || undefined;
+    return undefined;
   }
 
   return undefined;
 }
 
-function QuizEntryButtonContent({
-  children,
-  hideLabelFromAssistiveTech,
-}: {
-  children: ReactNode;
-  hideLabelFromAssistiveTech: boolean;
-}) {
+function QuizEntryButtonContent({ children }: { children: ReactNode }) {
   return (
     <>
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-[1] translate-y-full bg-base-white transition-transform duration-300 ease-out group-hover:translate-y-0 group-disabled:translate-y-full"
       />
-      <span
-        aria-hidden={hideLabelFromAssistiveTech ? true : undefined}
-        className="relative z-10 inline-grid overflow-hidden"
-      >
+      <span className="relative z-10 inline-grid overflow-hidden">
         <span className="col-start-1 row-start-1 transition-transform duration-300 ease-out group-hover:-translate-y-full group-disabled:translate-y-0">
           {children}
         </span>
-        <span className="col-start-1 row-start-1 translate-y-full text-base-black transition-transform duration-300 ease-out group-hover:translate-y-0 group-disabled:translate-y-full">
+        <span
+          aria-hidden="true"
+          className="col-start-1 row-start-1 translate-y-full text-base-black transition-transform duration-300 ease-out group-hover:translate-y-0 group-disabled:translate-y-full"
+        >
           {children}
         </span>
       </span>
@@ -78,13 +72,11 @@ export default function QuizEntryButton({
       <Link
         href={href}
         onClick={onClick}
-        aria-label={resolvedAriaLabel}
+        {...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {})}
         className={baseClassName}
         style={baseStyle}
       >
-        <QuizEntryButtonContent hideLabelFromAssistiveTech={Boolean(resolvedAriaLabel)}>
-          {children}
-        </QuizEntryButtonContent>
+        <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
       </Link>
     );
   }
@@ -94,13 +86,11 @@ export default function QuizEntryButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      aria-label={resolvedAriaLabel}
+      {...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {})}
       className={baseClassName}
       style={baseStyle}
     >
-      <QuizEntryButtonContent hideLabelFromAssistiveTech={Boolean(resolvedAriaLabel)}>
-        {children}
-      </QuizEntryButtonContent>
+      <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
     </button>
   );
 }

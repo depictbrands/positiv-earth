@@ -246,7 +246,10 @@ export default function DesignYourTravelQuiz({
     : "Next";
 
   return (
-    <section className="relative flex min-h-[100svh] w-full flex-col overflow-hidden">
+    <section
+      aria-labelledby="quiz-heading"
+      className="relative flex min-h-[100svh] w-full flex-col overflow-hidden"
+    >
       <Image
         src={content.backgroundImageUrl}
         alt={content.backgroundImageAlt}
@@ -261,30 +264,28 @@ export default function DesignYourTravelQuiz({
         style={{ backgroundColor: "var(--color-quiz-bg-overlay)" }}
       />
 
-      {/* Top bar — desktop: nav centered, quiz button pinned right (matches heroes). */}
-      <div className="hidden lg:block">
-        <div className="fixed inset-x-0 top-6 z-50 flex justify-center">
-          <Header />
+      {/* Top bar — single Header landmark; layout responds inside Header.tsx */}
+      <div className="fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6">
+        <div className="relative w-full">
+          <div className="flex items-start justify-between gap-4 lg:block">
+            <div className="min-w-0 flex-1 lg:w-full lg:flex lg:justify-center">
+              <Header />
+            </div>
+            <div className="shrink-0 lg:absolute lg:top-0 lg:left-[82.0767195767%]">
+              <QuizEntryButton href="/design-your-travel">
+                Design Your Travel
+              </QuizEntryButton>
+            </div>
+          </div>
         </div>
-        <div className="fixed top-6 z-50" style={{ left: "82.0767195767%" }}>
-          <QuizEntryButton href="/design-your-travel">
-            Design Your Travel
-          </QuizEntryButton>
-        </div>
-      </div>
-
-      {/* Top bar — mobile / tablet. */}
-      <div className="fixed inset-x-0 top-0 z-50 flex items-start justify-between gap-4 px-5 pt-5 sm:px-8 lg:hidden">
-        <Header />
-        <QuizEntryButton href="/design-your-travel">
-          Design Your Travel
-        </QuizEntryButton>
       </div>
 
       {/* Title + quiz panel */}
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 pb-12 pt-28 lg:pt-32">
         <div className="mx-auto flex w-full flex-col gap-6 max-w-[var(--size-quiz-block-width)]">
-          <h1 className="sr-only">{content.title}</h1>
+          <h1 id="quiz-heading" className="sr-only">
+            {content.title}
+          </h1>
           <div aria-hidden="true">
             <TextReveal className="font-body text-quiz-title text-base-white">
               {content.title}

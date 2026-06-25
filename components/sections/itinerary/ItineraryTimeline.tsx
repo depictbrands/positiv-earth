@@ -338,9 +338,15 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
 
   return (
     <>
-      <section className="w-full overflow-hidden bg-base-white">
+      <section
+        aria-labelledby="itinerary-timeline-heading"
+        className="w-full overflow-hidden bg-base-white"
+      >
       <div className="mx-auto w-full max-w-[var(--size-itinerary-overview-width)] px-6 py-16 sm:px-10 lg:px-0 lg:py-22">
-        <h2 className="font-display text-heading-4 text-base-black">
+        <h2
+          id="itinerary-timeline-heading"
+          className="font-display text-heading-4 text-base-black"
+        >
           {resolved.heading}
         </h2>
 

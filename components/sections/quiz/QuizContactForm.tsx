@@ -176,28 +176,30 @@ function CountryCombobox({
 
   return (
     <div ref={rootRef} className="relative">
-      <input
-        type="text"
-        role="combobox"
-        aria-expanded={open}
-        aria-controls={listId}
-        aria-autocomplete="list"
-        aria-label={label}
-        aria-activedescendant={
-          open && filtered[activeIndex] ? `${listId}-${activeIndex}` : undefined
-        }
-        value={open ? query : value}
-        placeholder={label}
-        onChange={(event) => {
-          setQuery(event.target.value);
-          setOpen(true);
-          setActiveIndex(0);
-        }}
-        onFocus={openList}
-        onClick={openList}
-        onKeyDown={onKeyDown}
-        className="w-full border-0 border-b border-base-white bg-transparent pb-2 pr-8 font-body text-body-1 text-base-white placeholder:text-base-white/60 focus:outline-none focus-visible:border-b-2"
-      />
+      <label className="flex w-full flex-col gap-[var(--spacing-quiz-field-gap)]">
+        <span className="sr-only">{label}</span>
+        <input
+          type="text"
+          role="combobox"
+          aria-expanded={open}
+          aria-controls={listId}
+          aria-autocomplete="list"
+          aria-activedescendant={
+            open && filtered[activeIndex] ? `${listId}-${activeIndex}` : undefined
+          }
+          value={open ? query : value}
+          placeholder={label}
+          onChange={(event) => {
+            setQuery(event.target.value);
+            setOpen(true);
+            setActiveIndex(0);
+          }}
+          onFocus={openList}
+          onClick={openList}
+          onKeyDown={onKeyDown}
+          className="w-full border-0 border-b border-base-white bg-transparent pb-2 pr-8 font-body text-body-1 text-base-white placeholder:text-base-white/60 focus:outline-none focus-visible:border-b-2"
+        />
+      </label>
       <svg
         aria-hidden="true"
         viewBox="0 0 24 24"

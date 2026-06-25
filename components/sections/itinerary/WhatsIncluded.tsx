@@ -66,12 +66,18 @@ export default function WhatsIncluded({ content }: WhatsIncludedProps) {
   const resolved = resolveContent(content);
 
   return (
-    <section className="w-full overflow-hidden bg-base-black text-base-white">
+    <section
+      aria-labelledby="itinerary-whats-included-heading"
+      className="w-full overflow-hidden bg-base-black text-base-white"
+    >
       <div
         className="mx-auto flex w-full max-w-[var(--size-itinerary-whats-included-width)] flex-col items-center px-6 py-16 sm:px-10 lg:px-0 lg:py-22"
         style={{ gap: "var(--spacing-itinerary-whats-included-section-gap)" }}
       >
-        <h2 className="w-full text-center font-display text-heading-4 text-base-white">
+        <h2
+          id="itinerary-whats-included-heading"
+          className="w-full text-center font-display text-heading-4 text-base-white"
+        >
           {resolved.heading}
         </h2>
 

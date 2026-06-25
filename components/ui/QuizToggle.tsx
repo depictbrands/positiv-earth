@@ -1,8 +1,8 @@
 type QuizToggleProps = {
   checked: boolean;
   onChange: (checked: boolean) => void;
-  /** Accessible label (the visible text sits beside the switch). */
-  label: string;
+  /** Id of the visible label element that names this switch. */
+  labelledById: string;
 };
 
 // The "add children" switch (Figma node 584:1432): a white track with a soft
@@ -12,13 +12,17 @@ type QuizToggleProps = {
 const KNOB_TRAVEL =
   "calc(var(--size-quiz-toggle-track-width) - var(--size-quiz-toggle-knob-size) - 2 * var(--spacing-quiz-toggle-inset))";
 
-export default function QuizToggle({ checked, onChange, label }: QuizToggleProps) {
+export default function QuizToggle({
+  checked,
+  onChange,
+  labelledById,
+}: QuizToggleProps) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
-      aria-label={label}
+      aria-labelledby={labelledById}
       onClick={() => onChange(!checked)}
       className="relative shrink-0 rounded-full bg-base-white transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white w-[var(--size-quiz-toggle-track-width)] h-[var(--size-quiz-toggle-track-height)]"
     >

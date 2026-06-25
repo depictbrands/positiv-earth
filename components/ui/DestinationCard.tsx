@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useId } from "react";
 
 import type { Destination } from "@/types/destination";
 
@@ -13,14 +14,28 @@ type DestinationCardProps = {
   layout?: "home" | "next-itinerary";
 };
 
+type DestinationCardContentProps = DestinationCardProps & {
+  /** When the card is a link, the image is decorative and ids label the link. */
+  linked?: boolean;
+  titleId?: string;
+  durationId?: string;
+  locationsId?: string;
+};
+
 function DestinationCardContent({
   destination,
   orientation = "portrait",
-}: DestinationCardProps) {
+  linked = false,
+  titleId,
+  durationId,
+  locationsId,
+}: DestinationCardContentProps) {
   const locations = destination.locations.join(", ");
   const isPortrait = orientation === "portrait";
   const imageUrl = destination.imageUrl?.trim() || PLACEHOLDER_IMAGE;
-  const imageAlt = destination.imageAlt?.trim() || destination.name;
+  const imageAlt = linked
+    ? ""
+    : destination.imageAlt?.trim() || destination.name;
 
   return (
     <article className="relative h-full w-full overflow-hidden rounded-card-corner">
@@ -65,6 +80,7 @@ function DestinationCardContent({
             style={{ gap: "var(--spacing-destination-card-header-gap)" }}
           >
             <h3
+              id={titleId}
               className={`font-display text-destination-card-title uppercase text-base-white ${
                 isPortrait ? "min-w-0 flex-1" : "whitespace-nowrap"
               }`}
@@ -85,7 +101,10 @@ function DestinationCardContent({
               }}
             />
 
-            <span className="inline-flex shrink-0 items-end text-base-white">
+            <span
+              id={durationId}
+              className="inline-flex shrink-0 items-end text-base-white"
+            >
               <span className="font-display text-destination-card-duration leading-none">
                 {destination.durationDays}
               </span>
@@ -102,7 +121,10 @@ function DestinationCardContent({
           </div>
         </div>
 
-        <p className="w-full font-open-sans text-destination-card-locations text-base-white">
+        <p
+          id={locationsId}
+          className="w-full font-open-sans text-destination-card-locations text-base-white"
+        >
           {locations}
         </p>
       </div>
@@ -115,8 +137,13 @@ export default function DestinationCard({
   orientation = "portrait",
   layout = "home",
 }: DestinationCardProps) {
+  const baseId = useId();
+  const titleId = `${baseId}-title`;
+  const durationId = `${baseId}-duration`;
+  const locationsId = `${baseId}-locations`;
   const isNextItinerary = layout === "next-itinerary";
   const copyOrientation = isNextItinerary ? "portrait" : orientation;
+  const hasHref = Boolean(destination.href?.trim());
 
   const sizeClass = isNextItinerary
     ? "aspect-[458/530] w-full min-w-0"
@@ -135,16 +162,21 @@ export default function DestinationCard({
       destination={destination}
       orientation={copyOrientation}
       layout={layout}
+      linked={hasHref}
+      titleId={hasHref ? titleId : undefined}
+      durationId={hasHref ? durationId : undefined}
+      locationsId={hasHref ? locationsId : undefined}
     />
   );
 
-  if (!destination.href) {
+  if (!hasHref) {
     return <div className={boxClass}>{card}</div>;
   }
 
   return (
     <Link
-      href={destination.href}
+      href={destination.href!}
+      aria-labelledby={`${titleId} ${durationId} ${locationsId}`}
       className={`${boxClass} focus-visible:rounded-card-corner focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white`}
     >
       {card}

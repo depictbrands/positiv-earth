@@ -1582,18 +1582,37 @@ body {
   --radius-search-button-corner: max(3rem, 3.175vw);
 }
 
+/* Keyboard focus rings — use on focusable elements instead of outline-none or
+   outline-* inline styles (Stark / WCAG 2.4.7). */
+.focus-ring-ink:focus-visible {
+  outline: var(--size-search-bar-focus-ring-width) solid var(--color-base-black);
+  outline-offset: var(--spacing-search-bar-focus-ring-offset);
+}
+
+.focus-ring-white:focus-visible {
+  outline: var(--size-search-bar-focus-ring-width) solid var(--color-base-white);
+  outline-offset: var(--spacing-search-bar-focus-ring-offset);
+}
+
+.focus-ring-search-button:focus-visible {
+  outline: var(--size-search-button-focus-ring-width) solid var(--color-base-black);
+  outline-offset: var(--spacing-search-button-focus-ring-offset);
+}
+
 .quiz-entry-button {
   filter: drop-shadow(var(--shadow-quiz-entry-drop));
 }
 
+/* Inset ring stays visible inside overflow-hidden (outline is clipped). */
 .quiz-entry-button:focus-visible {
-  outline: var(--size-search-bar-focus-ring-width) solid var(--color-base-white);
-  outline-offset: var(--size-search-bar-focus-ring-width);
+  box-shadow: inset 0 0 0 var(--size-search-bar-focus-ring-width)
+    var(--color-base-white);
 }
 
 .quiz-entry-button:hover:focus-visible,
 .quiz-entry-button:focus-visible:hover {
-  outline-color: var(--color-base-black);
+  box-shadow: inset 0 0 0 var(--size-search-bar-focus-ring-width)
+    var(--color-base-black);
 }
 
 .quiz-entry-button::before {

@@ -192,6 +192,7 @@ export default function AboutIntro({ content }: AboutIntroProps) {
 
   return (
     <section
+      aria-label="About Jorge"
       ref={sectionRef}
       className="relative w-full overflow-hidden bg-cream-white text-base-black"
     >

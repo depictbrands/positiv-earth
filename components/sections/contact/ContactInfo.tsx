@@ -88,7 +88,10 @@ export default function ContactInfo({ content }: ContactInfoProps) {
   const [primary, secondary] = resolved.photos;
 
   return (
-    <section className="w-full bg-cream-white">
+    <section
+      aria-labelledby="contact-info-heading"
+      className="w-full bg-cream-white"
+    >
       {/* Edge gutter matches the rest of the site (e.g. Footer / FAQ): the
           container spans the full 1512px frame and insets by the 48px side
           offset, so the 1416px content row sits 48px from the viewport edge. */}
@@ -152,7 +155,10 @@ export default function ContactInfo({ content }: ContactInfoProps) {
           className="flex w-full flex-col items-start lg:w-[var(--size-contact-info-column-width)]"
           style={{ gap: "var(--spacing-contact-info-column-gap)" }}
         >
-          <h2 className="font-display text-heading-4 text-base-black">
+          <h2
+            id="contact-info-heading"
+            className="font-display text-heading-4 text-base-black"
+          >
             {resolved.name}
           </h2>
 

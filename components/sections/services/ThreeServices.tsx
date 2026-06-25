@@ -147,7 +147,7 @@ export default function ThreeServices({
     : DEFAULT_CONTENT.services;
 
   return (
-    <section className="w-full bg-base-white">
+    <section aria-label="Our services" className="w-full bg-base-white">
       <div className="mx-auto flex w-full max-w-[var(--size-three-services-width)] flex-col gap-[var(--spacing-three-services-row-gap-mobile)] px-6 pt-[var(--spacing-three-services-top)] pb-[var(--spacing-three-services-bottom)] sm:px-8 lg:gap-[var(--spacing-three-services-row-gap)] lg:px-0">
         {services.map((service, index) => (
           <ServiceRow

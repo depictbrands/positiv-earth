@@ -30,7 +30,9 @@ export default function Logo({
         className,
       )}
     >
-      <span className={cn(textClass, imageClassName)}>[logo]</span>
+      <span aria-hidden="true" className={cn(textClass, imageClassName)}>
+        [logo]
+      </span>
     </Link>
   );
 }

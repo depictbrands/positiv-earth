@@ -133,9 +133,15 @@ export default function FAQ({ content = DEFAULT_CONTENT }: FAQProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="w-full bg-cream-white">
+    <section
+      aria-labelledby="faq-section-heading"
+      className="w-full bg-cream-white"
+    >
       <div className="mx-auto flex w-full max-w-[var(--size-faq-width)] flex-col gap-12 px-6 pt-[var(--spacing-faq-top)] pb-[var(--spacing-faq-bottom)] sm:px-8 lg:flex-row lg:justify-between lg:gap-0 lg:px-12">
-        <h2 className="font-display text-heading-4 text-base-black lg:w-[var(--size-faq-heading-width)] lg:shrink-0">
+        <h2
+          id="faq-section-heading"
+          className="font-display text-heading-4 text-base-black lg:w-[var(--size-faq-heading-width)] lg:shrink-0"
+        >
           {heading}
         </h2>
 

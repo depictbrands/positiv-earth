@@ -23,19 +23,9 @@ export default function SearchButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "inline-flex items-center justify-center whitespace-nowrap rounded-search-button-corner bg-search-button-surface font-body text-search-bar text-base-black transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline",
+        "focus-ring-search-button inline-flex h-[var(--size-search-button-height)] items-center justify-center whitespace-nowrap rounded-search-button-corner bg-search-button-surface py-[var(--spacing-search-button-padding-y)] pl-[var(--spacing-search-button-padding-left)] pr-[var(--spacing-search-button-padding-right)] font-body text-search-bar text-base-black transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
-      style={{
-        height: "var(--size-search-button-height)",
-        paddingLeft: "var(--spacing-search-button-padding-left)",
-        paddingRight: "var(--spacing-search-button-padding-right)",
-        paddingTop: "var(--spacing-search-button-padding-y)",
-        paddingBottom: "var(--spacing-search-button-padding-y)",
-        outlineColor: "var(--color-base-black)",
-        outlineOffset: "var(--spacing-search-button-focus-ring-offset)",
-        outlineWidth: "var(--size-search-button-focus-ring-width)",
-      }}
     >
       {children}
     </button>

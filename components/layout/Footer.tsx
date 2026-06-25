@@ -131,6 +131,7 @@ export default function Footer({ className }: FooterProps) {
           {/* Left column: connect, contact, quick links */}
           <div className="flex flex-col gap-12">
             <section
+              aria-labelledby="footer-connect-heading"
               className="flex flex-col items-start"
               style={{ gap: "var(--spacing-footer-connect-gap)" }}
             >
@@ -138,7 +139,10 @@ export default function Footer({ className }: FooterProps) {
                 className="flex w-full max-w-[var(--size-footer-support-width)] flex-col items-start"
                 style={{ gap: "var(--spacing-footer-connect-copy-gap)" }}
               >
-                <h2 className="font-body text-footer-heading text-base-white">
+                <h2
+                  id="footer-connect-heading"
+                  className="font-body text-footer-heading text-base-white"
+                >
                   Connect with Us
                 </h2>
                 <p
@@ -158,11 +162,7 @@ export default function Footer({ className }: FooterProps) {
               >
                 {FOOTER_SOCIAL_LINKS.map((item) => {
                   const iconBoxClassName =
-                    "inline-flex transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white";
-                  const iconBoxStyle = {
-                    width: "var(--size-footer-social-icon)",
-                    height: "var(--size-footer-social-icon)",
-                  };
+                    "focus-ring-white inline-flex size-[var(--size-footer-social-icon)] transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full";
                   const icon = (
                     <>
                       <span className="sr-only">{item.label}</span>
@@ -178,7 +178,6 @@ export default function Footer({ className }: FooterProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={iconBoxClassName}
-                        style={iconBoxStyle}
                       >
                         {icon}
                       </a>
@@ -189,7 +188,6 @@ export default function Footer({ className }: FooterProps) {
                     <span
                       key={item.label}
                       className={iconBoxClassName}
-                      style={iconBoxStyle}
                       aria-hidden="true"
                     >
                       {icon}
@@ -199,7 +197,10 @@ export default function Footer({ className }: FooterProps) {
               </div>
             </section>
 
-            <section className="flex flex-col gap-10 sm:flex-row sm:gap-[var(--spacing-footer-contact-gap)]">
+            <section
+              aria-label="Contact information and quick links"
+              className="flex flex-col gap-10 sm:flex-row sm:gap-[var(--spacing-footer-contact-gap)]"
+            >
               <div
                 className="flex w-full max-w-[var(--size-footer-contact-column-width)] flex-col items-start text-base-white"
                 style={{ gap: "var(--spacing-footer-contact-copy-gap)" }}
@@ -270,12 +271,7 @@ export default function Footer({ className }: FooterProps) {
 
             <button
               type="button"
-              className="mt-10 inline-flex w-auto min-w-[var(--size-footer-submit-width)] items-center justify-center self-end whitespace-nowrap rounded-search-button-corner border border-base-white bg-transparent font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-              style={{
-                paddingInline: "var(--spacing-footer-submit-padding-x)",
-                paddingBlock: "var(--spacing-footer-submit-padding-y)",
-                boxShadow: "var(--shadow-footer-submit)",
-              }}
+              className="focus-ring-white mt-10 inline-flex w-auto min-w-[var(--size-footer-submit-width)] items-center justify-center self-end whitespace-nowrap rounded-search-button-corner border border-base-white bg-transparent px-[var(--spacing-footer-submit-padding-x)] py-[var(--spacing-footer-submit-padding-y)] font-body text-cta-button text-base-white shadow-[var(--shadow-footer-submit)] transition-opacity hover:opacity-80 active:opacity-70"
             >
               Send Message
             </button>
@@ -288,7 +284,10 @@ export default function Footer({ className }: FooterProps) {
           style={{ borderColor: "var(--color-footer-divider)" }}
         />
 
-        <section className="mt-6 flex flex-col items-start gap-4 text-base-white sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+        <section
+          aria-label="Legal information"
+          className="mt-6 flex flex-col items-start gap-4 text-base-white sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+        >
           <p className="font-open-sans text-footer-legal">
             © 2026 PositivEarth. All rights reserved.
           </p>

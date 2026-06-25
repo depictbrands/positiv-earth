@@ -182,7 +182,11 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
   }, [scenes]);
 
   return (
-    <section ref={sectionRef} className="relative w-full">
+    <section
+      aria-label="About PositivEarth"
+      ref={sectionRef}
+      className="relative w-full"
+    >
       <div
         ref={pinRef}
         className="h-screen w-full overflow-hidden"

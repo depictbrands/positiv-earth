@@ -57,8 +57,9 @@ export default function LottiePlayer({
   return (
     <div
       ref={containerRef}
-      role="img"
-      aria-label={ariaLabel}
+      {...(ariaLabel
+        ? { role: "img" as const, "aria-label": ariaLabel }
+        : { "aria-hidden": true as const })}
       className={className}
       style={style}
     />

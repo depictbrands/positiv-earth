@@ -65,6 +65,7 @@ export default function HowItWorks({
 
   return (
     <section
+      aria-labelledby="how-it-works-heading"
       className="relative grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-brand-story-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
     >
       <div
@@ -102,7 +103,10 @@ export default function HowItWorks({
           gap: "var(--spacing-how-it-works-copy-gap)",
         }}
       >
-        <h2 className="w-full text-left font-display text-heading-4 text-base-black">
+        <h2
+          id="how-it-works-heading"
+          className="w-full text-left font-display text-heading-4 text-base-black"
+        >
           {renderHeading(content)}
         </h2>
 

@@ -40,7 +40,10 @@ export default function AboutCTA({ content }: AboutCTAProps) {
   const headItalic = headRest.join(" ");
 
   return (
-    <section className="relative flex w-full items-center justify-center overflow-hidden px-6 py-24 sm:px-10 lg:min-h-[var(--size-about-cta-band-height)] lg:py-0">
+    <section
+      aria-labelledby="about-cta-heading"
+      className="relative flex w-full items-center justify-center overflow-hidden px-6 py-24 sm:px-10 lg:min-h-[var(--size-about-cta-band-height)] lg:py-0"
+    >
       <Image
         src={resolved.imageUrl}
         alt={resolved.imageAlt}
@@ -58,7 +61,10 @@ export default function AboutCTA({ content }: AboutCTAProps) {
         className="relative z-10 flex flex-col items-center text-center"
         style={{ gap: "var(--spacing-cta-content-gap)" }}
       >
-        <h2 className="font-display text-heading-2 text-base-white">
+        <h2
+          id="about-cta-heading"
+          className="font-display text-heading-2 text-base-white"
+        >
           {headFirst}
           {headItalic ? <span className="italic"> {headItalic}</span> : null}
         </h2>
