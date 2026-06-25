@@ -194,7 +194,7 @@
  * how-it-works-body-gap | --spacing-how-it-works-body-gap         | 24px
  * hero-overlay          | --color-hero-overlay                      | rgba(0,0,0,0.25)
  * itinerary-hero-overlay | --color-itinerary-hero-overlay           | rgba(0,0,0,0.4)
- * itinerary-hero-content-width | --size-itinerary-hero-content-width | 875px
+ * itinerary-hero-content-width | --size-itinerary-hero-content-width | 880px
  * itinerary-hero-rule-thick-height | --size-itinerary-hero-rule-thick-height | 5px
  * itinerary-hero-inset-x | --spacing-itinerary-hero-inset-x       | 96px
  * itinerary-hero-inset-bottom | --spacing-itinerary-hero-inset-bottom | 96px
@@ -605,7 +605,7 @@
   --size-destinations-grid-width: 88.875rem;
   --size-destinations-cta-width: 11.875rem;
   --size-destinations-cta-height: 3.5rem;
-  --size-itinerary-hero-content-width: 54.6875rem;
+  --size-itinerary-hero-content-width: 80rem;
   --size-itinerary-hero-rule-thick-height: 0.3125rem;
   --size-itinerary-overview-width: 88.5rem;
   --size-itinerary-overview-copy-width: 31.8125rem;

@@ -85,12 +85,13 @@ export default function ItineraryHero({ content }: ItineraryHeroProps) {
           <Dot />
         </p>
 
-        {/* Title — wraps on mobile, single line on desktop */}
+        {/* Title — single line when it fits, wraps within the content box for
+            longer titles so it never overflows and gets clipped by the section. */}
         <div className="flex w-full max-w-full flex-col items-stretch gap-4 lg:w-fit lg:gap-6">
           <TextReveal
             as="h1"
             id="itinerary-hero-heading"
-            className="max-w-full font-display text-heading-2 lg:whitespace-nowrap"
+            className="max-w-full font-display text-heading-2"
           >
             {resolved.title}
           </TextReveal>
