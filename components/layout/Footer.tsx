@@ -264,7 +264,7 @@ export default function Footer({ className }: FooterProps) {
 
               <FooterField
                 label="Message"
-                placeholder="Write your message.."
+                placeholder="Write your message."
                 className="w-full"
               />
             </div>
