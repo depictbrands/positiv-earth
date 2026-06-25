@@ -172,12 +172,12 @@ export default function ContactInfo({ content }: ContactInfoProps) {
             >
               <a
                 href={`mailto:${resolved.email}`}
-                className="font-merriweather-sans text-turntable-tag text-contact-detail-ink underline decoration-from-font transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-contact-detail-ink"
+                className="font-merriweather-sans text-p1 text-contact-detail-ink underline decoration-from-font transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-contact-detail-ink"
                 style={{ wordBreak: "break-word" }}
               >
                 {resolved.email}
               </a>
-              <p className="font-merriweather-sans text-turntable-tag text-contact-detail-ink">
+              <p className="font-merriweather-sans text-p1 text-contact-detail-ink">
                 {resolved.phone}
               </p>
             </div>

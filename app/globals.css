@@ -675,7 +675,7 @@
   --size-contact-info-photo-width: 24.5625rem;
   --size-contact-info-photo-height: 29.25rem;
   --size-contact-info-column-width: 33.25rem;
-  --size-contact-info-social-icon: 2rem;
+  --size-contact-info-social-icon: 1.5rem;
   --size-faq-width: 94.5rem;
   --size-faq-heading-width: 22.25rem;
   --size-faq-list-width: 43.25rem;
@@ -1343,7 +1343,7 @@ body {
   --size-contact-info-photo-width: max(24.5625rem, 25.992vw);
   --size-contact-info-photo-height: max(29.25rem, 30.952vw);
   --size-contact-info-column-width: max(33.25rem, 35.185vw);
-  --size-contact-info-social-icon: max(2rem, 2.116vw);
+  --size-contact-info-social-icon: max(1.5rem, 1.58vw);
 
   /* Header geometry */
   --size-header-height: max(3.5rem, 3.704vw);
