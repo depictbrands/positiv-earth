@@ -4,9 +4,10 @@ import Header from "@/components/layout/Header";
 import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 
-// Single site-wide top bar rendered once outside <main> (see SiteChrome), so the
-// nested <header> is exposed as the page's one top-level banner landmark. Pins to
-// the viewport and slides up on downward scroll, back in on upward scroll.
+// Single site-wide top bar rendered once outside <main> (see SiteChrome) as the
+// page's one top-level banner landmark — logo, nav, and quiz CTA all live
+// inside this <header>. Pins to the viewport and slides up on downward scroll,
+// back in on upward scroll.
 export default function SiteHeader() {
   const navHidden = useHideOnScroll();
 
@@ -15,7 +16,7 @@ export default function SiteHeader() {
   const topBarTransform = navHidden ? "-translate-y-[200%]" : "translate-y-0";
 
   return (
-    <div
+    <header
       className={`fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
     >
       <div className="relative w-full">
@@ -30,6 +31,6 @@ export default function SiteHeader() {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }

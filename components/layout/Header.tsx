@@ -159,7 +159,7 @@ export default function Header({ className, style }: HeaderProps) {
   const closeMenu = () => setOpen(false);
 
   return (
-    <header className={cn("relative lg:w-full", className)} style={style}>
+    <div className={cn("relative lg:w-full", className)} style={style}>
       {/* Desktop: logo pinned left, glass pill nav centered in the viewport */}
       <div
         className="relative hidden lg:flex lg:w-full lg:items-center lg:px-8"
@@ -266,6 +266,6 @@ export default function Header({ className, style }: HeaderProps) {
           </nav>
         ) : null}
       </div>
-    </header>
+    </div>
   );
 }
