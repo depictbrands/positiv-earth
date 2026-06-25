@@ -90,7 +90,7 @@ export default function ContactInfo({ content }: ContactInfoProps) {
   return (
     <section
       aria-labelledby="contact-info-heading"
-      className="w-full bg-cream-white"
+      className="w-full bg-secondary-black"
     >
       {/* Edge gutter matches the rest of the site (e.g. Footer / FAQ): the
           container spans the full 1512px frame and insets by the 48px side
@@ -157,7 +157,7 @@ export default function ContactInfo({ content }: ContactInfoProps) {
         >
           <h2
             id="contact-info-heading"
-            className="font-display text-heading-4 text-base-black"
+            className="font-display text-heading-4 text-base-white"
           >
             {resolved.name}
           </h2>
@@ -172,18 +172,18 @@ export default function ContactInfo({ content }: ContactInfoProps) {
             >
               <a
                 href={`mailto:${resolved.email}`}
-                className="font-merriweather-sans text-p1 text-contact-detail-ink underline decoration-from-font transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-contact-detail-ink"
+                className="font-merriweather-sans text-p1 text-base-white underline decoration-from-font transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
                 style={{ wordBreak: "break-word" }}
               >
                 {resolved.email}
               </a>
-              <p className="font-merriweather-sans text-p1 text-contact-detail-ink">
+              <p className="font-merriweather-sans text-p1 text-base-white">
                 {resolved.phone}
               </p>
             </div>
 
             <div
-              className="flex flex-wrap items-center text-contact-detail-ink"
+              className="flex flex-wrap items-center text-base-white"
               style={{ gap: "var(--spacing-contact-info-social-gap)" }}
             >
               {resolved.socials.map((social) => (
@@ -192,7 +192,7 @@ export default function ContactInfo({ content }: ContactInfoProps) {
                   href={social.url}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="block transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-contact-detail-ink"
+                  className="block transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
                   style={{
                     width: "var(--size-contact-info-social-icon)",
                     height: "var(--size-contact-info-social-icon)",

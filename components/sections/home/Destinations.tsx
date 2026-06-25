@@ -91,12 +91,12 @@ export default function Destinations({
   return (
     <section
       aria-labelledby="destinations-heading"
-      className="w-full overflow-hidden bg-base-white"
+      className="w-full overflow-hidden bg-secondary-black"
     >
       <div className="mx-auto flex w-full max-w-[var(--size-destinations-grid-width)] flex-col items-center px-6 py-20 sm:px-10 lg:px-0 lg:py-[var(--spacing-destinations-heading-offset-top)]">
         <h2
           id="destinations-heading"
-          className="text-center font-display text-heading-4 text-base-black"
+          className="text-center font-display text-heading-4 text-base-white"
         >
           {content.heading}
         </h2>
@@ -134,7 +134,7 @@ export default function Destinations({
 
         <Link
           href="#"
-          className="focus-ring-ink mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center rounded-search-button-corner border border-[var(--color-ink-base)] font-body text-cta-button text-[var(--color-ink-base)] transition-opacity hover:opacity-80 active:opacity-70 lg:mt-20"
+          className="focus-ring-white mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center rounded-search-button-corner border border-base-white font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 lg:mt-20"
         >
           All Trips
         </Link>

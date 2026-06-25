@@ -74,7 +74,7 @@ function FaqRow({ item, open, onToggle, withDivider }: FaqRowProps) {
         // Dividers sit between consecutive items: a top border plus matching
         // space above and below it (24px each, per Figma).
         withDivider &&
-          "mt-[var(--spacing-faq-item-gap)] border-t border-faq-divider pt-[var(--spacing-faq-item-gap)]",
+          "mt-[var(--spacing-faq-item-gap)] border-t border-footer-divider pt-[var(--spacing-faq-item-gap)]",
       )}
     >
       <h3>
@@ -84,14 +84,14 @@ function FaqRow({ item, open, onToggle, withDivider }: FaqRowProps) {
           onClick={onToggle}
           aria-expanded={open}
           aria-controls={panelId}
-          className="group flex w-full items-start justify-between gap-6 rounded-card-corner text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-base-black focus-visible:ring-offset-4 focus-visible:ring-offset-cream-white"
+          className="group flex w-full items-start justify-between gap-6 rounded-card-corner text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-base-white focus-visible:ring-offset-4 focus-visible:ring-offset-secondary-black"
         >
-          <span className="font-body text-p2 text-faq-question transition-colors group-hover:text-base-black">
+          <span className="font-body text-p2 text-base-white transition-colors group-hover:opacity-80">
             {item.question}
           </span>
           <span
             className={cn(
-              "mt-3 flex text-faq-question transition-transform duration-300 ease-out motion-reduce:transition-none group-hover:text-base-black",
+              "mt-3 flex text-base-white transition-transform duration-300 ease-out motion-reduce:transition-none group-hover:opacity-80",
               open && "rotate-180",
             )}
           >
@@ -114,7 +114,7 @@ function FaqRow({ item, open, onToggle, withDivider }: FaqRowProps) {
         )}
       >
         <div className="min-h-0 overflow-hidden">
-          <p className="font-body text-p1 text-faq-answer">{item.answer}</p>
+          <p className="font-body text-p1 text-base-white">{item.answer}</p>
         </div>
       </div>
     </div>
@@ -135,12 +135,12 @@ export default function FAQ({ content = DEFAULT_CONTENT }: FAQProps) {
   return (
     <section
       aria-labelledby="faq-section-heading"
-      className="w-full bg-cream-white"
+      className="w-full bg-secondary-black"
     >
       <div className="mx-auto flex w-full max-w-[var(--size-faq-width)] flex-col gap-12 px-6 pt-[var(--spacing-faq-top)] pb-[var(--spacing-faq-bottom)] sm:px-8 lg:flex-row lg:justify-between lg:gap-0 lg:px-12">
         <h2
           id="faq-section-heading"
-          className="font-display text-heading-4 text-base-black lg:w-[var(--size-faq-heading-width)] lg:shrink-0"
+          className="font-display text-heading-4 text-base-white lg:w-[var(--size-faq-heading-width)] lg:shrink-0"
         >
           {heading}
         </h2>

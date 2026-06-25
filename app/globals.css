@@ -5,6 +5,7 @@
  * Original Figma name   | CSS variable name                         | Original value
  * base-black            | --color-base-black                        | #181818ff
  * base-white            | --color-base-white                        | #ffffffff
+ * secondary-black       | --color-secondary-black                   | #262626
  * header-corner         | --radius-header-corner                    | 50px
  * search-bar-corner     | --radius-search-bar-corner                | 80px
  * search-button-corner  | --radius-search-button-corner             | 48px
@@ -368,6 +369,8 @@
 @theme {
   --color-base-black: oklch(0.209 0 0);
   --color-base-white: oklch(1 0 0);
+  /* Neutral dark surface — #262626 */
+  --color-secondary-black: oklch(0.269 0 0);
   --color-search-bar-ink-light: oklch(0.4889 0.0070 223.55);
   --color-search-bar-divider: oklch(0.1913 0 89.88 / 0.12);
   --color-header-glass-surface: oklch(0.3052 0 89.88 / 0.6);
