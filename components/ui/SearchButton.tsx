@@ -23,7 +23,7 @@ export default function SearchButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "focus-ring-search-button inline-flex h-[var(--size-search-button-height)] items-center justify-center whitespace-nowrap rounded-search-button-corner bg-search-button-surface py-[var(--spacing-search-button-padding-y)] pl-[var(--spacing-search-button-padding-left)] pr-[var(--spacing-search-button-padding-right)] font-body text-search-bar text-base-black transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-50",
+        "focus-ring-search-button inline-flex h-[var(--size-search-button-height)] items-center justify-center whitespace-nowrap rounded-search-button-corner bg-search-button-surface py-[var(--spacing-search-button-padding-y)] pl-[var(--spacing-search-button-padding-left)] pr-[var(--spacing-search-button-padding-right)] font-body text-search-bar-button text-base-black transition-opacity hover:opacity-90 active:opacity-80 disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
     >

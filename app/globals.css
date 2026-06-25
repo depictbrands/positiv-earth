@@ -67,6 +67,7 @@
  * search-button-padding-y | --spacing-search-button-padding-y        | 15px
  * search-button-focus-ring-width | --size-search-button-focus-ring-width | 2px
  * search-button-focus-ring-offset | --spacing-search-button-focus-ring-offset | 2px
+ * search-bar-button     | --text-search-bar-button                  | 20px
  * search-bar-width      | --size-search-bar-width                   | 1216px
  * search-bar-height     | --size-search-bar-height                  | 80px
  * search-bar-padding-x  | --spacing-search-bar-padding-x            | 24px
@@ -878,6 +879,11 @@
   --text-search-bar--letter-spacing: 0.02em;
   --text-search-bar--font-weight: 600;
 
+  --text-search-bar-button: 1.25rem;
+  --text-search-bar-button--line-height: 1.6rem;
+  --text-search-bar-button--letter-spacing: 0.02em;
+  --text-search-bar-button--font-weight: 600;
+
   --text-header-logo: 1.5rem;
   --text-header-logo--line-height: normal;
   --text-header-logo--letter-spacing: 0em;
@@ -1124,7 +1130,8 @@ body {
   --text-testimonial-card-name: max(1.25rem, 1.323vw);
   --text-testimonial-card-quote: max(1rem, 1.058vw);
   --text-cta-button: max(1.25rem, 1.323vw);
-  --text-search-bar: max(1rem, 1.058vw);
+  --text-search-bar: max(1rem, 1.06vw);
+  --text-search-bar-button: max(1.25rem, 1.323vw);
   --text-nav: max(1rem, 1.058vw);
   --text-header-logo: max(1.5rem, 1.587vw);
 
