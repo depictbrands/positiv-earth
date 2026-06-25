@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Merriweather, Merriweather_Sans, Open_Sans, Raleway } from "next/font/google";
 import "./globals.css";
+import SiteChrome from "@/components/layout/SiteChrome";
 
 const merriweather = Merriweather({
   variable: "--ff-merriweather",
@@ -44,7 +45,9 @@ export default function RootLayout({
       className={`${merriweather.variable} ${merriweatherSans.variable} ${raleway.variable} ${openSans.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <SiteChrome>{children}</SiteChrome>
+      </body>
     </html>
   );
 }

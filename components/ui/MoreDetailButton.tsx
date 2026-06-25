@@ -22,7 +22,7 @@ export default function MoreDetailButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex flex-col items-start gap-1 transition-opacity disabled:cursor-not-allowed disabled:opacity-50 ${variantClassName}`}
+      className={`inline-flex flex-col items-start gap-1 rounded-sm transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current disabled:cursor-not-allowed disabled:opacity-50 ${variantClassName}`}
     >
       <span className="flex items-center gap-2.5 mt-4">
         <span className="font-body text-cta-button">{children}</span>

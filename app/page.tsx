@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/Footer";
 import BrandStory from "@/components/sections/home/BrandStory";
 import CTA from "@/components/sections/home/CTA";
 import Destinations from "@/components/sections/home/Destinations";
@@ -24,7 +23,6 @@ export default async function Home() {
       <Destinations content={content?.destinations} />
       <Testimonial content={content?.testimonial} />
       <CTA content={content?.cta} />
-      <Footer />
     </main>
   );
 }

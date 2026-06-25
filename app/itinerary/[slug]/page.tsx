@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { CSSProperties } from "react";
 
-import Footer from "@/components/layout/Footer";
 import { DEFAULT_DESTINATIONS } from "@/components/sections/home/Destinations";
 import Accommodation from "@/components/sections/itinerary/Accommodation";
 import WhatsIncluded from "@/components/sections/itinerary/WhatsIncluded";
@@ -269,7 +268,6 @@ export default async function ItineraryPage({ params }: ItineraryPageProps) {
       <Accommodation content={itinerary.accommodation} />
       <WhatsIncluded content={itinerary.whatsIncluded} />
       <NextItineraries content={nextItineraries} currentSlug={slug} />
-      <Footer />
     </main>
   );
 }

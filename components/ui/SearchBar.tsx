@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 
 import SearchButton from "@/components/ui/SearchButton";
 
@@ -138,6 +138,8 @@ function SearchInputSegment({
   placeholder: string;
   value: string;
 }) {
+  const inputId = useId();
+
   return (
     <div
       className="flex w-full items-center lg:w-[var(--size-search-bar-segment-width)]"
@@ -145,9 +147,14 @@ function SearchInputSegment({
         gap: "var(--spacing-search-bar-segment-gap)",
       }}
     >
+      {/* Visually-hidden but programmatically associated label; the placeholder
+          remains as the visible cue. */}
+      <label htmlFor={inputId} className="sr-only">
+        {placeholder}
+      </label>
       <input
+        id={inputId}
         type="text"
-        aria-label={placeholder}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}

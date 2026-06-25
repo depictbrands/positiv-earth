@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/Footer";
 import ContactHero from "@/components/sections/contact/ContactHero";
 import ContactInfo from "@/components/sections/contact/ContactInfo";
 import { client } from "@/sanity/lib/client";
@@ -16,7 +15,6 @@ export default async function ContactPage() {
     <main className="contact-scale flex w-full flex-col items-center">
       <ContactHero content={content?.hero} />
       <ContactInfo content={content?.info} />
-      <Footer />
     </main>
   );
 }

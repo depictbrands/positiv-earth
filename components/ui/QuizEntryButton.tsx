@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type QuizEntryButtonProps = {
   children: ReactNode;
@@ -15,11 +15,7 @@ type QuizEntryButtonProps = {
 // .quiz-entry-button), backdrop blur, hairline border, drop shadow. Hover:
 // white fill and black label slide up from the bottom in sync.
 const baseClassName =
-  "quiz-entry-button group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-glass-border bg-transparent px-6 text-center font-body text-cta-button text-base-white backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] disabled:cursor-not-allowed disabled:opacity-50";
-
-const baseStyle: CSSProperties = {
-  height: "var(--size-header-height)",
-};
+  "quiz-entry-button group relative inline-flex h-[var(--size-header-height)] items-center justify-center overflow-hidden rounded-full border border-glass-border bg-transparent px-6 text-center font-body text-cta-button text-base-white backdrop-blur-glass backdrop-saturate-[var(--glass-saturate)] disabled:cursor-not-allowed disabled:opacity-50";
 
 function resolveAriaLabel(
   ariaLabel: string | undefined,
@@ -28,9 +24,11 @@ function resolveAriaLabel(
   const explicit = ariaLabel?.trim();
   if (explicit) return explicit;
 
-  // String children supply the visible label; avoid duplicating it in aria-label.
+  // The visible label is rendered twice (a real copy + an aria-hidden copy that
+  // drives the hover slide). Pin the accessible name to the single visible
+  // string so name-from-content can't concatenate it into a doubled label.
   if (typeof children === "string") {
-    return undefined;
+    return children.trim() || undefined;
   }
 
   return undefined;
@@ -74,7 +72,6 @@ export default function QuizEntryButton({
         onClick={onClick}
         {...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {})}
         className={baseClassName}
-        style={baseStyle}
       >
         <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
       </Link>
@@ -88,7 +85,6 @@ export default function QuizEntryButton({
       disabled={disabled}
       {...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {})}
       className={baseClassName}
-      style={baseStyle}
     >
       <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
     </button>

@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/Footer";
 import ServicesHero from "@/components/sections/services/ServicesHero";
 import ThreeServices from "@/components/sections/services/ThreeServices";
 import { client } from "@/sanity/lib/client";
@@ -16,7 +15,6 @@ export default async function ServicesPage() {
     <main className="services-scale flex w-full flex-col items-center">
       <ServicesHero content={content?.hero} />
       <ThreeServices content={content?.threeServices} />
-      <Footer />
     </main>
   );
 }

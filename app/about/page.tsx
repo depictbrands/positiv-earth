@@ -3,7 +3,6 @@ import AboutMotionProvider from "@/components/sections/about/AboutMotionProvider
 import AboutIntro from "@/components/sections/about/AboutIntro";
 import AboutSceneStage from "@/components/sections/about/AboutSceneStage";
 import AboutCTA from "@/components/sections/about/AboutCTA";
-import Footer from "@/components/layout/Footer";
 import type { AboutSceneContent } from "@/types/about-scene-content";
 import { client } from "@/sanity/lib/client";
 import { mapAboutPage } from "@/sanity/lib/mapAboutPage";
@@ -83,7 +82,6 @@ export default async function AboutPage() {
           ]}
         />
         <AboutCTA content={content?.cta} />
-        <Footer />
       </AboutMotionProvider>
     </main>
   );

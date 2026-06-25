@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/Footer";
 import FAQ from "@/components/sections/faq/FAQ";
 import FAQHero from "@/components/sections/faq/FAQHero";
 import { client } from "@/sanity/lib/client";
@@ -14,7 +13,6 @@ export default async function FAQPage() {
     <main className="faq-scale flex w-full flex-col items-center">
       <FAQHero content={content?.hero} />
       <FAQ content={content?.faq} />
-      <Footer />
     </main>
   );
 }

@@ -387,7 +387,7 @@
     oklch(1 0 89.88 / 0.8) 74.75%,
     var(--color-base-white) 100%
   );
-  --color-hero-overlay: oklch(0 0 0 / 0.3);
+  --color-hero-overlay: oklch(0 0 0 / 0.4);
   --color-itinerary-hero-overlay: oklch(0 0 0 / 0.4);
   --color-search-button-surface: oklch(0.8297 0 89.88);
   --color-destination-card-scrim: oklch(0 0 0 / 0.4);

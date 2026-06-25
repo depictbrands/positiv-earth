@@ -3,9 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 
-import Header from "@/components/layout/Header";
 import TextReveal from "@/components/ui/TextReveal";
-import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import QuizOption from "@/components/ui/QuizOption";
 import QuizContactForm from "@/components/sections/quiz/QuizContactForm";
 import QuizImageChoiceGrid from "@/components/sections/quiz/QuizImageChoiceGrid";
@@ -263,22 +261,6 @@ export default function DesignYourTravelQuiz({
         className="absolute inset-0"
         style={{ backgroundColor: "var(--color-quiz-bg-overlay)" }}
       />
-
-      {/* Top bar — single Header landmark; layout responds inside Header.tsx */}
-      <div className="fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6">
-        <div className="relative w-full">
-          <div className="flex items-start justify-between gap-4 lg:block">
-            <div className="min-w-0 flex-1 lg:w-full lg:flex lg:justify-center">
-              <Header />
-            </div>
-            <div className="shrink-0 lg:absolute lg:top-0 lg:left-[82.0767195767%]">
-              <QuizEntryButton href="/design-your-travel">
-                Design Your Travel
-              </QuizEntryButton>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Title + quiz panel */}
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 pb-12 pt-28 lg:pt-32">

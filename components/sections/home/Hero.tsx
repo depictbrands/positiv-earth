@@ -2,11 +2,8 @@
 
 import Image from "next/image";
 
-import Header from "@/components/layout/Header";
-import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import SearchBar from "@/components/ui/SearchBar";
 import TextReveal from "@/components/ui/TextReveal";
-import { useHideOnScroll } from "@/hooks/useHideOnScroll";
 import type { HeroContent } from "@/types/hero-content";
 
 const DEFAULT_IMAGE_URL =
@@ -51,15 +48,6 @@ function heroHeadlineText(headline: HeroContent["headline"]): string {
 
 export default function Hero({ content }: HeroProps) {
   const resolved = resolveHeroContent(content);
-  const navHidden = useHideOnScroll();
-
-  // The top bar (Header + "Design Your Travel") pins to the viewport and slides
-  // up out of view on downward scroll, back in on upward scroll.
-  const topBarTransition =
-    "transition-transform duration-300 ease-out will-change-transform";
-  const topBarTransform = navHidden
-    ? "-translate-y-[200%]"
-    : "translate-y-0";
 
   return (
     <section
@@ -73,26 +61,6 @@ export default function Hero({ content }: HeroProps) {
         className="object-cover"
         priority
       />
-
-      {/* Top bar — single Header landmark; layout responds inside Header.tsx */}
-      <div
-        className={`fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
-      >
-        <div className="relative w-full">
-          <div className="flex items-start justify-between gap-4 lg:block">
-            <div className="min-w-0 flex-1 lg:w-full lg:flex lg:justify-center">
-              <Header />
-            </div>
-            <div
-              className="shrink-0 lg:absolute lg:top-0 lg:left-[82.0767195767%]"
-            >
-              <QuizEntryButton href="/design-your-travel">
-                Design Your Travel
-              </QuizEntryButton>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Full-bleed dark scrim that also wraps the foreground copy, so the copy
           is measured against a real ancestor background. Renders identically to
