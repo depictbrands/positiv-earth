@@ -46,8 +46,10 @@ function DestinationCardContent({
         className="object-cover"
       />
 
+      {/* Gradient scrim now wraps the copy so the white title/locations are
+          measured against a real ancestor background (not a sibling layer).
+          Renders identically — the copy keeps the same bottom-anchored box. */}
       <div
-        aria-hidden="true"
         className="absolute inset-x-0 bottom-0 w-full"
         style={{
           height: isPortrait
@@ -58,19 +60,18 @@ function DestinationCardContent({
           backgroundImage:
             "linear-gradient(0deg, var(--color-destination-card-portrait-overlay-start) 50%, var(--color-destination-card-portrait-overlay-end) 87.08%)",
         }}
-      />
-
-      <div
-        className="absolute inset-x-0 bottom-0 flex flex-col items-start"
-        style={{
-          gap: "var(--spacing-destination-card-copy-gap)",
-          paddingInline: "var(--spacing-destination-card-copy-inset)",
-          paddingBottom: "var(--spacing-destination-card-copy-inset)",
-          width:
-            "calc(100% - (var(--spacing-destination-card-copy-inset) * 2))",
-          maxWidth: "var(--size-destination-card-copy-width)",
-        }}
       >
+        <div
+          className="absolute inset-x-0 bottom-0 flex flex-col items-start"
+          style={{
+            gap: "var(--spacing-destination-card-copy-gap)",
+            paddingInline: "var(--spacing-destination-card-copy-inset)",
+            paddingBottom: "var(--spacing-destination-card-copy-inset)",
+            width:
+              "calc(100% - (var(--spacing-destination-card-copy-inset) * 2))",
+            maxWidth: "var(--size-destination-card-copy-width)",
+          }}
+        >
         <div
           className="flex w-full flex-col items-start"
           style={{ gap: "var(--spacing-destination-card-title-gap)" }}
@@ -127,6 +128,7 @@ function DestinationCardContent({
         >
           {locations}
         </p>
+        </div>
       </div>
     </article>
   );

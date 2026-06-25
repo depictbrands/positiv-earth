@@ -387,11 +387,11 @@
     oklch(1 0 89.88 / 0.8) 74.75%,
     var(--color-base-white) 100%
   );
-  --color-hero-overlay: oklch(0 0 0 / 0.55);
+  --color-hero-overlay: oklch(0 0 0 / 0.3);
   --color-itinerary-hero-overlay: oklch(0 0 0 / 0.4);
   --color-search-button-surface: oklch(0.8297 0 89.88);
   --color-destination-card-scrim: oklch(0 0 0 / 0.4);
-  --color-destination-card-portrait-overlay-start: oklch(0.209 0 0 / 0.85);
+  --color-destination-card-portrait-overlay-start: oklch(0.209 0 0 / 0.7);
   --color-destination-card-portrait-overlay-end: oklch(0.209 0 0 / 0);
   --color-destination-card-divider: var(--color-base-white);
   --color-cta-overlay: oklch(0 0 0 / 0.55);

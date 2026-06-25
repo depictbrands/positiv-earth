@@ -35,7 +35,7 @@ export default function CTA({ content }: CTAProps) {
   return (
     <section
       aria-labelledby="home-cta-heading"
-      className="relative flex w-full items-center justify-center overflow-hidden px-6 py-24 sm:px-10 lg:min-h-[var(--size-cta-height)] lg:py-0"
+      className="relative flex w-full overflow-hidden lg:min-h-[var(--size-cta-height)]"
     >
       <Image
         src={resolved.imageUrl}
@@ -44,15 +44,16 @@ export default function CTA({ content }: CTAProps) {
         sizes="100vw"
         className="object-cover"
       />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{ backgroundColor: "var(--color-cta-overlay)" }}
-      />
 
+      {/* Full-bleed dark scrim that also wraps the copy, so the heading is
+          measured against a real ancestor background. Fills the section via
+          flex-1 + stretch, rendering identically to the previous overlay. */}
       <div
-        className="relative z-10 flex flex-col items-center text-center"
-        style={{ gap: "var(--spacing-cta-content-gap)" }}
+        className="relative z-10 flex flex-1 flex-col items-center justify-center text-center px-6 py-24 sm:px-10 lg:py-0"
+        style={{
+          gap: "var(--spacing-cta-content-gap)",
+          backgroundColor: "var(--color-cta-overlay)",
+        }}
       >
         <h2
           id="home-cta-heading"

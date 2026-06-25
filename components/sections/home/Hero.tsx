@@ -74,12 +74,6 @@ export default function Hero({ content }: HeroProps) {
         priority
       />
 
-      <div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{ backgroundColor: "var(--color-hero-overlay)" }}
-      />
-
       {/* Top bar — single Header landmark; layout responds inside Header.tsx */}
       <div
         className={`fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
@@ -100,8 +94,15 @@ export default function Hero({ content }: HeroProps) {
         </div>
       </div>
 
+      {/* Full-bleed dark scrim that also wraps the foreground copy, so the copy
+          is measured against a real ancestor background. Renders identically to
+          the previous standalone inset-0 overlay (fills the section via flex-1). */}
       <div
-        className="relative z-10 flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white"
+        className="relative z-10 flex w-full flex-1 flex-col"
+        style={{ backgroundColor: "var(--color-hero-overlay)" }}
+      >
+      <div
+        className="flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white"
         style={{ gap: "var(--spacing-hero-content-gap)" }}
       >
         <h1 id="hero-heading" className="sr-only">
@@ -172,8 +173,9 @@ export default function Hero({ content }: HeroProps) {
         </p>
       </div>
 
-      <div className="relative z-10 flex w-full justify-center px-6 pb-12 lg:pb-20">
+      <div className="flex w-full justify-center px-6 pb-12 lg:pb-20">
         <SearchBar onSearch={(criteria) => console.log(criteria)} />
+      </div>
       </div>
     </section>
   );
