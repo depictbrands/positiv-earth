@@ -104,11 +104,9 @@ function DestinationCardContent({
 
             <span
               id={durationId}
-              className="inline-flex shrink-0 items-end text-base-white"
+              className="inline-flex shrink-0 items-end font-display text-destination-card-duration leading-none text-base-white"
             >
-              <span className="font-display text-destination-card-duration leading-none">
-                {destination.durationDays}
-              </span>
+              {destination.durationDays}
               <span
                 className="font-open-sans text-destination-card-duration-label leading-none"
                 style={{
@@ -116,7 +114,7 @@ function DestinationCardContent({
                     "var(--spacing-destination-card-duration-label-offset-x)",
                 }}
               >
-                DAYS
+                {" DAYS"}
               </span>
             </span>
           </div>
