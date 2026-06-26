@@ -84,8 +84,8 @@
  * header-active-pill-height | --size-header-active-pill-height      | 46px
  * header-active-pill-offset | --spacing-header-active-pill-offset   | 5px
  * header-glass-blur     | --blur-header-glass                       | 2px
- * testimonial-card-width | --size-testimonial-card-width          | 384px
- * testimonial-card-height | --size-testimonial-card-height        | 307px
+ * testimonial-card-width | --size-testimonial-card-width          | 225px (9:16)
+ * testimonial-card-height | --size-testimonial-card-height        | 400px (9:16)
  * testimonial-card-inset-x | --spacing-testimonial-card-inset-x   | 32px
  * testimonial-card-inset-top | --spacing-testimonial-card-inset-top | 34px
  * testimonial-card-content-width | --size-testimonial-card-content-width | 320px
@@ -662,8 +662,8 @@
   --size-search-button-width: 10rem;
   --size-search-button-height: 3.5rem;
   --size-search-button-focus-ring-width: 0.125rem;
-  --size-testimonial-card-width: 24rem;
-  --size-testimonial-card-height: 19.1875rem;
+  --size-testimonial-card-width: 14.0625rem;
+  --size-testimonial-card-height: 25rem;
   --size-testimonial-card-content-width: 20rem;
   --size-testimonial-card-avatar-size: 4rem;
   --size-cta-height: 44.4375rem;
@@ -1170,8 +1170,8 @@ body {
   --size-destination-card-vertical-divider-height: max(2rem, 2.116vw);
 
   /* Testimonial card + pagination geometry */
-  --size-testimonial-card-width: max(24rem, 25.397vw);
-  --size-testimonial-card-height: max(19.1875rem, 20.304vw);
+  --size-testimonial-card-width: max(14.0625rem, 14.881vw);
+  --size-testimonial-card-height: max(25rem, 26.455vw);
   --size-testimonial-card-avatar-size: max(4rem, 4.233vw);
   --size-testimonial-pagination-width: max(2.5rem, 2.646vw);
   --size-testimonial-pagination-height: max(0.5rem, 0.529vw);

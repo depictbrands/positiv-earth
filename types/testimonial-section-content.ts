@@ -1,8 +1,8 @@
 export type Testimonial = {
-  name: string;
-  quote: string;
-  avatarUrl: string;
-  avatarAlt: string;
+  videoUrl: string;
+  posterUrl?: string;
+  alt: string;
+  name?: string;
 };
 
 export type TestimonialSectionContent = {

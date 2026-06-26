@@ -53,8 +53,12 @@ export const HOME_PAGE_QUERY = `*[_type == "homePage" && _id == "homePage"][0]{
     heading,
     testimonials[] {
       name,
-      quote,
-      avatar {
+      video {
+        asset->{
+          url
+        }
+      },
+      poster {
         asset,
         alt
       }

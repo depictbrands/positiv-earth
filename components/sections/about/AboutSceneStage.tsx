@@ -230,7 +230,7 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
               }}
               className="relative z-10 flex max-w-[max(40rem,42.328vw)] flex-col gap-[max(1.5rem,1.587vw)] text-base-white will-change-transform"
             >
-              <h2 className="font-display text-heading-2">{scene.headline}</h2>
+              <h2 className="font-display text-heading-4">{scene.headline}</h2>
               <p className="max-w-[max(34rem,35.979vw)] whitespace-pre-line font-body text-p1">
                 {scene.body}
               </p>

@@ -1,34 +1,20 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
 import TestimonialCard from "@/components/ui/TestimonialCard";
 import type {
   Testimonial,
   TestimonialSectionContent,
 } from "@/types/testimonial-section-content";
 
-const DEFAULT_AVATAR =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="%23c7c7c7"/></svg>';
+const DEFAULT_POSTER =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 400"><rect width="225" height="400" fill="%23222222"/></svg>';
 
 const DEFAULT_TESTIMONIALS: Testimonial[] = [
-  {
-    name: "Melanie L.",
-    quote:
-      "Lorem ipsum dolor sit amet consectetur. Et hac vitae diam gravida sed. Eu volutpat non odio consectetur. Nec ultricies.",
-    avatarUrl: DEFAULT_AVATAR,
-    avatarAlt: "Portrait placeholder for Melanie L.",
-  },
-  {
-    name: "Melanie L.",
-    quote:
-      "Lorem ipsum dolor sit amet consectetur. Et hac vitae diam gravida sed. Eu volutpat non odio consectetur. Nec ultricies.",
-    avatarUrl: DEFAULT_AVATAR,
-    avatarAlt: "Portrait placeholder for Melanie L.",
-  },
-  {
-    name: "Melanie L.",
-    quote:
-      "Lorem ipsum dolor sit amet consectetur. Et hac vitae diam gravida sed. Eu volutpat non odio consectetur. Nec ultricies.",
-    avatarUrl: DEFAULT_AVATAR,
-    avatarAlt: "Portrait placeholder for Melanie L.",
-  },
+  { videoUrl: "", posterUrl: DEFAULT_POSTER, alt: "Customer testimonial video" },
+  { videoUrl: "", posterUrl: DEFAULT_POSTER, alt: "Customer testimonial video" },
+  { videoUrl: "", posterUrl: DEFAULT_POSTER, alt: "Customer testimonial video" },
 ];
 
 const DEFAULT_CONTENT: TestimonialSectionContent = {
@@ -43,6 +29,36 @@ type TestimonialSectionProps = {
 export default function Testimonial({
   content = DEFAULT_CONTENT,
 }: TestimonialSectionProps) {
+  const cardsRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const element = cardsRef.current;
+    if (!element) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      const frame = requestAnimationFrame(() => setInView(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       aria-labelledby={content.heading ? "testimonial-heading" : undefined}
@@ -55,9 +71,7 @@ export default function Testimonial({
           gap: "var(--spacing-testimonial-section-gap)",
         }}
       >
-        <div
-          className="flex w-full flex-col items-start gap-12 lg:[gap:var(--spacing-testimonial-section-stack-gap)]"
-        >
+        <div className="flex w-full flex-col items-start gap-12 lg:[gap:var(--spacing-testimonial-section-stack-gap)]">
           {content.heading ? (
             <h2
               id="testimonial-heading"
@@ -68,50 +82,31 @@ export default function Testimonial({
           ) : null}
 
           <div
-            className="grid w-full grid-cols-1 justify-items-center sm:grid-cols-2 lg:grid-cols-3 lg:justify-items-stretch"
+            ref={cardsRef}
+            className="flex w-full flex-wrap items-center justify-center"
             style={{
               gap: "var(--spacing-testimonial-section-cards-gap)",
             }}
           >
             {content.testimonials.map((testimonial, index) => (
-              <TestimonialCard
-                key={`${testimonial.name}-${index}`}
-                name={testimonial.name}
-                quote={testimonial.quote}
-                avatarUrl={testimonial.avatarUrl?.trim() || DEFAULT_AVATAR}
-                avatarAlt={
-                  testimonial.avatarAlt?.trim() ||
-                  `Portrait of ${testimonial.name}`
-                }
-              />
+              <div
+                key={`${testimonial.name ?? "testimonial"}-${index}`}
+                style={{
+                  transform: inView ? "translateX(0)" : "translateX(-100vw)",
+                  opacity: inView ? 1 : 0,
+                  transition:
+                    "transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 700ms ease-out",
+                  transitionDelay: `${index * 150}ms`,
+                }}
+              >
+                <TestimonialCard
+                  videoUrl={testimonial.videoUrl}
+                  posterUrl={testimonial.posterUrl}
+                  alt={testimonial.alt}
+                />
+              </div>
             ))}
           </div>
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="flex items-center justify-center"
-          style={{
-            width: "var(--size-testimonial-pagination-width)",
-            height: "var(--size-testimonial-pagination-height)",
-            gap: "var(--spacing-testimonial-pagination-gap)",
-          }}
-        >
-          {content.testimonials.slice(0, 3).map((testimonial, index) => (
-            <span
-              key={`${testimonial.name}-dot-${index}`}
-              aria-hidden="true"
-              className="rounded-full"
-              style={{
-                width: "var(--size-testimonial-pagination-dot-size)",
-                height: "var(--size-testimonial-pagination-dot-size)",
-                backgroundColor:
-                  index === 0
-                    ? "var(--color-base-white)"
-                    : "var(--color-testimonial-pagination-inactive)",
-              }}
-            />
-          ))}
         </div>
       </div>
     </section>

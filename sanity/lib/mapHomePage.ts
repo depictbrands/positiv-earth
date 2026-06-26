@@ -58,8 +58,8 @@ type SanityHomePage = {
     heading?: string;
     testimonials?: Array<{
       name?: string;
-      quote?: string;
-      avatar?: SanityImageWithAlt;
+      video?: { asset?: { url?: string } };
+      poster?: SanityImageWithAlt;
     }>;
   };
   cta?: {
@@ -180,13 +180,13 @@ function mapTestimonial(
     NonNullable<SanityHomePage["testimonial"]>["testimonials"]
   >[number],
 ): Testimonial {
-  const avatar = mapImage(item.avatar);
+  const poster = mapImage(item.poster);
 
   return {
-    name: item.name ?? "",
-    quote: item.quote ?? "",
-    avatarUrl: avatar?.imageUrl ?? "",
-    avatarAlt: avatar?.imageAlt ?? "",
+    name: item.name?.trim() || undefined,
+    videoUrl: item.video?.asset?.url ?? "",
+    posterUrl: poster?.imageUrl,
+    alt: item.name?.trim() || "Customer testimonial video",
   };
 }
 
@@ -195,7 +195,9 @@ function mapTestimonialSection(
 ): TestimonialSectionContent {
   return {
     heading: section.heading,
-    testimonials: (section.testimonials ?? []).map(mapTestimonial),
+    testimonials: (section.testimonials ?? [])
+      .map(mapTestimonial)
+      .filter((testimonial) => testimonial.videoUrl),
   };
 }
 

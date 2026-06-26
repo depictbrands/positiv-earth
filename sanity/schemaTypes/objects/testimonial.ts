@@ -7,22 +7,30 @@ export const testimonial = defineType({
   fields: [
     defineField({
       name: "name",
-      title: "Name",
+      title: "Name / Label",
+      description:
+        "Internal label, also used as the video's accessible description.",
       type: "string",
     }),
     defineField({
-      name: "quote",
-      title: "Quote",
-      type: "text",
-      rows: 4,
+      name: "video",
+      title: "Video",
+      description: "Upload an MP4 (9:16 portrait). Plays on hover.",
+      type: "file",
+      options: { accept: "video/*" },
     }),
     defineField({
-      name: "avatar",
-      title: "Avatar",
+      name: "poster",
+      title: "Poster image",
+      description:
+        "Optional still shown before the video plays (e.g. the first frame).",
       type: "imageWithAlt",
     }),
   ],
   preview: {
-    select: { title: "name", subtitle: "quote", media: "avatar.asset" },
+    select: { title: "name", media: "poster.asset" },
+    prepare({ title, media }) {
+      return { title: title || "Testimonial", media };
+    },
   },
 });
