@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+import ElfsightWhatsAppChat from "@/components/layout/ElfsightWhatsAppChat";
 import Footer from "@/components/layout/Footer";
 import SiteHeader from "@/components/layout/SiteHeader";
 
@@ -26,6 +27,7 @@ export default function SiteChrome({ children }: { children: ReactNode }) {
       <SiteHeader />
       {children}
       {showFooter ? <Footer /> : null}
+      <ElfsightWhatsAppChat />
     </>
   );
 }
