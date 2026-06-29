@@ -33,7 +33,7 @@ export default function SiteChrome({
     <>
       <SiteHeader logo={logo} />
       {children}
-      {showFooter ? <Footer /> : null}
+      {showFooter ? <Footer logo={logo} /> : null}
       <ElfsightWhatsAppChat />
     </>
   );

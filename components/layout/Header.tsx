@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 import Logo from "@/components/ui/Logo";
+import { useAdaptiveLogoSurface } from "@/hooks/useAdaptiveLogoSurface";
 import type { LogoContent } from "@/types/logo-content";
 
 const NAV_ITEMS = [
@@ -157,6 +158,8 @@ function HeaderNavButton({
 export default function Header({ className, style, logo }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const logoAnchorRef = useRef<HTMLDivElement>(null);
+  const logoSurface = useAdaptiveLogoSurface(logoAnchorRef);
 
   const closeMenu = () => setOpen(false);
 
@@ -169,13 +172,15 @@ export default function Header({ className, style, logo }: HeaderProps) {
           height: "var(--size-header-height)",
         }}
       >
-        <Logo
-          variant="header"
-          priority
-          className="relative z-10 shrink-0"
-          imageUrl={logo?.headerLogoUrl}
-          imageAlt={logo?.headerLogoAlt}
-        />
+        <div ref={logoAnchorRef} className="relative z-10 shrink-0">
+          <Logo
+            variant="header"
+            priority
+            imageUrl={logo?.headerLogoUrl}
+            imageAlt={logo?.headerLogoAlt}
+            surface={logoSurface}
+          />
+        </div>
 
         <div
           className="absolute left-1/2 top-0 -translate-x-1/2"
@@ -218,6 +223,7 @@ export default function Header({ className, style, logo }: HeaderProps) {
             priority
             imageUrl={logo?.headerLogoUrl}
             imageAlt={logo?.headerLogoAlt}
+            surface={logoSurface}
           />
 
           <button

@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import ExpeditionOverviewAccordion from "@/components/ui/ExpeditionOverviewAccordion";
+import ProcessTimeline from "@/components/ui/ProcessTimeline";
 import type {
   ItineraryOverviewContent,
   ItineraryProcessStep,
@@ -85,7 +86,6 @@ function resolveContent(content?: ItineraryOverviewContent): ItineraryOverviewCo
 // Presentational — content arrives via props.
 export default function Overview({ content }: OverviewProps) {
   const resolved = resolveContent(content);
-  const lastStep = resolved.process.length - 1;
 
   return (
     <section
@@ -123,28 +123,17 @@ export default function Overview({ content }: OverviewProps) {
           </div>
         </div>
 
-        {/* Process timeline */}
-        <ol className="flex flex-col gap-10 lg:flex-row lg:gap-0">
-          {resolved.process.map((step, index) => (
-            <li key={`${step.title}-${index}`} className="flex flex-1 flex-col gap-4">
-              <div className="flex items-center" aria-hidden="true">
-                <span className="block size-2 shrink-0 rounded-full bg-base-white" />
-                {index < lastStep ? (
-                  <span className="hidden h-px flex-1 bg-base-white lg:block" />
-                ) : null}
-              </div>
+        {/* Curation process: titled process timeline, nudged down from the row above */}
+        <div
+          className="mt-3 flex flex-col"
+          style={{ gap: "var(--spacing-itinerary-overview-copy-gap)" }}
+        >
+          <h3 className="w-full font-body text-p2 text-base-white">
+            Curation Process
+          </h3>
 
-              <div className="flex flex-col gap-1 lg:pr-4">
-                <p className="font-body text-itinerary-overview-step-title text-base-white">
-                  {step.title}
-                </p>
-                <p className="font-open-sans text-itinerary-overview-step-text text-base-white">
-                  {step.description}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
+          <ProcessTimeline steps={resolved.process} />
+        </div>
       </div>
     </section>
   );

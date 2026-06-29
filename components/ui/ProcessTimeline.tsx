@@ -1,0 +1,83 @@
+"use client";
+
+import { useState } from "react";
+
+import type { ItineraryProcessStep } from "@/types/itinerary-overview-content";
+
+function cn(...values: Array<string | false | null | undefined>) {
+  return values.filter(Boolean).join(" ");
+}
+
+type ProcessTimelineProps = {
+  steps: ItineraryProcessStep[];
+  className?: string;
+};
+
+// Horizontal process timeline (Connect → Reflect). Default state shows only the
+// continuous track line with a dot per step and the titles tilted 30° above each
+// dot. Hovering (or keyboard-focusing) a title turns that step the accent color
+// and reveals its left-aligned description below the dot, while the other titles
+// fade. Leaving the title returns the whole timeline to its default state.
+export default function ProcessTimeline({ steps, className }: ProcessTimelineProps) {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const lastStep = steps.length - 1;
+
+  return (
+    <ol className={cn("relative flex w-full", className)}>
+      {steps.map((step, index) => {
+        const isActive = activeIndex === index;
+        const isDimmed = activeIndex !== null && !isActive;
+
+        return (
+          <li key={`${step.title}-${index}`} className="relative flex flex-1 flex-col">
+            {/* Title, tilted 30° above the dot. Drives the hover/focus state. */}
+            <div className="relative h-20">
+              <button
+                type="button"
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                onFocus={() => setActiveIndex(index)}
+                onBlur={() => setActiveIndex(null)}
+                className={cn(
+                  "absolute bottom-0 left-0 origin-bottom-left rotate-[-30deg] whitespace-nowrap rounded-card-corner font-body text-itinerary-overview-step-title transition-[color,opacity] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-base-white focus-visible:ring-offset-2 focus-visible:ring-offset-base-black motion-reduce:transition-none",
+                  isActive ? "text-itinerary-accent" : "text-base-white",
+                  isDimmed ? "opacity-30" : "opacity-100",
+                )}
+              >
+                {step.title}
+              </button>
+            </div>
+
+            {/* Dot sitting on the continuous track line. Each step but the last
+                draws the segment reaching the next dot, so the line is unbroken. */}
+            <div className="relative flex h-2 items-center">
+              {index < lastStep ? (
+                <span
+                  aria-hidden="true"
+                  className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-base-white"
+                />
+              ) : null}
+              <span
+                aria-hidden="true"
+                className="relative block size-2 rounded-full bg-base-white"
+              />
+            </div>
+
+            {/* Description, left-aligned under the dot, revealed only while active. */}
+            <div className="relative h-24">
+              <p
+                aria-hidden={!isActive}
+                className={cn(
+                  "pointer-events-none absolute left-0 top-4 w-56 text-left font-open-sans text-itinerary-overview-step-text text-base-white transition-opacity duration-300 motion-reduce:transition-none",
+                  isActive ? "opacity-100" : "opacity-0",
+                )}
+              >
+                {step.description}
+              </p>
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}

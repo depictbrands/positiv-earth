@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import Logo from "@/components/ui/Logo";
+import type { LogoContent } from "@/types/logo-content";
 
 const QUICK_LINKS = ["Home", "About", "Services", "FAQ", "Contact"] as const;
 
@@ -17,6 +18,7 @@ type FooterSocialLabel = (typeof FOOTER_SOCIAL_LINKS)[number]["label"];
 
 type FooterProps = {
   className?: string;
+  logo?: LogoContent;
 };
 
 function cn(...values: Array<string | false | null | undefined>) {
@@ -110,7 +112,7 @@ function FooterField({
   );
 }
 
-export default function Footer({ className }: FooterProps) {
+export default function Footer({ className, logo }: FooterProps) {
   return (
     <footer
       className={cn("footer-scale relative w-full overflow-hidden", className)}
@@ -125,7 +127,12 @@ export default function Footer({ className }: FooterProps) {
       />
 
       <div className="relative mx-auto w-full max-w-[var(--size-footer-width)] px-6 py-14 sm:px-10 lg:px-[var(--spacing-footer-logo-offset-x)] lg:py-[var(--spacing-footer-logo-offset-top)]">
-        <Logo variant="footer" />
+        <Logo
+          variant="footer"
+          imageUrl={logo?.headerLogoUrl}
+          imageAlt={logo?.headerLogoAlt}
+          surface="dark"
+        />
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:mt-[var(--spacing-footer-connect-gap)] lg:grid-cols-2 lg:gap-x-16">
           {/* Left column: connect, contact, quick links */}

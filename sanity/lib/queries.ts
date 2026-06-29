@@ -324,7 +324,10 @@ export const HOME_DESTINATIONS_QUERY = `*[_type == "homePage" && _id == "homePag
   }
 }`;
 
-export const LOGO_QUERY = `*[_type == "homePage" && _id == "homePage"][0].logo->{
+export const LOGO_QUERY = `coalesce(
+  *[_type == "homePage" && _id == "homePage"][0].logo->,
+  *[_type == "logo" && _id == "logo"][0]
+){
   headerLogo {
     asset,
     alt
