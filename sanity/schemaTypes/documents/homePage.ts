@@ -12,6 +12,14 @@ export const homePage = defineType({
       initialValue: "Home page",
     }),
     defineField({
+      name: "logo",
+      title: "Logo & favicon",
+      description:
+        "Site-wide header logo and browser favicon. Select the Logo document (create one under Content → Logo if needed).",
+      type: "reference",
+      to: [{ type: "logo" }],
+    }),
+    defineField({
       name: "hero",
       title: "Hero",
       type: "heroSection",

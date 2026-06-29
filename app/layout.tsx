@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Merriweather, Merriweather_Sans, Open_Sans, Raleway } from "next/font/google";
 import "./globals.css";
 import SiteChrome from "@/components/layout/SiteChrome";
+import { getLogo } from "@/sanity/lib/getLogo";
 
 const merriweather = Merriweather({
   variable: "--ff-merriweather",
@@ -29,16 +30,29 @@ const openSans = Open_Sans({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Positiv Earth",
-  description: "A boutique travel advisory for the culturally curious. ",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const logo = await getLogo();
 
-export default function RootLayout({
+  return {
+    title: "Positiv Earth",
+    description: "A boutique travel advisory for the culturally curious. ",
+    ...(logo.faviconUrl
+      ? {
+          icons: {
+            icon: logo.faviconUrl,
+          },
+        }
+      : {}),
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const logo = await getLogo();
+
   return (
     <html
       lang="en"
@@ -46,7 +60,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome logo={logo}>{children}</SiteChrome>
       </body>
     </html>
   );

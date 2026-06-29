@@ -323,3 +323,13 @@ export const HOME_DESTINATIONS_QUERY = `*[_type == "homePage" && _id == "homePag
     alt
   }
 }`;
+
+export const LOGO_QUERY = `*[_type == "homePage" && _id == "homePage"][0].logo->{
+  headerLogo {
+    asset,
+    alt
+  },
+  favicon {
+    asset
+  }
+}`;

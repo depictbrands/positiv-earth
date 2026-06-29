@@ -4,6 +4,8 @@ type LogoProps = {
   variant?: "header" | "footer";
   className?: string;
   imageClassName?: string;
+  imageUrl?: string;
+  imageAlt?: string;
   priority?: boolean;
 };
 
@@ -15,11 +17,17 @@ export default function Logo({
   variant = "header",
   className,
   imageClassName,
+  imageUrl,
+  imageAlt = "Positiv Earth",
+  priority = false,
 }: LogoProps) {
   const textClass =
     variant === "footer"
       ? "font-display text-footer-logo text-base-white"
       : "font-display text-header-logo text-base-white";
+
+  const showHeaderImage =
+    variant === "header" && Boolean(imageUrl?.trim());
 
   return (
     <Link
@@ -30,9 +38,24 @@ export default function Logo({
         className,
       )}
     >
-      <span aria-hidden="true" className={cn(textClass, imageClassName)}>
-        [logo]
-      </span>
+      {showHeaderImage ? (
+        // SVG/PNG from Sanity — native <img> keeps vector logos crisp.
+        <img
+          src={imageUrl}
+          alt={imageAlt}
+          width={240}
+          height={56}
+          fetchPriority={priority ? "high" : undefined}
+          className={cn(
+            "h-[var(--size-header-height)] w-auto max-w-none object-contain object-left",
+            imageClassName,
+          )}
+        />
+      ) : (
+        <span aria-hidden="true" className={cn(textClass, imageClassName)}>
+          [logo]
+        </span>
+      )}
     </Link>
   );
 }

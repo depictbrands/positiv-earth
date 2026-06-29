@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, type CSSProperties, type ReactNode } from "react";
 
 import Logo from "@/components/ui/Logo";
+import type { LogoContent } from "@/types/logo-content";
 
 const NAV_ITEMS = [
   { label: "About", href: "/about" },
@@ -16,6 +17,7 @@ const NAV_ITEMS = [
 type HeaderProps = {
   className?: string;
   style?: CSSProperties;
+  logo?: LogoContent;
 };
 
 function cn(...values: Array<string | false | null | undefined>) {
@@ -152,7 +154,7 @@ function HeaderNavButton({
   );
 }
 
-export default function Header({ className, style }: HeaderProps) {
+export default function Header({ className, style, logo }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -167,7 +169,13 @@ export default function Header({ className, style }: HeaderProps) {
           height: "var(--size-header-height)",
         }}
       >
-        <Logo variant="header" priority className="relative z-10 shrink-0" />
+        <Logo
+          variant="header"
+          priority
+          className="relative z-10 shrink-0"
+          imageUrl={logo?.headerLogoUrl}
+          imageAlt={logo?.headerLogoAlt}
+        />
 
         <div
           className="absolute left-1/2 top-0 -translate-x-1/2"
@@ -205,7 +213,12 @@ export default function Header({ className, style }: HeaderProps) {
           className="flex items-center gap-4 rounded-header-corner px-5"
           style={{ height: "var(--size-header-height)", ...glassStyle }}
         >
-          <Logo variant="header" priority />
+          <Logo
+            variant="header"
+            priority
+            imageUrl={logo?.headerLogoUrl}
+            imageAlt={logo?.headerLogoAlt}
+          />
 
           <button
             type="button"
