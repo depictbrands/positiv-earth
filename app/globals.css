@@ -1001,15 +1001,22 @@
   --text-quiz-question--font-weight: 600;
 }
 
+/*
+ * `clip` (not `hidden`) hides horizontal overflow without forcing overflow-y to
+ * `auto` — `hidden` would turn html AND body into separate scroll containers,
+ * and above 1512 (where vw-based widths nudge content past the viewport) those
+ * nested scrollers caused the scroll to "catch" once and added phantom white
+ * space below the footer. `clip` keeps the viewport as the single scroller.
+ */
 html {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   background: var(--color-surface);
   color: var(--color-text);
   font-family: var(--font-body);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Line-by-line slide-up text reveal (SplitType + GSAP) */
@@ -1482,6 +1489,9 @@ body {
 
   /* Section height + container / element widths + heights */
   --size-hero-height: max(61.375rem, 64.947vw);
+  /* Hero content box scales with the title type (80rem @1512 → 84.656vw) so the
+     title doesn't false-wrap above 1512 while the heading-2 font keeps growing. */
+  --size-itinerary-hero-content-width: max(80rem, 84.656vw);
   --size-itinerary-overview-width: max(88.5rem, 93.651vw);
   --size-itinerary-overview-copy-width: max(31.8125rem, 33.664vw);
   --size-itinerary-overview-map-width: max(44rem, 46.561vw);

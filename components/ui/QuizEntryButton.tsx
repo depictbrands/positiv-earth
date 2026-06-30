@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { isExternalHref } from "@/lib/isExternalHref";
+
 type QuizEntryButtonProps = {
   children: ReactNode;
   /** Explicit accessible name when `children` is not plain text. */
@@ -66,13 +68,27 @@ export default function QuizEntryButton({
   const resolvedAriaLabel = resolveAriaLabel(ariaLabel, children);
 
   if (href && !disabled) {
+    const linkProps = {
+      onClick,
+      ...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {}),
+      className: baseClassName,
+    };
+
+    if (isExternalHref(href)) {
+      return (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          {...linkProps}
+        >
+          <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
+        </a>
+      );
+    }
+
     return (
-      <Link
-        href={href}
-        onClick={onClick}
-        {...(resolvedAriaLabel ? { "aria-label": resolvedAriaLabel } : {})}
-        className={baseClassName}
-      >
+      <Link href={href} {...linkProps}>
         <QuizEntryButtonContent>{children}</QuizEntryButtonContent>
       </Link>
     );

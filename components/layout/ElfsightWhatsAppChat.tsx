@@ -11,10 +11,17 @@ export default function ElfsightWhatsAppChat() {
         src="https://elfsightcdn.com/platform.js"
         strategy="lazyOnload"
       />
-      <div
-        className={`elfsight-app-${ELFSIGHT_APP_ID}`}
-        data-elfsight-app-lazy
-      />
+      {/* The chat itself renders as a fixed floating button, but this mount
+          element sits in normal flow (a flex item of <body>) and reserves
+          vertical space, which showed as white space below the footer. The
+          zero-height clipped wrapper removes that in-flow footprint; the fixed
+          widget escapes the clip and still displays. */}
+      <div className="h-0 overflow-clip">
+        <div
+          className={`elfsight-app-${ELFSIGHT_APP_ID}`}
+          data-elfsight-app-lazy
+        />
+      </div>
     </>
   );
 }

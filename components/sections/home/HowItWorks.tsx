@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import MoreDetailButton from "@/components/ui/MoreDetailButton";
+import { isExternalHref } from "@/lib/isExternalHref";
 import Turntable from "@/components/ui/Turntable";
 import type {
   HowItWorksContent,
@@ -70,11 +71,9 @@ export default function HowItWorks({
     >
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-[var(--color-how-it-works-bg-fallback)] bg-no-repeat"
+        className="absolute inset-0 bg-[var(--color-how-it-works-bg-fallback)] bg-cover bg-center bg-no-repeat lg:bg-[position:var(--size-how-it-works-bg-position-x)_0] lg:bg-[length:var(--size-how-it-works-bg-size)]"
         style={{
           backgroundImage: `url("${imageUrl}")`,
-          backgroundPosition: "var(--size-how-it-works-bg-position-x) 0",
-          backgroundSize: "var(--size-how-it-works-bg-size)",
         }}
       />
       <div
@@ -121,12 +120,23 @@ export default function HowItWorks({
           </p>
 
           {cta ? (
-            <Link
-              href={cta.href}
-              className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
-            >
-              <MoreDetailButton variant="light">{cta.label}</MoreDetailButton>
-            </Link>
+            isExternalHref(cta.href) ? (
+              <a
+                href={cta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
+              >
+                <MoreDetailButton variant="light">{cta.label}</MoreDetailButton>
+              </a>
+            ) : (
+              <Link
+                href={cta.href}
+                className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-black"
+              >
+                <MoreDetailButton variant="light">{cta.label}</MoreDetailButton>
+              </Link>
+            )
           ) : null}
         </div>
       </div>
