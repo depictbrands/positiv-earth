@@ -107,8 +107,8 @@
  * footer-logo-offset-top | --spacing-footer-logo-offset-top         | 86px
  * footer-main-offset-top | --spacing-footer-main-offset-top         | 203px
  * footer-left-column-width | --size-footer-left-column-width        | 648px
- * footer-connect-gap    | --spacing-footer-connect-gap              | 18px
- * footer-connect-copy-gap | --spacing-footer-connect-copy-gap       | 13px
+ * footer-connect-gap    | --spacing-footer-connect-gap              | 16px
+ * footer-connect-copy-gap | --spacing-footer-connect-copy-gap       | 16px
  * footer-support-width  | --size-footer-support-width               | 648px
  * footer-social-gap     | --spacing-footer-social-gap               | 17px
  * footer-social-icon    | --size-footer-social-icon                 | 24px
@@ -116,6 +116,9 @@
  * footer-contact-gap    | --spacing-footer-contact-gap              | 63px
  * footer-contact-column-width | --size-footer-contact-column-width  | 409px
  * footer-contact-copy-gap | --spacing-footer-contact-copy-gap       | 8px
+ * footer-left-stack-gap | --spacing-footer-left-stack-gap           | 48px
+ * footer-main-grid-gap-y | --spacing-footer-main-grid-gap-y         | 48px
+ * footer-main-grid-gap-x | --spacing-footer-main-grid-gap-x         | 64px
  * footer-quick-links-gap | --spacing-footer-quick-links-gap         | 6px
  * footer-quick-links-width | --size-footer-quick-links-width        | 77px
  * footer-form-width     | --size-footer-form-width                  | 596px
@@ -465,12 +468,15 @@
   --spacing-footer-logo-offset-x: 3.875rem;
   --spacing-footer-logo-offset-top: 5.375rem;
   --spacing-footer-main-offset-top: 12.6875rem;
-  --spacing-footer-connect-gap: 1.125rem;
-  --spacing-footer-connect-copy-gap: 0.8125rem;
+  --spacing-footer-connect-gap: 1rem;
+  --spacing-footer-connect-copy-gap: 1rem;
   --spacing-footer-social-gap: 1.0625rem;
   --spacing-footer-contact-offset-top: 24.875rem;
   --spacing-footer-contact-gap: 3.9375rem;
   --spacing-footer-contact-copy-gap: 0.5rem;
+  --spacing-footer-left-stack-gap: 3rem;
+  --spacing-footer-main-grid-gap-y: 3rem;
+  --spacing-footer-main-grid-gap-x: 4rem;
   --spacing-footer-quick-links-gap: 0.375rem;
   --spacing-footer-form-offset-x: 50.875rem;
   --spacing-footer-form-offset-top: 9.875rem;
@@ -932,10 +938,10 @@
   --text-footer-form-label--letter-spacing: 0em;
   --text-footer-form-label--font-weight: 600;
 
-  --text-footer-form-placeholder: 0.625rem;
+  --text-footer-form-placeholder: 1rem;
   --text-footer-form-placeholder--line-height: 1.25rem;
   --text-footer-form-placeholder--letter-spacing: 0em;
-  --text-footer-form-placeholder--font-weight: 600;
+  --text-footer-form-placeholder--font-weight: 400;
 
   --text-footer-legal: 1rem;
   --text-footer-legal--line-height: 1.875rem;
@@ -963,7 +969,7 @@
   --text-nav--font-weight: 400;
 
   --text-quick-link-footer: 1.25rem;
-  --text-quick-link-footer--line-height: 1.5625rem;
+  --text-quick-link-footer--line-height: 1.5;
   --text-quick-link-footer--letter-spacing: 0em;
   --text-quick-link-footer--font-weight: 400;
 
@@ -1641,16 +1647,16 @@ body {
   --text-footer-legal: max(1rem, 1.058vw);
   --text-quick-link-footer: max(1.25rem, 1.323vw);
   --text-cta-button: max(1.25rem, 1.323vw);
-  /* Contact info + quick links now use body-1; scale it with the footer too
-     (unitless 1.5 line-height already tracks the font). */
+  /* Contact info + quick links now use body-1; scale it with the footer too. */
   --text-body-1: max(1.25rem, 1.323vw);
+  --text-body-1--line-height: 1.5;
 
   /* Non-form copy line-heights track the font above 1512 (each fixed rem → its
      vw equivalent at the frame) so they don't tighten as the type scales up.
-     Heading uses a unitless ratio already; the form fields are left as-is. */
+     Heading uses a unitless ratio already. */
   --text-footer-support--line-height: max(1.25rem, 1.323vw);
-  --text-quick-link-footer--line-height: max(1.5625rem, 1.653vw);
   --text-footer-legal--line-height: max(1.875rem, 1.984vw);
+  --text-footer-form-placeholder--line-height: max(1.25rem, 1.323vw);
 
   /* Widths */
   --size-footer-width: max(94.5rem, 100vw);
@@ -1663,11 +1669,14 @@ body {
   /* Spacing */
   --spacing-footer-logo-offset-x: max(3.875rem, 4.101vw);
   --spacing-footer-logo-offset-top: max(5.375rem, 5.688vw);
-  --spacing-footer-connect-gap: max(1.125rem, 1.19vw);
-  --spacing-footer-connect-copy-gap: max(0.8125rem, 0.86vw);
+  --spacing-footer-connect-gap: max(1rem, 1.058vw);
+  --spacing-footer-connect-copy-gap: max(1rem, 1.058vw);
   --spacing-footer-social-gap: max(1.0625rem, 1.124vw);
   --spacing-footer-contact-gap: max(3.9375rem, 4.167vw);
   --spacing-footer-contact-copy-gap: max(0.5rem, 0.529vw);
+  --spacing-footer-left-stack-gap: max(3rem, 3.175vw);
+  --spacing-footer-main-grid-gap-y: max(3rem, 3.175vw);
+  --spacing-footer-main-grid-gap-x: max(4rem, 4.233vw);
   --spacing-footer-quick-links-gap: max(0.375rem, 0.397vw);
   --spacing-footer-form-sections-gap: max(2.625rem, 2.778vw);
   --spacing-footer-form-row-gap: max(2.4375rem, 2.579vw);

@@ -93,7 +93,7 @@ function FooterField({
 }) {
   return (
     <label className={cn("flex flex-col text-base-white", className)}>
-      <span className="font-raleway text-footer-form-label">{label}</span>
+      <span className="font-body text-body-1">{label}</span>
       {placeholder ? (
         <span
           className="font-raleway text-footer-form-placeholder"
@@ -140,11 +140,14 @@ export default function Footer({ className, logo }: FooterProps) {
           surface="dark"
         />
 
-        <div className="mt-12 grid grid-cols-1 gap-12 lg:mt-[var(--spacing-footer-connect-gap)] lg:grid-cols-2 lg:gap-x-16">
+        <div className="mt-12 grid grid-cols-1 gap-y-[var(--spacing-footer-main-grid-gap-y)] lg:mt-[var(--spacing-footer-connect-gap)] lg:grid-cols-2 lg:gap-x-[var(--spacing-footer-main-grid-gap-x)]">
           {/* Left column: connect copy + contact stacked, with quick links
               pulled up beside them so it top-aligns with the heading and form */}
           <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[var(--spacing-footer-contact-gap)]">
-            <div className="flex flex-col gap-12 lg:max-w-[var(--size-footer-support-width)]">
+            <div
+              className="flex flex-col lg:max-w-[var(--size-footer-support-width)]"
+              style={{ gap: "var(--spacing-footer-left-stack-gap)" }}
+            >
               <section
                 aria-labelledby="footer-connect-heading"
                 className="flex flex-col items-start"
@@ -218,12 +221,14 @@ export default function Footer({ className, logo }: FooterProps) {
               >
                 <a
                   href="mailto:positivearth@jorgefrivera.com"
-                  className="font-open-sans text-body-1 underline transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+                  className="font-body text-body-1 underline transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
                 >
                   positivearth@jorgefrivera.com
                 </a>
-                <p className="font-open-sans text-body-1">+1 (401) 538-4703</p>
-                <p className="font-open-sans text-body-1">
+                <p className="font-body text-body-1">
+                  +1 (401) 538-4703
+                </p>
+                <p className="font-body text-body-1">
                   Rhode Island • Serving travelers worldwide
                 </p>
               </section>
@@ -238,7 +243,7 @@ export default function Footer({ className, logo }: FooterProps) {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className="font-open-sans text-body-1 transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+                  className="font-body text-body-1 transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
                 >
                   {item.label}
                 </Link>
