@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 
-import MoreDetailButton from "@/components/ui/MoreDetailButton";
 import type { BrandStoryContent } from "@/types/brand-story-content";
 
 const DEFAULT_IMAGE_URL =
@@ -20,10 +18,6 @@ const DEFAULT_CONTENT: BrandStoryContent = {
   ],
   imageUrl: DEFAULT_IMAGE_URL,
   imageAlt: "Traveler smiling at a mountain destination",
-  cta: {
-    label: "About PositivEarth",
-    href: "/about",
-  },
 };
 
 type BrandStoryProps = {
@@ -54,10 +48,6 @@ export default function BrandStory({
   const [expanded, setExpanded] = useState(false);
   const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
   const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
-  const ctaLabel = content.cta?.label?.trim() || DEFAULT_CONTENT.cta?.label;
-  const ctaHref = content.cta?.href?.trim() || DEFAULT_CONTENT.cta?.href;
-  const cta =
-    ctaLabel && ctaHref ? { label: ctaLabel, href: ctaHref } : undefined;
 
   return (
     <section
@@ -118,15 +108,6 @@ export default function BrandStory({
               </svg>
             </button>
           </div>
-
-          {cta ? (
-            <Link
-              href={cta.href}
-              className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-            >
-              <MoreDetailButton variant="dark">{cta.label}</MoreDetailButton>
-            </Link>
-          ) : null}
         </div>
       </div>
 

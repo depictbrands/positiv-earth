@@ -3,7 +3,13 @@ import Link from "next/link";
 import Logo from "@/components/ui/Logo";
 import type { LogoContent } from "@/types/logo-content";
 
-const QUICK_LINKS = ["Home", "About", "Services", "FAQ", "Contact"] as const;
+const QUICK_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
+] as const;
 
 /** Set each profile URL here. Leave empty to hide that icon from the footer row. */
 const FOOTER_SOCIAL_LINKS = [
@@ -135,113 +141,109 @@ export default function Footer({ className, logo }: FooterProps) {
         />
 
         <div className="mt-12 grid grid-cols-1 gap-12 lg:mt-[var(--spacing-footer-connect-gap)] lg:grid-cols-2 lg:gap-x-16">
-          {/* Left column: connect, contact, quick links */}
-          <div className="flex flex-col gap-12">
-            <section
-              aria-labelledby="footer-connect-heading"
-              className="flex flex-col items-start"
-              style={{ gap: "var(--spacing-footer-connect-gap)" }}
-            >
-              <div
-                className="flex w-full max-w-[var(--size-footer-support-width)] flex-col items-start"
-                style={{ gap: "var(--spacing-footer-connect-copy-gap)" }}
+          {/* Left column: connect copy + contact stacked, with quick links
+              pulled up beside them so it top-aligns with the heading and form */}
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between lg:gap-[var(--spacing-footer-contact-gap)]">
+            <div className="flex flex-col gap-12 lg:max-w-[var(--size-footer-support-width)]">
+              <section
+                aria-labelledby="footer-connect-heading"
+                className="flex flex-col items-start"
+                style={{ gap: "var(--spacing-footer-connect-gap)" }}
               >
-                <h2
-                  id="footer-connect-heading"
-                  className="font-body text-footer-heading text-base-white"
+                <div
+                  className="flex w-full max-w-[var(--size-footer-support-width)] flex-col items-start"
+                  style={{ gap: "var(--spacing-footer-connect-copy-gap)" }}
                 >
-                  Connect with Us
-                </h2>
-                <p
-                  className="font-body text-footer-support"
-                  style={{ color: "var(--color-footer-muted-text)" }}
+                  <h2
+                    id="footer-connect-heading"
+                    className="font-body text-footer-heading text-base-white"
+                  >
+                    Connect with Us
+                  </h2>
+                  <p className="font-body text-footer-support text-base-white">
+                    <span className="font-semibold">
+                      Travel confidently. Connect deeply. Experience more.
+                    </span>
+                    <br />
+                    Cultural travel planning + coaching—so you don&apos;t just visit
+                    places… you belong in them.
+                  </p>
+                </div>
+
+                <div
+                  className="flex flex-wrap items-center text-base-white"
+                  style={{ gap: "var(--spacing-footer-social-gap)" }}
                 >
-                  Travel confidently. Connect deeply. Experience more.
-                  <br />
-                  Cultural travel planning + coaching—so you don&apos;t just visit
-                  places… you belong in them.
-                </p>
-              </div>
+                  {FOOTER_SOCIAL_LINKS.map((item) => {
+                    const iconBoxClassName =
+                      "focus-ring-white inline-flex size-[var(--size-footer-social-icon)] transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full";
+                    const icon = (
+                      <>
+                        <span className="sr-only">{item.label}</span>
+                        <SocialIcon label={item.label} />
+                      </>
+                    );
 
-              <div
-                className="flex flex-wrap items-center text-base-white"
-                style={{ gap: "var(--spacing-footer-social-gap)" }}
-              >
-                {FOOTER_SOCIAL_LINKS.map((item) => {
-                  const iconBoxClassName =
-                    "focus-ring-white inline-flex size-[var(--size-footer-social-icon)] transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full";
-                  const icon = (
-                    <>
-                      <span className="sr-only">{item.label}</span>
-                      <SocialIcon label={item.label} />
-                    </>
-                  );
+                    if (item.href.trim()) {
+                      return (
+                        <a
+                          key={item.label}
+                          href={item.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={iconBoxClassName}
+                        >
+                          {icon}
+                        </a>
+                      );
+                    }
 
-                  if (item.href.trim()) {
                     return (
-                      <a
+                      <span
                         key={item.label}
-                        href={item.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className={iconBoxClassName}
+                        aria-hidden="true"
                       >
                         {icon}
-                      </a>
+                      </span>
                     );
-                  }
+                  })}
+                </div>
+              </section>
 
-                  return (
-                    <span
-                      key={item.label}
-                      className={iconBoxClassName}
-                      aria-hidden="true"
-                    >
-                      {icon}
-                    </span>
-                  );
-                })}
-              </div>
-            </section>
-
-            <section
-              aria-label="Contact information and quick links"
-              className="flex flex-col gap-10 sm:flex-row sm:gap-[var(--spacing-footer-contact-gap)]"
-            >
-              <div
+              <section
+                aria-label="Contact information"
                 className="flex w-full max-w-[var(--size-footer-contact-column-width)] flex-col items-start text-base-white"
                 style={{ gap: "var(--spacing-footer-contact-copy-gap)" }}
               >
                 <a
                   href="mailto:positivearth@jorgefrivera.com"
-                  className="font-open-sans text-quick-link-footer underline transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+                  className="font-open-sans text-body-1 underline transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
                 >
                   positivearth@jorgefrivera.com
                 </a>
-                <p className="font-open-sans text-quick-link-footer">
-                  +1 (401) 538-4703
-                </p>
-                <p className="font-open-sans text-quick-link-footer">
+                <p className="font-open-sans text-body-1">+1 (401) 538-4703</p>
+                <p className="font-open-sans text-body-1">
                   Rhode Island • Serving travelers worldwide
                 </p>
-              </div>
+              </section>
+            </div>
 
-              <nav
-                aria-label="Footer"
-                className="flex flex-col items-start text-base-white"
-                style={{ gap: "var(--spacing-footer-quick-links-gap)" }}
-              >
-                {QUICK_LINKS.map((item) => (
-                  <Link
-                    key={item}
-                    href="#"
-                    className="font-open-sans text-quick-link-footer transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-                  >
-                    {item}
-                  </Link>
-                ))}
-              </nav>
-            </section>
+            <nav
+              aria-label="Footer"
+              className="flex flex-col items-start text-base-white"
+              style={{ gap: "var(--spacing-footer-quick-links-gap)" }}
+            >
+              {QUICK_LINKS.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="font-open-sans text-body-1 transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
           </div>
 
           {/* Right column: contact form */}
@@ -318,7 +320,15 @@ export default function Footer({ className, logo }: FooterProps) {
           </div>
 
           <p className="font-open-sans text-footer-legal">
-            Design &amp; Development by Depict Brands
+            Design &amp; Development by{" "}
+            <a
+              href="https://depictbrands.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline transition-opacity hover:opacity-80 active:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+            >
+              Depict Brands
+            </a>
           </p>
         </section>
       </div>

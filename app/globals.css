@@ -588,7 +588,7 @@
   --size-footer-width: 94.5rem;
   --size-footer-height: 41.3125rem;
   --size-footer-left-column-width: 40.5rem;
-  --size-footer-support-width: 40.5rem;
+  --size-footer-support-width: 26rem;
   --size-footer-social-icon: 1.5rem;
   --size-footer-contact-column-width: 25.5625rem;
   --size-footer-quick-links-width: 4.8125rem;
@@ -856,7 +856,12 @@
   --text-p2--font-weight: 300;
 
   --text-cta-button: 1.25rem;
-  --text-cta-button--line-height: 1.5rem;
+  /* Unitless ratio (24/20 = 1.2) so the line box scales with the font wherever
+     the *-scale classes uncap --text-cta-button above 1512. A fixed 1.5rem here
+     stayed put while the font grew, shrinking the line box below the glyph so the
+     QuizEntryButton's overflow-hidden label clipped descenders (the "g" in
+     "Design Your Travel"). Byte-for-byte 24px at the 1.25rem base. */
+  --text-cta-button--line-height: 1.2;
   --text-cta-button--letter-spacing: 0.03em;
   --text-cta-button--font-weight: 600;
 
@@ -1595,6 +1600,9 @@ body {
   --text-footer-legal: max(1rem, 1.058vw);
   --text-quick-link-footer: max(1.25rem, 1.323vw);
   --text-cta-button: max(1.25rem, 1.323vw);
+  /* Contact info + quick links now use body-1; scale it with the footer too
+     (unitless 1.5 line-height already tracks the font). */
+  --text-body-1: max(1.25rem, 1.323vw);
 
   /* Non-form copy line-heights track the font above 1512 (each fixed rem → its
      vw equivalent at the frame) so they don't tighten as the type scales up.
@@ -1605,7 +1613,7 @@ body {
 
   /* Widths */
   --size-footer-width: max(94.5rem, 100vw);
-  --size-footer-support-width: max(40.5rem, 42.857vw);
+  --size-footer-support-width: max(26rem, 27.513vw);
   --size-footer-contact-column-width: max(25.5625rem, 27.05vw);
   --size-footer-form-width: max(37.25rem, 39.418vw);
   --size-footer-social-icon: max(1.5rem, 1.587vw);

@@ -158,7 +158,7 @@ function SearchInputSegment({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="focus-ring-ink order-2 min-w-0 w-full bg-transparent font-body text-search-bar text-base-black caret-[var(--color-base-black)] placeholder:font-body placeholder:text-search-bar placeholder:text-[var(--color-search-bar-ink-light)]"
+        className="order-2 min-w-0 w-full bg-transparent font-body text-search-bar text-base-black caret-[var(--color-base-black)] focus:outline-none placeholder:font-body placeholder:text-search-bar placeholder:text-[var(--color-search-bar-ink-light)]"
       />
       <span
         aria-hidden="true"
