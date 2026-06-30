@@ -26,7 +26,9 @@ const BOX_H = 408;
 const CENTER_X = 315.5;
 const CENTER_Y = 229.5;
 const RING_RADIUS = 178.5;
-const LABEL_RADIUS = 206;
+// Labels sit further out than the ring so the gliding plane never crowds the
+// type — the gap (LABEL_RADIUS − RING_RADIUS) is the clearance the plane keeps.
+const LABEL_RADIUS = 224;
 const DOT_RADIUS = 5;
 
 // "Nomads Airplane" mark that leads the highlight arc. Its native viewBox is

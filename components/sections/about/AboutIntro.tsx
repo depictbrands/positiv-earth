@@ -198,12 +198,12 @@ export default function AboutIntro({ content }: AboutIntroProps) {
     >
       {/* Mobile / tablet: the absolute vh/vw composition can't reflow, so the
           portrait and lines stack in normal flow below the desktop breakpoint. */}
-      <div className="flex flex-col items-center gap-10 px-6 py-24 sm:px-10 lg:hidden">
+      <div className="flex flex-col items-start gap-10 px-6 py-24 sm:px-10 lg:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element -- placeholder data-URI until CMS image */}
         <img
           src={portraitImageUrl}
           alt={portraitImageAlt}
-          className="w-full max-w-[var(--size-about-intro-portrait-width)] rounded-card-corner object-cover"
+          className="w-full max-w-[var(--size-about-intro-portrait-width)] self-center rounded-card-corner object-cover"
         />
         {stats.map((stat) => (
           <Stat key={stat.emphasis} {...stat} />

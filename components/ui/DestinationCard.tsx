@@ -122,7 +122,17 @@ function DestinationCardContent({
 
         <p
           id={locationsId}
-          className="w-full font-open-sans text-destination-card-locations text-base-white"
+          className={`font-open-sans text-destination-card-locations text-base-white ${
+            isPortrait ? "shrink-0" : "whitespace-nowrap"
+          }`}
+          style={{
+            width: isPortrait
+              ? "var(--size-destination-card-portrait-locations-width)"
+              : "var(--size-destination-card-locations-width)",
+            maxWidth: isPortrait
+              ? "var(--size-destination-card-portrait-locations-width)"
+              : "100%",
+          }}
         >
           {locations}
         </p>

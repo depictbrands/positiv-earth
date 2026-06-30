@@ -88,7 +88,7 @@ export default function HowItWorks({
         className="relative z-10 flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
       >
         <div
-          className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-end gap-12 lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
+          className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-end gap-12 lg:ml-[var(--spacing-how-it-works-turntable-offset-x)] lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
         >
           <div className="w-full">
             <Turntable className="shrink-0" steps={content.steps} />

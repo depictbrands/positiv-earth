@@ -82,8 +82,10 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
 
       {/* Hero title — staggered display composition (Figma node 731:429/432/433):
           small lead word, large emphasized middle, small trailing word. The
-          desktop percentages reproduce each word's center point within the
-          1512×982 frame so the layout scales fluidly; below lg it collapses to a
+          percentages reproduce each word's center point within the 1512×982
+          frame; because they're relative to the hero box the diagonal stagger
+          (lead upper-left, emphasis center, trail lower-right) holds at every
+          width — so the same layout is kept on mobile instead of collapsing to a
           centered stack. A single sr-only <h1> carries the full title. */}
       <h1
         id="services-hero-heading"
@@ -91,29 +93,9 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
       >
         <span className="sr-only">{resolved.headline}</span>
 
-        {/* Mobile / tablet: centered stack */}
-        <span
-          aria-hidden="true"
-          className="flex flex-1 flex-col items-center justify-center gap-2 px-6 text-center lg:hidden"
-        >
+        <span aria-hidden="true" className="absolute inset-0">
           {lead ? (
-            <TextReveal className="text-heading-3">{lead}</TextReveal>
-          ) : null}
-          {emphasis ? (
-            <TextReveal className="text-heading-1">{emphasis}</TextReveal>
-          ) : null}
-          {trail ? (
-            <TextReveal className="text-heading-3">{trail}</TextReveal>
-          ) : null}
-        </span>
-
-        {/* Desktop: staggered diagonal composition */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 hidden lg:block"
-        >
-          {lead ? (
-            <TextReveal className="absolute left-[32.14%] top-[35.39%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-3">
+            <TextReveal className="absolute left-[32.14%] top-[43%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-3 lg:top-[35.39%]">
               {lead}
             </TextReveal>
           ) : null}
@@ -123,7 +105,7 @@ export default function ServicesHero({ content }: ServicesHeroProps) {
             </TextReveal>
           ) : null}
           {trail ? (
-            <TextReveal className="absolute left-[53.47%] top-[64.61%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-3">
+            <TextReveal className="absolute left-[53.47%] top-[57%] -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-heading-3 lg:top-[64.61%]">
               {trail}
             </TextReveal>
           ) : null}

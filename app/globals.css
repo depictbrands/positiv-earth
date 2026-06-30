@@ -52,6 +52,7 @@
  * destination-card-header-gap | --spacing-destination-card-header-gap | 16px
  * destination-card-copy-width | --size-destination-card-copy-width | 387px
  * destination-card-title-width | --size-destination-card-title-width | 295px
+ * destination-card-locations-width | --size-destination-card-locations-width | 387px
  * destination-card-vertical-divider-height | --size-destination-card-vertical-divider-height | 32px
  * destination-card-duration-label-offset-x | --spacing-destination-card-duration-label-offset-x | 25px
  * destination-card-duration-label-offset-y | --spacing-destination-card-duration-label-offset-y | 18px
@@ -61,6 +62,7 @@
  * destination-card-portrait-width | --size-destination-card-portrait-width | 21.375rem
  * destination-card-portrait-height | --size-destination-card-portrait-height | 40.625rem
  * destination-card-portrait-overlay-height | --size-destination-card-portrait-overlay-height | 14.4375rem
+ * destination-card-portrait-locations-width | --size-destination-card-portrait-locations-width | 288px
  * search-button-width   | --size-search-button-width                | 160px
  * search-button-height  | --size-search-button-height               | 56px
  * search-button-padding-left | --spacing-search-button-padding-left  | 52px
@@ -189,6 +191,7 @@
  * how-it-works-turntable-width | --size-how-it-works-turntable-width | 706px
  * how-it-works-turntable-height | --size-how-it-works-turntable-height | 698px
  * how-it-works-turntable-gap | --spacing-how-it-works-turntable-gap | 145px
+ * how-it-works-turntable-offset-x | --spacing-how-it-works-turntable-offset-x | 32px
  * how-it-works-copy-width | --size-how-it-works-copy-width          | 473px
  * how-it-works-copy-offset-x | --spacing-how-it-works-copy-offset-x | 991px
  * how-it-works-copy-offset-top | --spacing-how-it-works-copy-offset-top | 531px
@@ -527,6 +530,7 @@
   --spacing-text-reveal-line-buffer-italic:0.5em;
   --spacing-abouthero-role-gap: 2rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
+  --spacing-how-it-works-turntable-offset-x: 2.5rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
   --spacing-how-it-works-copy-offset-top: 33.1875rem;
   --spacing-how-it-works-copy-gap: 4rem;
@@ -572,6 +576,7 @@
 
   --size-destination-card-copy-width: 24.1875rem;
   --size-destination-card-title-width: 18.4375rem;
+  --size-destination-card-locations-width: 24.1875rem;
   --size-destination-card-vertical-divider-height: 2rem;
   --size-destination-card-landscape-width: 43.8125rem;
   --size-destination-card-landscape-height: 40.625rem;
@@ -579,6 +584,7 @@
   --size-destination-card-portrait-width: 21.375rem;
   --size-destination-card-portrait-height: 40.625rem;
   --size-destination-card-portrait-overlay-height: 18rem;
+  --size-destination-card-portrait-locations-width: 18rem;
   --size-search-bar-width: 76rem;
   --size-search-bar-height: 5rem;
   --size-search-bar-segment-width: 21rem;
@@ -1186,6 +1192,8 @@ body {
   --size-destination-card-portrait-overlay-height: max(18rem, 19.048vw);
   --size-destination-card-copy-width: max(24.1875rem, 25.595vw);
   --size-destination-card-title-width: max(18.4375rem, 19.51vw);
+  --size-destination-card-locations-width: max(24.1875rem, 25.595vw);
+  --size-destination-card-portrait-locations-width: max(18rem, 19.048vw);
   --size-destination-card-vertical-divider-height: max(2rem, 2.116vw);
 
   /* Testimonial card + pagination geometry */
@@ -1219,6 +1227,7 @@ body {
   --spacing-brand-story-copy-gap: max(4.1875rem, 4.431vw);
   --spacing-brand-story-body-gap: max(1.25rem, 1.323vw);
   --spacing-how-it-works-turntable-gap: max(9.0625rem, 9.59vw);
+  --spacing-how-it-works-turntable-offset-x: max(2.5rem, 2.646vw);
   --spacing-how-it-works-copy-offset-x: max(61.9375rem, 65.542vw);
   --spacing-how-it-works-copy-gap: max(3.125rem, 3.307vw);
   --spacing-how-it-works-body-gap: max(1.5rem, 1.587vw);
@@ -1519,6 +1528,8 @@ body {
   --size-destination-card-portrait-overlay-height: max(18rem, 19.048vw);
   --size-destination-card-copy-width: max(24.1875rem, 25.595vw);
   --size-destination-card-title-width: max(18.4375rem, 19.51vw);
+  --size-destination-card-locations-width: max(24.1875rem, 25.595vw);
+  --size-destination-card-portrait-locations-width: max(18rem, 19.048vw);
   --size-destination-card-vertical-divider-height: max(2rem, 2.116vw);
   /* Header geometry */
   --size-header-height: max(3.5rem, 3.704vw);
@@ -1598,15 +1609,20 @@ body {
  * the gap and they overlap. Re-declaring the header tokens here (scoped to the
  * header subtree, so the CTA-section button keeps its own --text-cta-button)
  * shrinks the bar height, logo, and CTA type fluidly with the viewport so the
- * two sit side-by-side without colliding. clamp() floors are reached on the
- * narrowest phones and the values grow back to the design frame by 640px.
+ * two sit side-by-side without colliding. The mobile dropdown menu shares this
+ * subtree, so its label type (--text-nav) and rounded box (the active-pill
+ * corner) shrink in lockstep with the bar and stay visually consistent.
+ * clamp() floors are reached on the narrowest phones and the values grow back
+ * to the design frame by 640px.
  */
 @media (max-width: 639.98px) {
   .header-scale {
     --size-header-height: clamp(2.5rem, 8.5vw, 3.5rem);
     --text-cta-button: clamp(0.8125rem, 3.4vw, 1.25rem);
     --text-header-logo: clamp(1rem, 3.8vw, 1.5rem);
+    --text-nav: clamp(0.8125rem, 3.4vw, 1rem);
     --radius-header-corner: clamp(1.75rem, 6vw, 3.125rem);
+    --radius-header-active-pill-corner: clamp(0.875rem, 3vw, 1.5625rem);
   }
 }
 
