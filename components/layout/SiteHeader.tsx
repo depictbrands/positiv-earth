@@ -9,6 +9,9 @@ type SiteHeaderProps = {
   logo?: LogoContent;
 };
 
+const QUIZ_HREF = "/design-your-travel";
+const QUIZ_LABEL = "Design Your Travel";
+
 // Single site-wide top bar rendered once outside <main> (see SiteChrome) as the
 // page's one top-level banner landmark — logo, nav, and quiz CTA all live
 // inside this <header>. Pins to the viewport and slides up on downward scroll,
@@ -25,22 +28,20 @@ export default function SiteHeader({ logo }: SiteHeaderProps) {
       className={`header-scale fixed inset-x-0 top-0 z-50 px-4 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
     >
       <div className="relative w-full">
-        {/* Mobile/tablet: logo+hamburger bar sits compact on the left, quiz CTA
-            on the right. The bar sizes to its content (no flex-1) so it never
-            stretches into the CTA. Desktop reverts to centered nav + absolute
-            CTA. */}
-        <div className="flex items-start justify-between gap-2 sm:gap-4 lg:block">
-          <div className="min-w-0 lg:w-full lg:flex lg:justify-center">
-            <Header logo={logo} />
-          </div>
-          {/* Anchored to the right with the same inset as the logo's left, so
-              the header stays symmetric (equal gap to both viewport edges) at
-              every width instead of drifting via a left-percentage. */}
-          <div className="shrink-0 lg:absolute lg:top-0 lg:right-[var(--spacing-header-inset-x)]">
-            <QuizEntryButton href="/design-your-travel">
-              Design Your Travel
-            </QuizEntryButton>
-          </div>
+        {/* Mobile/tablet: the bar centers logo+hamburger and the menu opens as a
+            full-viewport overlay (handled inside Header, with the quiz CTA at
+            its bottom-right). Desktop reverts to centered nav + absolute CTA. */}
+        <div className="w-full lg:flex lg:justify-center">
+          <Header
+            logo={logo}
+            quizCta={{ href: QUIZ_HREF, label: QUIZ_LABEL }}
+          />
+        </div>
+        {/* Desktop-only quiz CTA, anchored top-right with the same inset as the
+            logo's left so the header stays symmetric. On mobile this CTA lives
+            inside the menu overlay instead. */}
+        <div className="hidden lg:absolute lg:top-0 lg:right-[var(--spacing-header-inset-x)] lg:block">
+          <QuizEntryButton href={QUIZ_HREF}>{QUIZ_LABEL}</QuizEntryButton>
         </div>
       </div>
     </header>

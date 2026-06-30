@@ -2,11 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 
 import Logo from "@/components/ui/Logo";
+import QuizEntryButton from "@/components/ui/QuizEntryButton";
 import { useAdaptiveLogoSurface } from "@/hooks/useAdaptiveLogoSurface";
 import type { LogoContent } from "@/types/logo-content";
+
+/** Editorial CTA shown bottom-right of the mobile menu overlay. */
+type QuizCta = { href: string; label: string };
 
 const NAV_ITEMS = [
   { label: "About", href: "/about" },
@@ -19,10 +31,23 @@ type HeaderProps = {
   className?: string;
   style?: CSSProperties;
   logo?: LogoContent;
+  /** Quiz CTA rendered inside the mobile menu overlay (bottom-right). */
+  quizCta?: QuizCta;
 };
 
 function cn(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
+}
+
+// True only after client mount (false during SSR/first paint), so the menu
+// overlay portal — which needs document.body — never runs on the server.
+const subscribeNoop = () => () => {};
+function useHasMounted() {
+  return useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false,
+  );
 }
 
 const glassStyle: CSSProperties = {
@@ -155,16 +180,44 @@ function HeaderNavButton({
   );
 }
 
-export default function Header({ className, style, logo }: HeaderProps) {
+export default function Header({
+  className,
+  style,
+  logo,
+  quizCta,
+}: HeaderProps) {
   const [open, setOpen] = useState(false);
+  // The overlay is portaled to <body> so it escapes the header's transform
+  // (the slide-on-scroll translate makes the header a containing block for
+  // fixed descendants, which would otherwise clip a fixed inset-0 overlay to
+  // the bar). Gate the portal on mount so SSR/first paint stay identical.
+  const mounted = useHasMounted();
   const pathname = usePathname();
   const logoAnchorRef = useRef<HTMLDivElement>(null);
   const logoSurface = useAdaptiveLogoSurface(logoAnchorRef);
 
   const closeMenu = () => setOpen(false);
 
+  // While the menu is open: lock body scroll and close on Escape.
+  useEffect(() => {
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   return (
-    <div className={cn("relative lg:w-full", className)} style={style}>
+    <div className={cn("relative w-full", className)} style={style}>
       {/* Desktop: logo pinned left, glass pill nav centered in the viewport */}
       <div
         className="relative hidden lg:flex lg:w-full lg:items-center lg:px-[var(--spacing-header-inset-x)]"
@@ -212,10 +265,11 @@ export default function Header({ className, style, logo }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile / tablet: compact glass bar with a toggleable menu */}
-      <div className="relative lg:hidden">
+      {/* Mobile / tablet: logo + hamburger centered together in a glass bar.
+          The menu opens as a full-viewport overlay (portaled below). */}
+      <div className="lg:hidden">
         <div
-          className="flex items-center gap-2 rounded-header-corner px-4 sm:gap-4 sm:px-5"
+          className="relative z-50 flex items-center justify-center gap-2 rounded-header-corner px-4 sm:gap-4 sm:px-5"
           style={{ height: "var(--size-header-height)", ...glassStyle }}
         >
           <Logo
@@ -228,11 +282,11 @@ export default function Header({ className, style, logo }: HeaderProps) {
 
           <button
             type="button"
-            aria-label="Toggle navigation menu"
+            aria-label={open ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((value) => !value)}
-            className="ml-auto inline-flex size-9 items-center justify-center text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
+            className="inline-flex size-9 items-center justify-center text-base-white transition-opacity hover:opacity-80 active:opacity-70 focus-visible:rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
           >
             <svg
               aria-hidden="true"
@@ -258,33 +312,64 @@ export default function Header({ className, style, logo }: HeaderProps) {
             </svg>
           </button>
         </div>
-
-        {open ? (
-          <nav
-            id="mobile-nav"
-            aria-label="Main navigation menu"
-            className="absolute left-0 z-30 mt-2 flex min-w-48 flex-col rounded-[var(--radius-header-active-pill-corner)] p-2 text-base-white"
-            style={{
-              ...glassStyle,
-              gap: "calc(4 * var(--spacing-header-active-pill-offset))",
-            }}
-          >
-            {NAV_ITEMS.map((item) => (
-              <HeaderNavButton
-                key={item.label}
-                variant="menu"
-                className="w-full"
-                buttonClassName="w-full px-4 py-2 text-left"
-                href={"href" in item ? item.href : undefined}
-                isActive={"href" in item ? pathname === item.href : false}
-                onNavigate={closeMenu}
-              >
-                {item.label}
-              </HeaderNavButton>
-            ))}
-          </nav>
-        ) : null}
       </div>
+
+      {/* Full-viewport menu overlay — fades in/out (never an instant swap) and
+          is invisible + untabbable when closed. Portaled to <body> so it fills
+          the viewport instead of being clipped by the header's transform. */}
+      {mounted
+        ? createPortal(
+            <div
+              id="mobile-nav"
+              aria-hidden={!open}
+              onClick={(event) => {
+                // Tap on the empty backdrop (not a link/CTA) closes the menu.
+                if (event.target === event.currentTarget) closeMenu();
+              }}
+              className={cn(
+                "fixed inset-0 z-40 flex flex-col px-6 pb-12 pt-[calc(var(--size-header-height)+5rem)] transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none lg:hidden",
+                open ? "visible opacity-100" : "invisible opacity-0",
+              )}
+              style={{
+                backgroundColor: "var(--color-quiz-overlay)",
+                backdropFilter: "blur(var(--blur-header-glass))",
+                WebkitBackdropFilter: "blur(var(--blur-header-glass))",
+              }}
+            >
+              <nav
+                aria-label="Main navigation menu"
+                className="flex flex-col items-center gap-6 text-center"
+              >
+                {NAV_ITEMS.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={closeMenu}
+                      className={cn(
+                        "font-display text-heading-3 text-base-white transition-opacity focus-visible:rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white",
+                        isActive ? "opacity-100" : "opacity-70 hover:opacity-100",
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {quizCta ? (
+                <div className="mt-auto flex justify-end">
+                  <QuizEntryButton href={quizCta.href} onClick={closeMenu}>
+                    {quizCta.label}
+                  </QuizEntryButton>
+                </div>
+              ) : null}
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
