@@ -1590,6 +1590,27 @@ body {
 }
 
 /*
+ * Header — scale DOWN below the `sm` (640px) breakpoint.
+ *
+ * The header is authored at the 1512px frame and otherwise never shrinks, so on
+ * a phone the logo + hamburger bar and the full-size "Design Your Travel" pill
+ * are wider than the viewport — the mobile row's justify-between then collapses
+ * the gap and they overlap. Re-declaring the header tokens here (scoped to the
+ * header subtree, so the CTA-section button keeps its own --text-cta-button)
+ * shrinks the bar height, logo, and CTA type fluidly with the viewport so the
+ * two sit side-by-side without colliding. clamp() floors are reached on the
+ * narrowest phones and the values grow back to the design frame by 640px.
+ */
+@media (max-width: 639.98px) {
+  .header-scale {
+    --size-header-height: clamp(2.5rem, 8.5vw, 3.5rem);
+    --text-cta-button: clamp(0.8125rem, 3.4vw, 1.25rem);
+    --text-header-logo: clamp(1rem, 3.8vw, 1.5rem);
+    --radius-header-corner: clamp(1.75rem, 6vw, 3.125rem);
+  }
+}
+
+/*
  * Shared Footer — uniform scale-up above the 1512px design frame.
  *
  * Unlike the per-route page classes, this one is applied to the Footer element

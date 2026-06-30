@@ -22,14 +22,14 @@ export default function SiteHeader({ logo }: SiteHeaderProps) {
 
   return (
     <header
-      className={`header-scale fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
+      className={`header-scale fixed inset-x-0 top-0 z-50 px-4 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
     >
       <div className="relative w-full">
         {/* Mobile/tablet: logo+hamburger bar sits compact on the left, quiz CTA
             on the right. The bar sizes to its content (no flex-1) so it never
             stretches into the CTA. Desktop reverts to centered nav + absolute
             CTA. */}
-        <div className="flex items-start justify-between gap-4 lg:block">
+        <div className="flex items-start justify-between gap-2 sm:gap-4 lg:block">
           <div className="min-w-0 lg:w-full lg:flex lg:justify-center">
             <Header logo={logo} />
           </div>

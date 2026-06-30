@@ -215,7 +215,7 @@ export default function Header({ className, style, logo }: HeaderProps) {
       {/* Mobile / tablet: compact glass bar with a toggleable menu */}
       <div className="relative lg:hidden">
         <div
-          className="flex items-center gap-4 rounded-header-corner px-5"
+          className="flex items-center gap-2 rounded-header-corner px-4 sm:gap-4 sm:px-5"
           style={{ height: "var(--size-header-height)", ...glassStyle }}
         >
           <Logo
