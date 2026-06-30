@@ -62,28 +62,28 @@ function DestinationCardContent({
         }}
       >
         <div
-          className="absolute inset-x-0 bottom-0 flex flex-col items-start"
+          className="absolute inset-x-0 bottom-0 box-border flex w-full min-w-0 max-w-full flex-col items-start"
           style={{
             gap: "var(--spacing-destination-card-copy-gap)",
             paddingInline: "var(--spacing-destination-card-copy-inset)",
             paddingBottom: "var(--spacing-destination-card-copy-inset)",
-            width:
-              "calc(100% - (var(--spacing-destination-card-copy-inset) * 2))",
             maxWidth: "var(--size-destination-card-copy-width)",
           }}
         >
         <div
-          className="flex w-full flex-col items-start"
+          className="flex w-full min-w-0 flex-col items-start"
           style={{ gap: "var(--spacing-destination-card-title-gap)" }}
         >
           <div
-            className="flex items-end text-base-white"
+            className="flex w-full min-w-0 items-end text-base-white"
             style={{ gap: "var(--spacing-destination-card-header-gap)" }}
           >
             <h3
               id={titleId}
               className={`font-display text-destination-card-title uppercase text-base-white ${
-                isPortrait ? "min-w-0 flex-1" : "whitespace-nowrap"
+                isPortrait
+                  ? "min-w-0 flex-1"
+                  : "min-w-0 flex-1 max-lg:whitespace-normal lg:whitespace-nowrap"
               }`}
               style={
                 isPortrait
@@ -122,16 +122,18 @@ function DestinationCardContent({
 
         <p
           id={locationsId}
-          className={`font-open-sans text-destination-card-locations text-base-white ${
-            isPortrait ? "shrink-0" : "whitespace-nowrap"
+          className={`w-full min-w-0 font-open-sans text-destination-card-locations text-base-white ${
+            isPortrait
+              ? "shrink-0"
+              : "max-lg:whitespace-normal lg:whitespace-nowrap"
           }`}
           style={{
             width: isPortrait
               ? "var(--size-destination-card-portrait-locations-width)"
-              : "var(--size-destination-card-locations-width)",
+              : undefined,
             maxWidth: isPortrait
               ? "var(--size-destination-card-portrait-locations-width)"
-              : "100%",
+              : "var(--size-destination-card-locations-width)",
           }}
         >
           {locations}
@@ -165,7 +167,7 @@ export default function DestinationCard({
 
   const boxClass = isNextItinerary
     ? `block w-full min-w-0 ${sizeClass}`
-    : `block w-full mx-auto lg:max-w-none ${sizeClass}`;
+    : `block w-full min-w-0 mx-auto lg:max-w-none ${sizeClass}`;
 
   const card = (
     <DestinationCardContent

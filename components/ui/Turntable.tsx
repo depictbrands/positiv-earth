@@ -30,6 +30,9 @@ const RING_RADIUS = 178.5;
 // type — the gap (LABEL_RADIUS − RING_RADIUS) is the clearance the plane keeps.
 const LABEL_RADIUS = 224;
 const DOT_RADIUS = 5;
+// Label line-height; halved, it's the vertical offset that keeps a single line
+// centered on its node and lets extra wrapped lines flow off the node instead.
+const LABEL_LINE_HEIGHT = 1.25;
 
 // "Nomads Airplane" mark that leads the highlight arc. Its native viewBox is
 // 2106×1053 and the nose points right (+x). It keeps a fixed 0° heading while
@@ -150,6 +153,7 @@ export default function Turntable({
       const labelPoint = getPoint(angle, LABEL_RADIUS);
 
       const dx = labelPoint.x - CENTER_X;
+      const dy = labelPoint.y - CENTER_Y;
       const isCentered = Math.abs(dx) < 40;
 
       let align: LabelAlign;
@@ -166,15 +170,22 @@ export default function Turntable({
         translateX = "-100%";
       }
 
+      // Below the ring's middle, pin the first line on the node (offset by half a
+      // line) so wrapped lines grow downward, away from the track; a single-line
+      // label is unchanged since -50% of one line equals half a line. This keeps
+      // a 2-line label (e.g. "Real-World Preparation") the same distance from the
+      // track as a 1-line one (e.g. "Cultural Briefing"). Elsewhere, center.
+      const translateY = dy > 40 ? `-${LABEL_LINE_HEIGHT / 2}em` : "-50%";
+
       const labelStyle: CSSProperties = {
         left: `${(labelPoint.x / BOX_W) * 100}%`,
         top: `${(labelPoint.y / BOX_H) * 100}%`,
         maxWidth: isCentered ? "46%" : "30%",
-        transform: `translate(${translateX}, -50%)`,
+        transform: `translate(${translateX}, ${translateY})`,
         // Scale labels with the turntable so they stay proportional on small
         // screens; 3.4cqw == the 24px turntable-tag token at the design width.
         fontSize: "min(var(--text-turntable-tag), 3.4cqw)",
-        lineHeight: "1.25",
+        lineHeight: `${LABEL_LINE_HEIGHT}`,
       };
 
       return { angle, fraction, dot, label, align, labelStyle };
@@ -447,7 +458,7 @@ export default function Turntable({
     <div
       ref={rootRef}
       className={cn(
-        "@container relative aspect-[702/408] w-full text-base-black",
+        "@container relative aspect-[702/408] w-full overflow-visible text-base-black",
         className,
       )}
       onMouseEnter={handleMouseEnter}

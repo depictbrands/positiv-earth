@@ -67,7 +67,7 @@ export default function HowItWorks({
   return (
     <section
       aria-labelledby="how-it-works-heading"
-      className="relative grid w-full grid-cols-1 overflow-hidden bg-base-white lg:min-h-[var(--size-brand-story-height)] lg:items-center lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
+      className="relative grid w-full grid-cols-1 overflow-x-visible overflow-y-hidden bg-base-white lg:min-h-[var(--size-brand-story-height)] lg:items-center lg:overflow-hidden lg:[grid-template-columns:var(--size-how-it-works-left-width)_1fr]"
     >
       <div
         aria-hidden="true"
@@ -85,10 +85,10 @@ export default function HowItWorks({
       />
 
       <div
-        className="relative z-10 flex w-full items-center justify-center overflow-hidden p-6 sm:p-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:p-0"
+        className="relative z-10 flex w-full items-center justify-center overflow-visible px-[max(var(--spacing-how-it-works-turntable-mobile-inset-x),16%)] py-6 sm:py-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:overflow-hidden lg:px-0 lg:py-0"
       >
         <div
-          className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-end gap-12 lg:ml-[var(--spacing-how-it-works-turntable-offset-x)] lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
+          className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-center gap-12 lg:ml-[var(--spacing-how-it-works-turntable-offset-x)] lg:items-end lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
         >
           <div className="w-full">
             <Turntable className="shrink-0" steps={content.steps} />

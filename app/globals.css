@@ -23,6 +23,7 @@
  * Raleway               | --font-raleway                            | Raleway
  * Open Sans             | --font-open-sans                          | Open Sans
  * heading-1             | --text-heading-1                          | 150px
+ * heading-1-line-height-mobile | --text-heading-1--line-height-mobile | 1 (hero stack)
  * heading-2             | --text-heading-2                          | 96px
  * itinerary-country-name | --text-itinerary-country-name            | 48px
  * itinerary-meta        | --text-itinerary-meta                     | 40px
@@ -195,6 +196,7 @@
  * how-it-works-turntable-height | --size-how-it-works-turntable-height | 698px
  * how-it-works-turntable-gap | --spacing-how-it-works-turntable-gap | 145px
  * how-it-works-turntable-offset-x | --spacing-how-it-works-turntable-offset-x | 32px
+ * how-it-works-turntable-mobile-inset-x | --spacing-how-it-works-turntable-mobile-inset-x | 56px
  * how-it-works-copy-width | --size-how-it-works-copy-width          | 473px
  * how-it-works-copy-offset-x | --spacing-how-it-works-copy-offset-x | 991px
  * how-it-works-copy-offset-top | --spacing-how-it-works-copy-offset-top | 531px
@@ -275,11 +277,14 @@
  * hero-height           | --size-hero-height                        | 982px
  * hero-content-width    | --size-hero-content-width                 | 1253px
  * hero-content-offset-top | --spacing-hero-content-offset-top       | 277px
+ * hero-content-inset-top-mobile | --spacing-hero-content-inset-top-mobile | header + clearance
  * hero-content-gap      | --spacing-hero-content-gap                | 50px
  * hero-subcopy-width    | --size-hero-subcopy-width                 | 869px
  * hero-search-offset-top | --spacing-hero-search-offset-top         | 708px
  * hero-headline-gap     | --spacing-hero-headline-gap               | 36px
+ * hero-headline-gap-mobile | --spacing-hero-headline-gap-mobile     | 16px
  * hero-headline-post-gap | --spacing-hero-headline-post-gap         | 40px
+ * hero-headline-post-gap-mobile | --spacing-hero-headline-post-gap-mobile | 20px
  * hero-headline-post-offset-x | --spacing-hero-headline-post-offset-x | 437px
  * hero-headline-post-offset-y | --spacing-hero-headline-post-offset-y | 145px
  * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.32em
@@ -526,17 +531,23 @@
   --spacing-next-itineraries-layout-gap: 6rem;
   --spacing-destinations-cta-offset-top: 111.4375rem;
   --spacing-hero-content-offset-top: 17.3125rem;
+  --spacing-hero-content-inset-top-mobile: calc(
+    var(--size-header-height) + 3.25rem
+  );
   --spacing-hero-content-gap: 3.125rem;
   --spacing-hero-search-offset-top: 44.25rem;
   --spacing-hero-headline-gap: 2.25rem;
+  --spacing-hero-headline-gap-mobile: 1rem;
   --spacing-hero-headline-post-gap: 2.5rem;
+  --spacing-hero-headline-post-gap-mobile: 1.25rem;
   --spacing-hero-headline-post-offset-x: 27.3125rem;
   --spacing-hero-headline-post-offset-y: 9.0625rem;
   --spacing-text-reveal-line-buffer: 0.32em;
   --spacing-text-reveal-line-buffer-italic:0.5em;
   --spacing-abouthero-role-gap: 2rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
-  --spacing-how-it-works-turntable-offset-x: 2.5rem;
+  --spacing-how-it-works-turntable-offset-x: 3rem;
+  --spacing-how-it-works-turntable-mobile-inset-x: 3.5rem;
   --spacing-how-it-works-copy-offset-x: 61.9375rem;
   --spacing-how-it-works-copy-offset-top: 33.1875rem;
   --spacing-how-it-works-copy-gap: 4rem;
@@ -769,6 +780,7 @@
    */
   --text-heading-1: clamp(3rem, 9.92vw, 9.375rem);
   --text-heading-1--line-height: 0.704;
+  --text-heading-1--line-height-mobile: 1;
   --text-heading-1--letter-spacing: 0em;
   --text-heading-1--font-weight: 400;
 
@@ -1084,6 +1096,21 @@ body {
 }
 
 /*
+ * Home hero — mobile/tablet headline stack.
+ * Desktop heading-1 uses a tight 0.704 ratio for the staggered composition;
+ * when the emphasis word sits above the post line, that ratio lets descenders
+ * collide with the row below. Loosen line-height here only, and stop the
+ * text-reveal line-wrapper's negative bottom margin from eating the flex gap.
+ */
+.hero-headline-mobile-stack .text-reveal .line-wrapper {
+  margin-bottom: 0;
+}
+
+.hero-headline-emphasis-mobile {
+  --text-heading-1--line-height: var(--text-heading-1--line-height-mobile);
+}
+
+/*
  * About page — uniform scale-up above the 1512px design frame.
  *
  * The About composition positions everything in vw/vh (tuned to the 1512 frame),
@@ -1233,7 +1260,8 @@ body {
   --spacing-brand-story-copy-gap: max(4.1875rem, 4.431vw);
   --spacing-brand-story-body-gap: max(1.25rem, 1.323vw);
   --spacing-how-it-works-turntable-gap: max(9.0625rem, 9.59vw);
-  --spacing-how-it-works-turntable-offset-x: max(2.5rem, 2.646vw);
+  --spacing-how-it-works-turntable-offset-x: max(3rem, 3.175vw);
+  --spacing-how-it-works-turntable-mobile-inset-x: max(3.5rem, 3.704vw);
   --spacing-how-it-works-copy-offset-x: max(61.9375rem, 65.542vw);
   --spacing-how-it-works-copy-gap: max(3.125rem, 3.307vw);
   --spacing-how-it-works-body-gap: max(1.5rem, 1.587vw);

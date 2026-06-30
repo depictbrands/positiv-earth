@@ -142,7 +142,7 @@ function SearchInputSegment({
 
   return (
     <div
-      className="flex w-full items-center lg:w-[var(--size-search-bar-segment-width)]"
+      className="flex w-full min-w-0 items-center xl:min-w-0 xl:flex-1 2xl:w-[var(--size-search-bar-segment-width)] 2xl:flex-none"
       style={{
         gap: "var(--spacing-search-bar-segment-gap)",
       }}
@@ -186,7 +186,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
   return (
     <div
-      className="flex w-full max-w-[var(--size-search-bar-width)] flex-col items-stretch gap-4 rounded-card-corner bg-base-white p-4 shadow-[var(--shadow-search-bar)] lg:h-[var(--size-search-bar-height)] lg:flex-row lg:items-center lg:gap-3 lg:rounded-search-bar-corner lg:p-0 lg:px-[var(--spacing-search-bar-padding-x)]"
+      className="flex w-full max-w-[var(--size-search-bar-width)] flex-col items-stretch gap-4 rounded-card-corner bg-base-white p-4 shadow-[var(--shadow-search-bar)] xl:h-[var(--size-search-bar-height)] xl:flex-row xl:items-center xl:gap-3 xl:rounded-search-bar-corner xl:p-0 xl:px-[var(--spacing-search-bar-padding-x)]"
     >
       <SearchInputSegment
         icon="where"
@@ -197,7 +197,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
       <span
         aria-hidden="true"
-        className="block h-px w-full shrink-0 lg:h-[var(--size-search-bar-divider-height)] lg:w-px"
+        className="block h-px w-full shrink-0 xl:h-[var(--size-search-bar-divider-height)] xl:w-px"
         style={{
           backgroundColor: "var(--color-search-bar-divider)",
         }}
@@ -212,7 +212,7 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 
       <span
         aria-hidden="true"
-        className="block h-px w-full shrink-0 lg:h-[var(--size-search-bar-divider-height)] lg:w-px"
+        className="block h-px w-full shrink-0 xl:h-[var(--size-search-bar-divider-height)] xl:w-px"
         style={{
           backgroundColor: "var(--color-search-bar-divider)",
         }}
@@ -225,8 +225,8 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
         placeholder="When do you want to go?"
       />
 
-      <div className="w-full lg:ml-auto lg:w-auto">
-        <SearchButton className="w-full lg:w-[var(--size-search-button-width)]" onClick={handleSearch} />
+      <div className="w-full xl:ml-auto xl:w-auto">
+        <SearchButton className="w-full xl:w-[var(--size-search-button-width)]" onClick={handleSearch} />
       </div>
     </div>
   );

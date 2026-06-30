@@ -70,7 +70,7 @@ export default function Hero({ content }: HeroProps) {
         style={{ backgroundColor: "var(--color-hero-overlay)" }}
       >
       <div
-        className="flex w-full flex-1 flex-col items-center justify-center px-6 py-12 text-center text-base-white"
+        className="flex w-full flex-1 flex-col items-center justify-center px-6 pb-12 pt-[var(--spacing-hero-content-inset-top-mobile)] text-center text-base-white lg:py-12"
         style={{ gap: "var(--spacing-hero-content-gap)" }}
       >
         <h1 id="hero-heading" className="sr-only">
@@ -79,22 +79,22 @@ export default function Hero({ content }: HeroProps) {
 
         <div
           aria-hidden="true"
-          className="mx-auto flex w-full flex-col items-center leading-none"
+          className="mx-auto flex w-full flex-col items-center lg:leading-none"
           style={{ maxWidth: "var(--size-hero-content-width)" }}
         >
           {/* Mobile / tablet: centered stack */}
           <div
-            className="flex flex-col items-center lg:hidden"
-            style={{ gap: "var(--spacing-hero-headline-post-gap)" }}
+            className="hero-headline-mobile-stack flex flex-col items-center lg:hidden"
+            style={{ gap: "var(--spacing-hero-headline-post-gap-mobile)" }}
           >
             <div
               className="flex flex-wrap items-center justify-center"
-              style={{ gap: "var(--spacing-hero-headline-gap)" }}
+              style={{ gap: "var(--spacing-hero-headline-gap-mobile)" }}
             >
               <TextReveal className="font-display text-heading-3 uppercase text-base-white">
                 {resolved.headline.pre}
               </TextReveal>
-              <TextReveal className="font-display text-heading-1 text-base-white">
+              <TextReveal className="hero-headline-emphasis-mobile font-display text-heading-1 text-base-white">
                 {resolved.headline.emphasis}
               </TextReveal>
             </div>
