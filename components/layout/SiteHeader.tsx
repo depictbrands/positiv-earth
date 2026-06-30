@@ -22,14 +22,17 @@ export default function SiteHeader({ logo }: SiteHeaderProps) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
+      className={`header-scale fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-0 lg:pt-6 ${topBarTransition} ${topBarTransform}`}
     >
       <div className="relative w-full">
         <div className="flex items-start justify-between gap-4 lg:block">
           <div className="min-w-0 flex-1 lg:w-full lg:flex lg:justify-center">
             <Header logo={logo} />
           </div>
-          <div className="shrink-0 lg:absolute lg:top-0 lg:left-[82.0767195767%]">
+          {/* Anchored to the right with the same inset as the logo's left, so
+              the header stays symmetric (equal gap to both viewport edges) at
+              every width instead of drifting via a left-percentage. */}
+          <div className="shrink-0 lg:absolute lg:top-0 lg:right-[var(--spacing-header-inset-x)]">
             <QuizEntryButton href="/design-your-travel">
               Design Your Travel
             </QuizEntryButton>

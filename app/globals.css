@@ -453,6 +453,9 @@
   --radius-card-corner: 0.625rem;
 
   --spacing-header-active-pill-offset: 0.3125rem;
+  /* Desktop header side inset — logo's left gap and the quiz CTA's right gap,
+     kept equal so the header is symmetric. 32px at the 1512 frame. */
+  --spacing-header-inset-x: 2rem;
   --spacing-search-bar-padding-x: 1.5rem;
   --spacing-search-bar-segment-gap: 1rem;
   --spacing-search-bar-focus-ring-offset: 0.125rem;
@@ -1125,6 +1128,10 @@ body {
   --text-p1: max(1.25rem, 1.323vw);
   --text-p2: max(1.5rem, 2.38vw);
   --text-hero-subcopy: max(1.25rem, 1.323vw);
+  /* Line-height tracks the font above 1512 (30px @1512 → 1.984vw) so the ratio
+     holds; without this the fixed 1.875rem made the line-height tighten as the
+     type scaled up past the frame. */
+  --text-hero-subcopy--line-height: max(1.875rem, 1.984vw);
   --text-destination-card-title: max(1.75rem, 2.38vw);
   --text-destination-card-duration: max(1.75rem, 2.38vw);
   --text-destination-card-duration-label: max(0.875rem, 0.926vw);
@@ -1543,6 +1550,31 @@ body {
 }
 
 /*
+ * Shared SiteHeader — uniform scale-up above the 1512px design frame.
+ *
+ * The fixed top bar (logo + glass nav + quiz CTA) lives in SiteChrome, a sibling
+ * of each page's <main>, so the per-page *-scale classes never reach it and the
+ * header would otherwise freeze at the 1512 frame while the page scaled up.
+ * Declaring the header's tokens here — as max(<1512 value>, <vw>) — cascades the
+ * scale-up to the whole header subtree on every route. At and below 1512 the vw
+ * is <= the design value so the header is byte-for-byte unchanged. The side inset
+ * (logo's left gap = quiz CTA's right gap) scales with it, keeping the header
+ * symmetric and centered at any width.
+ */
+.header-scale {
+  --text-cta-button: max(1.25rem, 1.323vw);
+  --text-nav: max(1rem, 1.058vw);
+  --text-header-logo: max(1.5rem, 1.587vw);
+  --size-header-height: max(3.5rem, 3.704vw);
+  --size-header-active-pill-width: max(6.1875rem, 6.548vw);
+  --size-header-active-pill-height: max(2.875rem, 3.042vw);
+  --spacing-header-active-pill-offset: max(0.3125rem, 0.331vw);
+  --spacing-header-inset-x: max(2rem, 2.116vw);
+  --radius-header-corner: max(3.125rem, 3.307vw);
+  --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
+}
+
+/*
  * Shared Footer — uniform scale-up above the 1512px design frame.
  *
  * Unlike the per-route page classes, this one is applied to the Footer element
@@ -1563,6 +1595,13 @@ body {
   --text-footer-legal: max(1rem, 1.058vw);
   --text-quick-link-footer: max(1.25rem, 1.323vw);
   --text-cta-button: max(1.25rem, 1.323vw);
+
+  /* Non-form copy line-heights track the font above 1512 (each fixed rem → its
+     vw equivalent at the frame) so they don't tighten as the type scales up.
+     Heading uses a unitless ratio already; the form fields are left as-is. */
+  --text-footer-support--line-height: max(1.25rem, 1.323vw);
+  --text-quick-link-footer--line-height: max(1.5625rem, 1.653vw);
+  --text-footer-legal--line-height: max(1.875rem, 1.984vw);
 
   /* Widths */
   --size-footer-width: max(94.5rem, 100vw);

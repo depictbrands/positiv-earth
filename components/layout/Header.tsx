@@ -167,7 +167,7 @@ export default function Header({ className, style, logo }: HeaderProps) {
     <div className={cn("relative lg:w-full", className)} style={style}>
       {/* Desktop: logo pinned left, glass pill nav centered in the viewport */}
       <div
-        className="relative hidden lg:flex lg:w-full lg:items-center lg:px-8"
+        className="relative hidden lg:flex lg:w-full lg:items-center lg:px-[var(--spacing-header-inset-x)]"
         style={{
           height: "var(--size-header-height)",
         }}
