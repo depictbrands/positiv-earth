@@ -539,7 +539,7 @@
   --spacing-hero-headline-gap: 2.25rem;
   --spacing-hero-headline-gap-mobile: 1rem;
   --spacing-hero-headline-post-gap: 2.5rem;
-  --spacing-hero-headline-post-gap-mobile: 1.25rem;
+  --spacing-hero-headline-post-gap-mobile: 0.7rem;
   --spacing-hero-headline-post-offset-x: 27.3125rem;
   --spacing-hero-headline-post-offset-y: 9.0625rem;
   --spacing-text-reveal-line-buffer: 0.32em;
@@ -780,7 +780,7 @@
    */
   --text-heading-1: clamp(3rem, 9.92vw, 9.375rem);
   --text-heading-1--line-height: 0.704;
-  --text-heading-1--line-height-mobile: 1;
+  --text-heading-1--line-height-mobile: 0.704;
   --text-heading-1--letter-spacing: 0em;
   --text-heading-1--font-weight: 400;
 
