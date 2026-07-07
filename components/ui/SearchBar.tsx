@@ -142,7 +142,7 @@ function SearchInputSegment({
 
   return (
     <div
-      className="flex w-full min-w-0 items-center xl:min-w-0 xl:flex-1 2xl:w-[var(--size-search-bar-segment-width)] 2xl:flex-none"
+      className="flex w-full min-w-0 items-center xl:min-w-0 xl:flex-1"
       style={{
         gap: "var(--spacing-search-bar-segment-gap)",
       }}

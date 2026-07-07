@@ -7,6 +7,15 @@ import type { Destination } from "@/types/destination";
 const PLACEHOLDER_IMAGE =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 342 650"><defs><linearGradient id="g" x1="0" x2="0.9" y1="0" y2="1"><stop stop-color="%236b8f8f"/><stop offset="1" stop-color="%23181818"/></linearGradient></defs><rect width="342" height="650" fill="url(%23g)"/></svg>';
 
+/** Render titles in Title Case regardless of how they're cased in the CMS
+ *  (content is currently stored uppercase). Lower-cases everything, then
+ *  capitalises the first letter of each word — accent-aware. */
+function toTitleCase(value: string) {
+  return value
+    .toLocaleLowerCase()
+    .replace(/(^|[\s-])(\p{L})/gu, (_, sep, ch) => sep + ch.toLocaleUpperCase());
+}
+
 type DestinationCardProps = {
   destination: Destination;
   orientation?: "landscape" | "portrait";
@@ -67,7 +76,12 @@ function DestinationCardContent({
             gap: "var(--spacing-destination-card-copy-gap)",
             paddingInline: "var(--spacing-destination-card-copy-inset)",
             paddingBottom: "var(--spacing-destination-card-copy-inset)",
-            maxWidth: "var(--size-destination-card-copy-width)",
+            // Portrait caps the copy block so text doesn't span the narrow
+            // card; landscape is wide, so let the header use the full card
+            // width (max-w-full) and keep "TITLE | N DAYS" on one line.
+            maxWidth: isPortrait
+              ? "var(--size-destination-card-copy-width)"
+              : undefined,
           }}
         >
         <div
@@ -75,48 +89,53 @@ function DestinationCardContent({
           style={{ gap: "var(--spacing-destination-card-title-gap)" }}
         >
           <div
-            className="flex w-full min-w-0 items-end text-base-white"
+            className="flex w-full min-w-0 flex-wrap items-end text-base-white"
             style={{ gap: "var(--spacing-destination-card-header-gap)" }}
           >
             <h3
               id={titleId}
-              className={`font-display text-destination-card-title uppercase text-base-white ${
-                isPortrait
-                  ? "min-w-0 flex-1"
-                  : "min-w-0 flex-1 max-lg:whitespace-normal lg:whitespace-nowrap"
-              }`}
+              className="font-display text-destination-card-title text-base-white"
               style={
                 isPortrait
                   ? { maxWidth: "var(--size-destination-card-title-width)" }
                   : undefined
               }
             >
-              {destination.name}
+              {toTitleCase(destination.name)}
             </h3>
 
-            <span
-              aria-hidden="true"
-              className="block w-px shrink-0 self-end bg-destination-card-divider"
-              style={{
-                height: "var(--size-destination-card-vertical-divider-height)",
-              }}
-            />
-
-            <span
-              id={durationId}
-              className="inline-flex shrink-0 items-end font-display text-destination-card-duration leading-none text-base-white"
+            {/* Divider + duration travel together as one unit, so on a
+                narrow card they wrap to the next line as a pair instead of the
+                divider being orphaned beside the title. */}
+            <div
+              className="flex shrink-0 items-end"
+              style={{ gap: "var(--spacing-destination-card-header-gap)" }}
             >
-              {destination.durationDays}
               <span
-                className="font-open-sans text-destination-card-duration-label leading-none"
+                aria-hidden="true"
+                className="block w-px self-end bg-destination-card-divider"
                 style={{
-                  marginLeft:
-                    "var(--spacing-destination-card-duration-label-offset-x)",
+                  height:
+                    "var(--size-destination-card-vertical-divider-height)",
                 }}
+              />
+
+              <span
+                id={durationId}
+                className="inline-flex items-end font-display text-destination-card-duration leading-none text-base-white"
               >
-                {" DAYS"}
+                {destination.durationDays}
+                <span
+                  className="font-open-sans text-destination-card-duration-label leading-none"
+                  style={{
+                    marginLeft:
+                      "var(--spacing-destination-card-duration-label-offset-x)",
+                  }}
+                >
+                  {" DAYS"}
+                </span>
               </span>
-            </span>
+            </div>
           </div>
         </div>
 

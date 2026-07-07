@@ -904,7 +904,7 @@
   --text-destination-card-duration-label--letter-spacing: 0em;
   --text-destination-card-duration-label--font-weight: 400;
 
-  --text-destination-card-locations: 1.5rem;
+  --text-destination-card-locations: clamp(1.167rem, 1.587vw, 1.5rem);
   --text-destination-card-locations--line-height: normal;
   --text-destination-card-locations--letter-spacing: 0em;
   --text-destination-card-locations--font-weight: 400;
@@ -1186,7 +1186,7 @@ body {
   --text-destination-card-title: max(1.75rem, 2.38vw);
   --text-destination-card-duration: max(1.75rem, 2.38vw);
   --text-destination-card-duration-label: max(0.875rem, 0.926vw);
-  --text-destination-card-locations: max(1.5rem, 1.587vw);
+  --text-destination-card-locations: max(1.167rem, 1.587vw);
   --text-turntable-tag: max(1.5rem, 1.587vw);
   --text-testimonial-card-name: max(1.25rem, 1.323vw);
   --text-testimonial-card-quote: max(1rem, 1.058vw);
@@ -1524,7 +1524,7 @@ body {
   --text-destination-card-title: max(1.75rem, 2.38vw);
   --text-destination-card-duration: max(1.75rem, 2.38vw);
   --text-destination-card-duration-label: max(0.875rem, 0.926vw);
-  --text-destination-card-locations: max(1.5rem, 1.587vw);
+  --text-destination-card-locations: max(1.167rem, 1.587vw);
   /* Shared Header + quiz button */
   --text-nav: max(1rem, 1.058vw);
   --text-header-logo: max(1.5rem, 1.587vw);
