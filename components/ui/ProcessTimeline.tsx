@@ -35,6 +35,17 @@ export default function ProcessTimeline({ steps, className }: ProcessTimelinePro
         const isActive = activeIndex === index;
         const isDimmed = activeIndex !== null && !isActive;
 
+        // On mobile the description box (w-16em) overflows the viewport for the
+        // trailing steps, whose dots sit near the right edge. Anchor the last two
+        // descriptions to the third-from-last dot so they open leftward and stay
+        // on screen; each li is flex-1, so one -100% offset equals one dot step.
+        // Desktop keeps every description left-aligned under its own dot.
+        const anchorIndex = steps.length - 3;
+        const mobileShift =
+          anchorIndex >= 0 && index > anchorIndex ? index - anchorIndex : 0;
+        const mobileLeftClass =
+          ["left-0", "left-[-100%]", "left-[-200%]"][mobileShift] ?? "left-0";
+
         return (
           <li key={`${step.title}-${index}`} className="relative flex flex-1 flex-col">
             {/* Title, tilted 30° above the dot. Drives the hover/focus state. */}
@@ -75,7 +86,9 @@ export default function ProcessTimeline({ steps, className }: ProcessTimelinePro
               <p
                 aria-hidden={!isActive}
                 className={cn(
-                  "pointer-events-none absolute left-0 top-[1.143em] w-[16em] text-left font-open-sans text-itinerary-overview-step-text text-base-white transition-opacity duration-300 motion-reduce:transition-none",
+                  "pointer-events-none absolute top-[1.143em] w-[16em] text-left font-open-sans text-itinerary-overview-step-text text-base-white transition-opacity duration-300 motion-reduce:transition-none",
+                  mobileLeftClass,
+                  "lg:left-0",
                   isActive ? "opacity-100" : "opacity-0",
                 )}
               >

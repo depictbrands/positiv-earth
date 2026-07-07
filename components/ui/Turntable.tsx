@@ -61,6 +61,20 @@ const MIN_STEP_MS = 220;
 const AUTO_STEP_MS = 1600;
 const EPSILON = 0.0005;
 
+// ---- Mobile linear timeline ----
+// Below the lg breakpoint HowItWorks stacks, so the ring is re-expressed as a
+// vertical timeline (see screenshot reference). Values per design: the tag type
+// scales fluidly, the icon column is as wide as the plane, labels sit a fixed
+// gap to its right, rows are evenly spaced, and the timeline clears the top of
+// the section. The animation state itself is shared with the ring — only the
+// projection differs.
+const MOBILE_TAG_FONT = "clamp(1rem, 1.59vw, 1.5rem)";
+const MOBILE_LINE_HEIGHT = 1.25;
+const MOBILE_TRACK_WIDTH = "1.5rem";
+const MOBILE_LABEL_GAP = "0.75rem";
+const MOBILE_TAG_GAP = "3rem";
+const MOBILE_TOP_OFFSET = "4rem";
+
 type LabelAlign = "left" | "center" | "right";
 
 type TurntableProps = {
@@ -75,6 +89,14 @@ type Point = {
 };
 
 type Phase = "idle" | "intro" | "steady";
+
+type MobileMetrics = {
+  lineX: number;
+  columnWidth: number;
+  width: number;
+  height: number;
+  dotYs: number[];
+};
 
 function cn(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
@@ -99,6 +121,19 @@ function getPoint(angle: number, radius: number): Point {
 // every motion reads with the same acceleration curve.
 function easeInOut(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
+// Project a ring fraction (0–1, the shared animation value) onto a vertical
+// pixel position on the mobile timeline. Nodes sit at i/itemCount; the final
+// segment wraps from the last node back to the first so the loop-based engine
+// (intro full sweep, auto-advance wrap) reads as the plane returning to the top.
+function mapFractionToY(fraction: number, dotYs: number[], itemCount: number) {
+  const seg = fraction * itemCount;
+  const index = ((Math.floor(seg) % itemCount) + itemCount) % itemCount;
+  const t = seg - Math.floor(seg);
+  const from = dotYs[index];
+  const to = dotYs[(index + 1) % itemCount];
+  return from + (to - from) * t;
 }
 
 function usePrefersReducedMotion() {
@@ -126,6 +161,8 @@ export default function Turntable({
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const rootRef = useRef<HTMLDivElement>(null);
+  const mobileRootRef = useRef<HTMLDivElement>(null);
+  const spanRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const rafRef = useRef<number | null>(null);
   const timeoutRef = useRef<number | null>(null);
   const introPlayedRef = useRef(false);
@@ -142,6 +179,7 @@ export default function Turntable({
   // Fraction of the ring (0–1) the highlight arc reveals, clockwise from the top.
   const [frontFraction, setFrontFraction] = useState(0);
   const [phase, setPhase] = useState<Phase>("idle");
+  const [mobileMetrics, setMobileMetrics] = useState<MobileMetrics | null>(null);
 
   // Even 72° spacing for five nodes, first node at the top, plus a derived
   // clockwise fraction (0 at top) used to place the highlight arc endpoint.
@@ -221,6 +259,62 @@ export default function Turntable({
       clearTimer();
     };
   }, []);
+
+  // Measure the mobile timeline's node positions so the shared animation state
+  // (front fraction / lit nodes) can be projected onto the vertical line. Runs
+  // whenever layout can change; the width==0 guard skips it while the block is
+  // display:none (desktop), and the ResizeObserver re-measures when it appears.
+  useEffect(() => {
+    const root = mobileRootRef.current;
+
+    if (!root) {
+      return;
+    }
+
+    const measure = () => {
+      const rootRect = root.getBoundingClientRect();
+
+      if (rootRect.width === 0) {
+        return;
+      }
+
+      const dotYs: number[] = [];
+      let lineX = 0;
+      let columnWidth = 0;
+
+      for (let index = 0; index < itemCount; index += 1) {
+        const span = spanRefs.current[index];
+
+        if (!span) {
+          return;
+        }
+
+        const rect = span.getBoundingClientRect();
+        dotYs[index] = rect.top - rootRect.top + rect.height / 2;
+        lineX = rect.left - rootRect.left + rect.width / 2;
+        columnWidth = rect.width;
+      }
+
+      setMobileMetrics({
+        lineX,
+        columnWidth,
+        width: rootRect.width,
+        height: rootRect.height,
+        dotYs,
+      });
+    };
+
+    measure();
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    window.addEventListener("resize", measure);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [itemCount, steps]);
 
   // Drive the highlight arc from its current position by `delta` of the ring
   // (always positive == clockwise) over `duration` ms, settling exactly on
@@ -454,93 +548,229 @@ export default function Turntable({
   const planeTransform = `translate(${leadPoint.x} ${leadPoint.y}) scale(${PLANE_SCALE}) translate(${-PLANE_CENTER_X} ${-PLANE_CENTER_Y})`;
   const showPlane = renderPhase !== "idle";
 
+  // Mobile timeline projection of the same state. Dot/stroke sizes derive from
+  // the measured column so they track the fluid tag type. The plane keeps its
+  // fixed heading (as on the ring); it just rides the vertical line.
+  const mobileDotRadius = mobileMetrics ? mobileMetrics.columnWidth / 6 : 0;
+  const mobileStroke = mobileMetrics ? mobileMetrics.columnWidth / 16 : 0;
+  const mobileTrackTop = mobileMetrics ? mobileMetrics.dotYs[0] : 0;
+  const mobileTrackBottom = mobileMetrics
+    ? mobileMetrics.dotYs[itemCount - 1]
+    : 0;
+  const mobilePlaneY = mobileMetrics
+    ? mapFractionToY(renderFront, mobileMetrics.dotYs, itemCount)
+    : 0;
+  const mobilePlaneScale = mobileMetrics
+    ? mobileMetrics.columnWidth / PLANE_VIEW_W
+    : 0;
+  const mobilePlaneTransform = mobileMetrics
+    ? `translate(${mobileMetrics.lineX} ${mobilePlaneY}) scale(${mobilePlaneScale}) translate(${-PLANE_CENTER_X} ${-PLANE_CENTER_Y})`
+    : "";
+  const showMobileHighlight =
+    mobileMetrics != null && mobilePlaneY - mobileTrackTop > 0.5;
+
   return (
     <div
       ref={rootRef}
-      className={cn(
-        "@container relative aspect-[702/408] w-full overflow-visible text-base-black",
-        className,
-      )}
+      className={cn("relative w-full text-base-black", className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onFocusCapture={handleFocusCapture}
       onBlurCapture={handleBlurCapture}
     >
-      <svg
-        viewBox={`0 0 ${BOX_W} ${BOX_H}`}
-        className="block size-full overflow-visible"
-        aria-hidden="true"
-      >
-        {/* Faint base track. */}
-        <circle
-          cx={CENTER_X}
-          cy={CENTER_Y}
-          r={RING_RADIUS}
-          className="fill-none stroke-base-black opacity-20"
-          strokeWidth="1.5"
-        />
-
-        {/* 100%-opacity highlight arc, revealed clockwise from the top. */}
-        <path
-          d={ringPath}
-          pathLength={1}
-          className="fill-none stroke-base-black"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeDasharray="1"
-          strokeDashoffset={1 - renderFront}
-        />
-
-        {geometry.map((item, index) => (
+      {/* Desktop (lg+): the circular turntable. */}
+      <div className="@container relative hidden aspect-[702/408] w-full overflow-visible lg:block">
+        <svg
+          viewBox={`0 0 ${BOX_W} ${BOX_H}`}
+          className="block size-full overflow-visible"
+          aria-hidden="true"
+        >
+          {/* Faint base track. */}
           <circle
-            key={`dot-${item.label}`}
-            cx={item.dot.x}
-            cy={item.dot.y}
-            r={DOT_RADIUS}
-            className={cn(
-              "fill-base-black transition-opacity duration-300",
-              isLit(index, item.fraction) ? "opacity-100" : "opacity-40",
-            )}
+            cx={CENTER_X}
+            cy={CENTER_Y}
+            r={RING_RADIUS}
+            className="fill-none stroke-base-black opacity-20"
+            strokeWidth="1.5"
           />
-        ))}
 
-        {/* Plane leading the highlight arc at a fixed heading. */}
-        {showPlane && (
-          <g transform={planeTransform} className="fill-base-black">
-            {PLANE_PATHS.map((d, index) => (
-              <path key={`plane-${index}`} d={d} fillRule="evenodd" clipRule="evenodd" />
-            ))}
-          </g>
-        )}
-      </svg>
+          {/* 100%-opacity highlight arc, revealed clockwise from the top. */}
+          <path
+            d={ringPath}
+            pathLength={1}
+            className="fill-none stroke-base-black"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeDasharray="1"
+            strokeDashoffset={1 - renderFront}
+          />
 
-      {geometry.map((item, index) => {
-        const isActive = index === safeActiveIndex;
-        const lit = isLit(index, item.fraction);
-        const textAlign =
-          item.align === "center"
-            ? "text-center"
-            : item.align === "left"
-              ? "text-left"
-              : "text-right";
-
-        return (
-          <div key={item.label} className="absolute" style={item.labelStyle}>
-            <button
-              type="button"
-              aria-current={isActive ? "step" : undefined}
-              onClick={handleNodeClick(index)}
+          {geometry.map((item, index) => (
+            <circle
+              key={`dot-${item.label}`}
+              cx={item.dot.x}
+              cy={item.dot.y}
+              r={DOT_RADIUS}
               className={cn(
-                "focus-ring-ink rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 disabled:pointer-events-none",
-                textAlign,
-                lit ? "opacity-100" : "opacity-65",
+                "fill-base-black transition-opacity duration-300",
+                isLit(index, item.fraction) ? "opacity-100" : "opacity-40",
               )}
-            >
-              {item.label}
-            </button>
-          </div>
-        );
-      })}
+            />
+          ))}
+
+          {/* Plane leading the highlight arc at a fixed heading. */}
+          {showPlane && (
+            <g transform={planeTransform} className="fill-base-black">
+              {PLANE_PATHS.map((d, index) => (
+                <path key={`plane-${index}`} d={d} fillRule="evenodd" clipRule="evenodd" />
+              ))}
+            </g>
+          )}
+        </svg>
+
+        {geometry.map((item, index) => {
+          const isActive = index === safeActiveIndex;
+          const lit = isLit(index, item.fraction);
+          const textAlign =
+            item.align === "center"
+              ? "text-center"
+              : item.align === "left"
+                ? "text-left"
+                : "text-right";
+
+          return (
+            <div key={item.label} className="absolute" style={item.labelStyle}>
+              <button
+                type="button"
+                aria-current={isActive ? "step" : undefined}
+                onClick={handleNodeClick(index)}
+                className={cn(
+                  "focus-ring-ink rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 disabled:pointer-events-none",
+                  textAlign,
+                  lit ? "opacity-100" : "opacity-65",
+                )}
+              >
+                {item.label}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Mobile (< lg): the same steps as a vertical timeline. */}
+      <div
+        ref={mobileRootRef}
+        className="relative w-full overflow-visible lg:hidden"
+        style={{ paddingTop: MOBILE_TOP_OFFSET }}
+      >
+        {mobileMetrics && (
+          <svg
+            className="pointer-events-none absolute inset-0 size-full overflow-visible"
+            viewBox={`0 0 ${mobileMetrics.width} ${mobileMetrics.height}`}
+            aria-hidden="true"
+          >
+            {/* Faint base track spanning every node. */}
+            <line
+              x1={mobileMetrics.lineX}
+              y1={mobileTrackTop}
+              x2={mobileMetrics.lineX}
+              y2={mobileTrackBottom}
+              className="stroke-base-black opacity-20"
+              strokeWidth={mobileStroke}
+            />
+
+            {/* Highlight covering the track from the top down to the plane. */}
+            {showMobileHighlight && (
+              <line
+                x1={mobileMetrics.lineX}
+                y1={mobileTrackTop}
+                x2={mobileMetrics.lineX}
+                y2={mobilePlaneY}
+                className="stroke-base-black"
+                strokeWidth={mobileStroke}
+                strokeLinecap="round"
+              />
+            )}
+
+            {mobileMetrics.dotYs.map((y, index) => (
+              <circle
+                key={`mobile-dot-${geometry[index].label}`}
+                cx={mobileMetrics.lineX}
+                cy={y}
+                r={mobileDotRadius}
+                className={cn(
+                  "fill-base-black transition-opacity duration-300",
+                  isLit(index, geometry[index].fraction)
+                    ? "opacity-100"
+                    : "opacity-40",
+                )}
+              />
+            ))}
+
+            {/* Plane leading the highlight at the same fixed heading as the ring. */}
+            {showPlane && (
+              <g transform={mobilePlaneTransform} className="fill-base-black">
+                {PLANE_PATHS.map((d, index) => (
+                  <path
+                    key={`mobile-plane-${index}`}
+                    d={d}
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                  />
+                ))}
+              </g>
+            )}
+          </svg>
+        )}
+
+        <ol
+          className="relative m-0 flex list-none flex-col p-0"
+          style={{ gap: MOBILE_TAG_GAP }}
+        >
+          {geometry.map((item, index) => {
+            const isActive = index === safeActiveIndex;
+            const lit = isLit(index, item.fraction);
+
+            return (
+              <li
+                key={item.label}
+                className="flex items-start"
+                style={{ gap: MOBILE_LABEL_GAP }}
+              >
+                {/* Icon column: reserves the plane-wide track and anchors the
+                    node dot on the label's first line (measured for the SVG). */}
+                <span
+                  ref={(element) => {
+                    spanRefs.current[index] = element;
+                  }}
+                  aria-hidden="true"
+                  className="block shrink-0"
+                  style={{
+                    width: MOBILE_TRACK_WIDTH,
+                    height: `${MOBILE_LINE_HEIGHT}em`,
+                    fontSize: MOBILE_TAG_FONT,
+                  }}
+                />
+                <button
+                  type="button"
+                  aria-current={isActive ? "step" : undefined}
+                  onClick={handleNodeClick(index)}
+                  className={cn(
+                    "focus-ring-ink rounded-sm bg-transparent text-left font-body font-semibold text-base-black transition-opacity duration-300 disabled:pointer-events-none",
+                    lit ? "opacity-100" : "opacity-65",
+                  )}
+                  style={{
+                    fontSize: MOBILE_TAG_FONT,
+                    lineHeight: MOBILE_LINE_HEIGHT,
+                  }}
+                >
+                  {item.label}
+                </button>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     </div>
   );
 }

@@ -85,7 +85,7 @@ export default function HowItWorks({
       />
 
       <div
-        className="relative z-10 flex w-full items-center justify-center overflow-visible px-[max(var(--spacing-how-it-works-turntable-mobile-inset-x),16%)] py-6 sm:py-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:overflow-hidden lg:px-0 lg:py-0"
+        className="relative z-10 flex w-full items-center justify-center overflow-visible px-[max(var(--spacing-how-it-works-turntable-mobile-inset-x),16%)] pb-6 sm:pb-10 lg:w-[var(--size-how-it-works-left-width)] lg:min-h-[var(--size-how-it-works-height)] lg:overflow-hidden lg:px-0 lg:py-0"
       >
         <div
           className="relative z-10 flex w-full max-w-[var(--size-how-it-works-turntable-width)] flex-col items-center gap-12 lg:ml-[var(--spacing-how-it-works-turntable-offset-x)] lg:items-end lg:[gap:var(--spacing-how-it-works-turntable-gap)]"
