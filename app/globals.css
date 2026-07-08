@@ -290,6 +290,8 @@
  * text-reveal-line-buffer | --spacing-text-reveal-line-buffer       | 0.32em
  * text-reveal-line-buffer-italic | --spacing-text-reveal-line-buffer-italic | 0.5em
  * abouthero-role-gap    | --spacing-abouthero-role-gap              | 32px
+ * abouthero-firstrow-gap | --spacing-abouthero-firstrow-gap         | 48px
+ * abouthero-headline-inset-left | --spacing-abouthero-headline-inset-left | 17rem (272px)
  * hero-subcopy          | --text-hero-subcopy                       | 20px
  * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
  * cta-content-gap       | --spacing-cta-content-gap                 | 46px
@@ -545,6 +547,8 @@
   --spacing-text-reveal-line-buffer: 0.32em;
   --spacing-text-reveal-line-buffer-italic:0.5em;
   --spacing-abouthero-role-gap: 2rem;
+  --spacing-abouthero-firstrow-gap: 3rem;
+  --spacing-abouthero-headline-inset-left: 17rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-turntable-offset-x: 3rem;
   --spacing-how-it-works-turntable-mobile-inset-x: 3.5rem;
@@ -1135,6 +1139,8 @@ body {
   /* Headline gaps in AboutHero (rem) tracked to vw so they scale with the type. */
   --spacing-hero-headline-gap: max(2.25rem, 2.381vw);
   --spacing-abouthero-role-gap: max(2rem, 2.116vw);
+  --spacing-abouthero-firstrow-gap: max(3rem, 3.175vw);
+  --spacing-abouthero-headline-inset-left: max(17rem, 17.989vw);
 
   /* AboutHero structural rem tokens — without these the hero section height and
      title block froze at the 1512 frame while the headline type kept scaling.

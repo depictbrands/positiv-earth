@@ -64,19 +64,18 @@ export default function AboutHero({ content }: AboutHeroProps) {
         style={{ backgroundColor: "var(--color-hero-overlay)" }}
       />
 
-      {/* Hero title — Figma node 411:813. Same responsive pattern as home Hero:
-          mobile/tablet stacks each line centred; desktop is a single centred row
-          of lead + name + two-line role block with a 36px gap. sr-only h1 text
-          carries the readable title. */}
+      {/* Hero title — Figma node 411:813. Mobile/tablet: centred stack. Desktop:
+          three-row block (lead + name, then each role line) centred horizontally.
+          sr-only h1 text carries the readable title. */}
       <h1
         id="about-hero-heading"
-        className="relative z-10 flex w-full flex-1 items-center justify-center px-6 font-display text-base-white"
+        className="relative z-10 flex w-full flex-1 items-center justify-center px-6 font-display text-base-white lg:justify-start lg:px-0 lg:pl-[var(--spacing-abouthero-headline-inset-left)]"
       >
         <span className="sr-only">{`${resolved.lead} ${resolved.name}, ${resolved.role}`}</span>
 
         <div
           aria-hidden="true"
-          className="mx-auto flex w-full flex-col items-center leading-none"
+          className="mx-auto flex w-full flex-col items-center leading-none lg:mx-0 lg:w-auto lg:items-center lg:text-center"
           style={{ maxWidth: "var(--size-abouthero-content-width)" }}
         >
           {/* Mobile / tablet: centred stack */}
@@ -97,35 +96,33 @@ export default function AboutHero({ content }: AboutHeroProps) {
             ))}
           </div>
 
-          {/* Desktop: a 3-col / 2-row grid. Row 1 holds lead + name + the first
-              role line, vertically centred together (so the first line sits on
-              the same axis as the name). Row 2 holds the remaining role line(s)
-              under the role column, separated by a large row gap. The grid's
-              full height (incl. the second line) is what gets centred by the
-              h1's items-center, so the whole headline is vertically centred. */}
-          <div
-            className="hidden lg:grid lg:grid-cols-[auto_auto_auto] lg:grid-rows-[auto_auto] lg:items-center"
-            style={{
-              columnGap: "var(--spacing-hero-headline-gap)",
-              rowGap: "var(--spacing-abouthero-role-gap)",
-            }}
-          >
-            <TextReveal className="col-start-1 row-start-1 shrink-0 text-heading-3">
-              {resolved.lead}
-            </TextReveal>
-            <TextReveal className="col-start-2 row-start-1 shrink-0 text-heading-1">
-              {resolved.name}
-            </TextReveal>
-            <TextReveal className="col-start-3 row-start-1 whitespace-nowrap text-left text-heading-3">
-              {roleLines[0]}
-            </TextReveal>
-            {roleLines.length > 1 && (
-              <span className="col-start-3 row-start-2 flex flex-col whitespace-nowrap text-left text-heading-3">
-                {roleLines.slice(1).map((line) => (
-                  <TextReveal key={line}>{line}</TextReveal>
-                ))}
-              </span>
-            )}
+          {/* Desktop: three rows — lead + name, role line 1, role line 2. */}
+          <div className="hidden lg:flex lg:flex-col lg:items-center">
+            <div
+              className="flex items-center"
+              style={{ columnGap: "var(--spacing-hero-headline-gap)" }}
+            >
+              <TextReveal className="shrink-0 text-heading-3">
+                {resolved.lead}
+              </TextReveal>
+              <TextReveal className="shrink-0 text-heading-1">
+                {resolved.name}
+              </TextReveal>
+            </div>
+            {roleLines.map((line, index) => (
+              <TextReveal
+                key={line}
+                className="whitespace-nowrap text-heading-3"
+                style={{
+                  marginTop:
+                    index === 0
+                      ? "var(--spacing-abouthero-firstrow-gap)"
+                      : "var(--spacing-abouthero-role-gap)",
+                }}
+              >
+                {line}
+              </TextReveal>
+            ))}
           </div>
         </div>
       </h1>
