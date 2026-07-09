@@ -88,7 +88,7 @@ export default function BrandStory({
               aria-expanded={expanded}
               className="mt-4 inline-flex items-center gap-2.5 font-body text-cta-button text-base-white transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
             >
-              <span>{expanded ? "Less detail" : "More detail"}</span>
+              <span>{expanded ? "Learn more" : "Learn more"}</span>
               <svg
                 aria-hidden="true"
                 viewBox="0 0 20 20"

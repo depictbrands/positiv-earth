@@ -12,7 +12,7 @@ export const CROSSFADE_HALF = 0.05; // ± window around each midpoint
 
 // §5 — scene background hexes (also tokenised in globals.css) and headlines.
 // Ordered A → B → C; background interpolates linearly across these.
-export const SCENE_BG_HEXES = ["#c7b97a", "#7297ae", "#c47066"] as const;
+export const SCENE_BG_HEXES = ["#345342", "#A5B3AB", "#1D402D"] as const;
 export const HEADLINE_EXIT_EM = -0.4; // old headline translateY on exit (§5)
 
 // §4 — System 1 text reposition. Each intro line's start (off-screen) and end

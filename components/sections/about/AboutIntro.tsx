@@ -77,8 +77,8 @@ function resolveIntroContent(content?: AboutIntroContent): AboutIntroContent {
   };
 }
 
-// A two-tone credential line (node 40:18): burnt-orange Merriweather italic
-// emphasis (96px) + Raleway SemiBold rest (64px), sharing an 80px line box.
+// A credential line (node 40:18): both emphasis and rest now use the light-green
+// About intro text token.
 function Stat({
   emphasis,
   rest,
@@ -89,8 +89,8 @@ function Stat({
   stacked?: boolean;
 }) {
   const emphasisCls =
-    "font-display italic text-about-stat-emphasis text-[color:var(--color-about-accent)]";
-  const restCls = "font-body text-about-stat-rest text-base-black";
+    "font-display italic text-about-stat-emphasis text-about-accent";
+  const restCls = "font-body text-about-stat-rest text-about-text-light";
 
   if (stacked) {
     return (
@@ -194,7 +194,8 @@ export default function AboutIntro({ content }: AboutIntroProps) {
     <section
       aria-label="About Jorge"
       ref={sectionRef}
-      className="relative w-full overflow-hidden bg-cream-white text-base-black"
+      className="relative w-full overflow-hidden bg-about-forest text-about-text-light"
+      style={{ backgroundColor: "var(--color-about-forest)" }}
     >
       {/* Mobile / tablet: the absolute vh/vw composition can't reflow, so the
           portrait and lines stack in normal flow below the desktop breakpoint. */}

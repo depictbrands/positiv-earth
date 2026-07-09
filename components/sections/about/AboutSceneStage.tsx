@@ -48,6 +48,13 @@ const IMAGE_WIDTH_VW: readonly (readonly (number | null)[])[] = [
   [null, null],
 ];
 
+// Scene text colours (A/B/C): light, dark, light.
+const SCENE_TEXT_COLORS = [
+  "var(--color-about-text-light)",
+  "var(--color-about-text-dark)",
+  "var(--color-about-text-light)",
+] as const;
+
 function sceneImageBoxHeight(i: number, j: number, viewportWidth: number, scale: number) {
   const widthVw = IMAGE_WIDTH_VW[i][j];
   if (widthVw != null) {
@@ -228,7 +235,8 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
               ref={(el) => {
                 textRefs.current[i] = el;
               }}
-              className="relative z-10 flex max-w-[max(40rem,42.328vw)] flex-col gap-[max(1.5rem,1.587vw)] text-base-white will-change-transform"
+              className="relative z-10 flex max-w-[max(40rem,42.328vw)] flex-col gap-[max(1.5rem,1.587vw)] will-change-transform"
+              style={{ color: SCENE_TEXT_COLORS[i] }}
             >
               <h2 className="font-display text-heading-4">{scene.headline}</h2>
               <p className="max-w-[max(34rem,35.979vw)] whitespace-pre-line font-body text-p1">

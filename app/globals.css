@@ -342,9 +342,12 @@
  * faq-bottom            | --spacing-faq-bottom                      | 202px
  * faq-item-gap          | --spacing-faq-item-gap                    | 24px
  * faq-answer-gap        | --spacing-faq-answer-gap                  | 20px
- * about-scene-a         | --color-about-scene-a                     | #c7b97a (olive — MOTION_SPEC §5 Scene A)
- * about-scene-b         | --color-about-scene-b                     | #7297ae (blue — MOTION_SPEC §5 Scene B)
- * about-scene-c         | --color-about-scene-c                     | #c47066 (coral — MOTION_SPEC §5 Scene C)
+ * forest                | --color-about-forest                      | #1D402D
+ * about-scene-a         | --color-about-scene-a                     | #345342 (MOTION_SPEC §5 Scene A)
+ * about-scene-b         | --color-about-scene-b                     | #A5B3AB (MOTION_SPEC §5 Scene B)
+ * about-scene-c         | --color-about-scene-c                     | --color-about-forest (MOTION_SPEC §5 Scene C)
+ * about-text-light      | --color-about-text-light                  | #E8ECEA
+ * about-text-dark       | --color-about-text-dark                   | #042714
  * about-cta-band-height | --size-about-cta-band-height              | 580px (MOTION_SPEC §7 bandH)
  * abouthero-content-width | --size-abouthero-content-width          | 1312px
  * quiz-overlay-backgroud | --color-quiz-overlay                     | rgba(24,24,24,0.8) (Figma "quiz-overlay-backgroud")
@@ -433,19 +436,21 @@
   --color-itinerary-accommodation-card-overlay: oklch(0 0 0 / 0.2);
 
   /*
-   * About page scene backgrounds (MOTION_SPEC §5). Kept as the exact sRGB hex
-   * from Figma Dev Mode (not converted to oklch) so the scroll-driven color
-   * interpolation between scenes stays faithful to the spec.
+   * About page scene backgrounds (MOTION_SPEC §5). Kept as exact sRGB hex so the
+   * scroll-driven interpolation in the scene stage stays faithful to the spec.
    */
-  --color-about-scene-a: #c7b97a;
-  --color-about-scene-b: #7297ae;
-  --color-about-scene-c: #c47066;
+  --color-about-forest: #1D402D;
+  --color-about-scene-a: #345342;
+  --color-about-scene-b: #A5B3AB;
+  --color-about-scene-c: var(--color-about-forest);
+  --color-about-text-light: #E8ECEA;
+  --color-about-text-dark: #042714;
 
   /*
-   * Burnt-orange emphasis colour for the intro stat lines (Figma about-2 /
-   * node 40:18 — "12 years", "Psychology", "100+"). Exact hex from Figma.
+   * Intro accent colour (about-2 / node 40:18). Shares the same light-green
+   * token as intro body text for the monochrome treatment.
    */
-  --color-about-accent: #d05a2c;
+  --color-about-accent: var(--color-about-text-light);
 
   /*
    * Design-Your-Travel quiz (Figma node 584:1372). The overlay panel and page
