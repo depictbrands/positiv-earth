@@ -1707,39 +1707,17 @@ body {
 }
 
 /*
- * Shared Footer — uniform scale-up above the 1512px design frame.
+ * Shared Footer — full-bleed width above the 1512px frame; layout tokens scale
+ * up, type stays at the capped @theme values (no font-size scale-up).
  *
  * Unlike the per-route page classes, this one is applied to the Footer element
- * itself (it is shared by every page). Every token the Footer consumes lives in
- * its own subtree, so re-declaring them on the footer root as max(<1512 value>,
- * <vw>) cascades the scale-up to all its descendants. At and below 1512 the
- * design values win (unchanged); above it the footer grows in lockstep with the
- * rest of each page. The width token becomes 100vw above 1512 so the footer goes
- * full-bleed like the scaled-up sections it sits beneath.
+ * itself (it is shared by every page). Width goes 100vw so the footer spans the
+ * viewport edge-to-edge; spacing and column widths still use max(<1512 value>,
+ * <vw>) so proportions hold on large displays without growing the type.
  */
 .footer-scale {
-  /* Type */
-  --text-footer-logo: max(2rem, 2.65vw);
-  --text-footer-heading: max(1.5rem, 2.12vw);
-  --text-footer-support: max(1rem, 1.058vw);
-  --text-footer-form-label: max(1rem, 1.058vw);
-  --text-footer-form-placeholder: max(0.875rem, 0.926vw);
-  --text-footer-legal: max(1rem, 1.058vw);
-  --text-quick-link-footer: max(1.25rem, 1.323vw);
-  --text-cta-button: max(1.25rem, 1.323vw);
-  /* Contact info + quick links now use body-1; scale it with the footer too. */
-  --text-body-1: max(1.25rem, 1.323vw);
-  --text-body-1--line-height: 1.5;
-
-  /* Non-form copy line-heights track the font above 1512 (each fixed rem → its
-     vw equivalent at the frame) so they don't tighten as the type scales up.
-     Heading uses a unitless ratio already. */
-  --text-footer-support--line-height: max(1.25rem, 1.323vw);
-  --text-footer-legal--line-height: max(1.875rem, 1.984vw);
-  --text-footer-form-placeholder--line-height: max(1.25rem, 1.323vw);
-
   /* Widths */
-  --size-footer-width: max(94.5rem, 100vw);
+  --size-footer-width: 100vw;
   --size-footer-support-width: max(26rem, 27.513vw);
   --size-footer-contact-column-width: max(25.5625rem, 27.05vw);
   --size-footer-form-width: max(37.25rem, 39.418vw);

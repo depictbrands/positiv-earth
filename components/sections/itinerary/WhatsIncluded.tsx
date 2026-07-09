@@ -59,28 +59,18 @@ function resolveContent(
   };
 }
 
-// Itinerary "WhatsIncluded" section (Figma node 584:1298): on a black canvas, a
-// centered heading over two columns — a long "Includes" list and a shorter
-// "Not Includes" list. Presentational — content arrives via props.
+// Itinerary "WhatsIncluded" section (Figma node 584:1298): on a black canvas,
+// two columns — a long "Includes" list and a shorter "Not Includes" list.
+// Presentational — content arrives via props.
 export default function WhatsIncluded({ content }: WhatsIncludedProps) {
   const resolved = resolveContent(content);
 
   return (
     <section
-      aria-labelledby="itinerary-whats-included-heading"
+      aria-label={resolved.heading}
       className="w-full overflow-hidden bg-base-black text-base-white"
     >
-      <div
-        className="mx-auto flex w-full max-w-[var(--size-itinerary-whats-included-width)] flex-col items-center px-6 py-16 sm:px-10 lg:px-0 lg:py-22"
-        style={{ gap: "var(--spacing-itinerary-whats-included-section-gap)" }}
-      >
-        <h2
-          id="itinerary-whats-included-heading"
-          className="w-full text-center font-display text-heading-4 text-base-white"
-        >
-          {resolved.heading}
-        </h2>
-
+      <div className="mx-auto flex w-full max-w-[var(--size-itinerary-whats-included-width)] flex-col items-center px-6 py-16 sm:px-10 lg:px-0 lg:py-22">
         <div className="flex w-full flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
           <div
             className="flex w-full flex-col lg:w-[var(--size-itinerary-whats-included-includes-width)]"
