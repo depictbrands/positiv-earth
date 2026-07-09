@@ -739,7 +739,7 @@
   );
   /* Stat 1 (12 years in airline industry): exact about-2 box top-left at (174, 151)
      in the 1512×982 frame — vw/vh scale fluidly with viewport size. */
-  --position-about-intro-stat-1-top: 15.377vh;
+  --position-about-intro-stat-1-top: 13vh;
   --position-about-intro-stat-1-left: 11.508vw;
   /* Stat 2 (Psychology master degree): exact about-2 box top-left at (991, 314)
      in the 1512×982 frame — vw/vh scale fluidly with viewport size. */
@@ -749,7 +749,7 @@
      block clears the portrait and has room above the section bottom. */
   --spacing-about-intro-stat-3-offset-top: -2rem;
   --position-about-intro-stat-3-top: calc(
-    90vh + var(--spacing-about-intro-stat-3-offset-top)
+    92vh + var(--spacing-about-intro-stat-3-offset-top)
   );
   --position-about-intro-stat-3-left: 54.827vw;
   /* Desktop intro cluster (portrait + stats) — shared upward shift. */
