@@ -42,12 +42,37 @@ function renderHeading(content: BrandStoryContent) {
   );
 }
 
+/** Collapsed preview ends at the first body paragraph (period), never mid-sentence. */
+function getBodyPreview(body: string[]): { preview: string; full: string } {
+  const paragraphs = body.map((part) => part.trim()).filter(Boolean);
+  const full = paragraphs.join(" ");
+
+  if (paragraphs.length > 1) {
+    return { preview: paragraphs[0], full };
+  }
+
+  // CMS may store the whole story as one string — take through the first sentence.
+  const firstSentenceEnd = full.indexOf(".");
+  if (firstSentenceEnd === -1) {
+    return { preview: full, full };
+  }
+
+  return {
+    preview: full.slice(0, firstSentenceEnd + 1),
+    full,
+  };
+}
+
 export default function BrandStory({
   content = DEFAULT_CONTENT,
 }: BrandStoryProps) {
   const [expanded, setExpanded] = useState(false);
   const imageUrl = content.imageUrl?.trim() || DEFAULT_CONTENT.imageUrl;
   const imageAlt = content.imageAlt?.trim() || DEFAULT_CONTENT.imageAlt;
+  const body =
+    content.body?.length > 0 ? content.body : DEFAULT_CONTENT.body;
+  const { preview, full } = getBodyPreview(body);
+  const canExpand = full.length > preview.length;
 
   return (
     <section
@@ -74,39 +99,37 @@ export default function BrandStory({
           }}
         >
           <div className="flex w-full flex-col items-start">
-            <p
-              className={`font-body text-p1 text-base-white ${
-                expanded ? "" : "line-clamp-3"
-              }`}
-            >
-              {content.body.join(" ")}
+            <p className="font-body text-p1 text-base-white">
+              {expanded || !canExpand ? full : preview}
             </p>
 
-            <button
-              type="button"
-              onClick={() => setExpanded((value) => !value)}
-              aria-expanded={expanded}
-              className="mt-4 inline-flex items-center gap-2.5 font-body text-cta-button text-base-white transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
-            >
-              <span>{expanded ? "Learn more" : "Learn more"}</span>
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 20 20"
-                className={`size-5 shrink-0 transition-transform ${
-                  expanded ? "rotate-180" : ""
-                }`}
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            {canExpand ? (
+              <button
+                type="button"
+                onClick={() => setExpanded((value) => !value)}
+                aria-expanded={expanded}
+                className="mt-4 inline-flex items-center gap-2.5 font-body text-cta-button text-base-white transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-base-white"
               >
-                <path
-                  d="M5 7.5L10 12.5L15 7.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+                <span>Learn more</span>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 20 20"
+                  className={`size-5 shrink-0 transition-transform ${
+                    expanded ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

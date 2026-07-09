@@ -10,8 +10,8 @@ const DEFAULT_IMAGE_URL =
 
 const DEFAULT_CONTENT: AboutHeroContent = {
   lead: "Meet",
-  name: "Jorge",
-  role: "Your Travel Expert & Cultural Connector",
+  name: "Jorge Rivera",
+  role: "Your Travel Expert",
   backgroundImageUrl: DEFAULT_IMAGE_URL,
   backgroundImageAlt: "Rainbow Mountain in the Peruvian Andes at sunset",
 };
@@ -75,7 +75,7 @@ export default function AboutHero({ content }: AboutHeroProps) {
 
         <div
           aria-hidden="true"
-          className="mx-auto flex w-full flex-col items-center leading-none lg:mx-0 lg:w-auto lg:items-center lg:text-center"
+          className="mx-auto flex w-full flex-col items-center leading-none lg:mx-0 lg:w-auto lg:items-start lg:text-left"
           style={{ maxWidth: "var(--size-abouthero-content-width)" }}
         >
           {/* Mobile / tablet: centred stack */}
@@ -96,24 +96,23 @@ export default function AboutHero({ content }: AboutHeroProps) {
             ))}
           </div>
 
-          {/* Desktop: three rows — lead + name, role line 1, role line 2. */}
-          <div className="hidden lg:flex lg:flex-col lg:items-center">
-            <div
-              className="flex items-center"
-              style={{ columnGap: "var(--spacing-hero-headline-gap)" }}
+          {/* Desktop: staggered left-aligned block (Figma node 1596:1999).
+              "Meet" sits above the name, indented; the name anchors the left
+              edge; each role line drops below, indented further right. */}
+          <div className="hidden lg:flex lg:flex-col lg:items-start">
+            <TextReveal
+              className="text-heading-3"
+              style={{ marginLeft: "var(--spacing-abouthero-lead-indent)" }}
             >
-              <TextReveal className="shrink-0 text-heading-3">
-                {resolved.lead}
-              </TextReveal>
-              <TextReveal className="shrink-0 text-heading-1">
-                {resolved.name}
-              </TextReveal>
-            </div>
+              {resolved.lead}
+            </TextReveal>
+            <TextReveal className="text-heading-1">{resolved.name}</TextReveal>
             {roleLines.map((line, index) => (
               <TextReveal
                 key={line}
                 className="whitespace-nowrap text-heading-3"
                 style={{
+                  marginLeft: "var(--spacing-abouthero-role-indent)",
                   marginTop:
                     index === 0
                       ? "var(--spacing-abouthero-firstrow-gap)"

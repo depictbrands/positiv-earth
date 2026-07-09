@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
 }
 
 const DEFAULT_PORTRAIT_URL =
-  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 439 519"><defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="%237fa9d0"/><stop offset="1" stop-color="%23cfe0ee"/></linearGradient></defs><rect width="439" height="519" fill="url(%23sky)"/><path d="M0 350L150 220L300 350L439 260V519H0V350Z" fill="%236f7d52"/><path d="M0 420L180 330L360 420L439 370V519H0V420Z" fill="%23566441"/></svg>';
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 794 518"><defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="%237fa9d0"/><stop offset="1" stop-color="%23cfe0ee"/></linearGradient></defs><rect width="794" height="518" fill="url(%23sky)"/><path d="M0 350L260 210L520 350L794 240V518H0V350Z" fill="%236f7d52"/><path d="M0 430L300 320L600 430L794 360V518H0V430Z" fill="%23566441"/></svg>';
 
 const DEFAULT_CONTENT: AboutIntroContent = {
   stats: [
@@ -31,31 +31,39 @@ const DEFAULT_CONTENT: AboutIntroContent = {
   portraitImageAlt: "Jorge exploring a mountain-top archaeological site",
 };
 
-// Resting (end) positions for each stat, from MOTION_SPEC §4 / Figma node 40:18.
-const REST_POSITIONS = INTRO_LINES.map((l) => ({
-  top: `${l.endYvh}vh`,
-  left: `${l.endXvw}vw`,
-}));
-
-// Per-line box width (as a % of the 1512 frame) and text alignment, straight
-// from the about-2 text boxes: line 1 662px left, line 2 498px left, line 3
-// 767px right-aligned. The width drives the exact wrap from the design.
-const STAT_LAYOUT = [
-  { width: "43.783vw", align: "left", stacked: false },
-  { width: "32.937vw", align: "left", stacked: false },
-  // Line 3 ("100+ destinations experience") is right-aligned and the two parts
-  // sit on their own lines in the design (node 40:51), not inline-wrapped.
-  { width: "50.728vw", align: "right", stacked: true },
+// Resting (end) positions for each stat — tokens in globals.css (desktop only).
+const STAT_POSITIONS = [
+  {
+    top: "var(--position-about-intro-stat-1-top)",
+    left: "var(--position-about-intro-stat-1-left)",
+  },
+  {
+    top: "var(--position-about-intro-stat-2-top)",
+    left: "var(--position-about-intro-stat-2-left)",
+  },
+  {
+    top: "var(--position-about-intro-stat-3-top)",
+    left: "var(--position-about-intro-stat-3-left)",
+  },
 ] as const;
 
-// Portrait box (439×519px) top-left at (448, 274) in the frame → %s of 1512×982.
-// Width stays pure vw so it scales with the vw-positioned stat lines at every
-// width, including above the 1512 frame (uniform scale-up). The fixed-rem cap is
-// the resting design width reached exactly at 1512 (29.034vw === 27.4375rem).
+// Per-line box width (as a % of the 1512 frame) and text alignment, straight
+// from the about-2 text boxes (node 1150:1734): line 1 333px left, line 2 473px
+// left, line 3 389px right-aligned. Each line stacks its emphasis over its rest
+// (matching the flex-col text boxes in the design); the width drives the wrap.
+const STAT_LAYOUT = [
+  { width: "22.024vw", align: "left", stacked: true },
+  { width: "31.283vw", align: "left", stacked: true },
+  { width: "25.728vw", align: "right", stacked: true },
+] as const;
+
+// Scene image box (794×518px) top-left at (165, 334) in the frame — tokens in
+// globals.css.
 const PORTRAIT = {
-  left: "29.630vw",
-  top: "27.902vh",
-  width: "29.034vw",
+  left: "var(--position-about-intro-portrait-left)",
+  top: "var(--position-about-intro-portrait-top)",
+  width: "var(--size-about-intro-portrait-vw)",
+  height: "var(--size-about-intro-portrait-height-vw)",
 } as const;
 
 type AboutIntroProps = {
@@ -89,8 +97,8 @@ function Stat({
   stacked?: boolean;
 }) {
   const emphasisCls =
-    "font-display italic text-about-stat-emphasis text-about-accent";
-  const restCls = "font-body text-about-stat-rest text-about-text-light";
+    "font-display italic text-about-stat-emphasis text-about-accent whitespace-nowrap";
+  const restCls = "font-body text-about-stat-rest text-base-white";
 
   if (stacked) {
     return (
@@ -152,8 +160,8 @@ export default function AboutIntro({ content }: AboutIntroProps) {
           return;
         }
         if (reduce) {
-          // Reduced motion: lines appear at rest immediately, no travel.
-          gsap.set(els, { x: 0, y: 0 });
+          // Reduced motion: lines appear at rest immediately, visible, no travel.
+          gsap.set(els, { opacity: 1, x: 0, y: 0 });
           setDebugValue("1 · intro", 1);
           return;
         }
@@ -166,13 +174,21 @@ export default function AboutIntro({ content }: AboutIntroProps) {
         INTRO_LINES.forEach((line, i) => {
           const el = lineRefs.current[i];
           if (!el) return;
+          // Each line reveals — fading from invisible to visible while sliding
+          // in from one full span of itself, measured live so the travel
+          // distance tracks the element's rendered size at any viewport width:
+          // line 1 from one width left, line 2 from one width right, line 3
+          // from one height below.
+          const from =
+            line.slide === "left"
+              ? { opacity: 0, x: () => -el.offsetWidth, y: 0 }
+              : line.slide === "right"
+                ? { opacity: 0, x: () => el.offsetWidth, y: 0 }
+                : { opacity: 0, x: 0, y: () => el.offsetHeight };
           tl.fromTo(
             el,
-            {
-              x: () => ((line.startXvw - line.endXvw) * window.innerWidth) / 100,
-              y: () => ((line.startYvh - line.endYvh) * window.innerHeight) / 100,
-            },
-            { x: 0, y: 0, duration: durationS, ease, immediateRender: true },
+            from,
+            { opacity: 1, x: 0, y: 0, duration: durationS, ease, immediateRender: true },
             line.stagger * durationS,
           );
         });
@@ -204,7 +220,7 @@ export default function AboutIntro({ content }: AboutIntroProps) {
         <img
           src={portraitImageUrl}
           alt={portraitImageAlt}
-          className="w-full max-w-[var(--size-about-intro-portrait-width)] self-center rounded-card-corner object-cover"
+          className="h-[var(--size-about-intro-portrait-height)] w-full max-w-[var(--size-about-intro-portrait-width)] self-center rounded-about-intro-portrait-corner object-cover"
         />
         {stats.map((stat) => (
           <Stat key={stat.emphasis} {...stat} />
@@ -214,35 +230,43 @@ export default function AboutIntro({ content }: AboutIntroProps) {
       {/* Desktop (1512px frame): centre portrait with the three stats at their
           exact about-2 (node 40:18) resting positions, lifted into place by
           System 1. */}
-      <div className="relative hidden h-[115vh] w-full lg:block">
-        <div className="absolute" style={PORTRAIT}>
-          <Image
-            src={portraitImageUrl}
-            alt={portraitImageAlt}
-            width={439}
-            height={519}
-            className="h-auto w-full rounded-card-corner object-cover"
-          />
-        </div>
-
-        {stats.map((stat, i) => (
+      <div className="relative hidden min-h-[var(--size-about-intro-section-height)] w-full lg:block">
+        <div
+          className="absolute inset-x-0 h-full"
+          style={{ top: "var(--spacing-about-intro-cluster-offset-top)" }}
+        >
           <div
-            key={stat.emphasis}
-            ref={(el) => {
-              lineRefs.current[i] = el;
-            }}
-            className={`absolute will-change-transform ${
-              STAT_LAYOUT[i].align === "right" ? "text-right" : "text-left"
-            }`}
-            style={{
-              top: REST_POSITIONS[i].top,
-              left: REST_POSITIONS[i].left,
-              width: STAT_LAYOUT[i].width,
-            }}
+            className="absolute overflow-hidden rounded-about-intro-portrait-corner"
+            style={PORTRAIT}
           >
-            <Stat {...stat} stacked={STAT_LAYOUT[i].stacked} />
+            <Image
+              src={portraitImageUrl}
+              alt={portraitImageAlt}
+              width={794}
+              height={518}
+              className="h-full w-full object-cover"
+            />
           </div>
-        ))}
+
+          {stats.map((stat, i) => (
+            <div
+              key={stat.emphasis}
+              ref={(el) => {
+                lineRefs.current[i] = el;
+              }}
+              className={`absolute will-change-transform ${
+                STAT_LAYOUT[i].align === "right" ? "text-right" : "text-left"
+              }`}
+              style={{
+                top: STAT_POSITIONS[i].top,
+                left: STAT_POSITIONS[i].left,
+                width: STAT_LAYOUT[i].width,
+              }}
+            >
+              <Stat {...stat} stacked={STAT_LAYOUT[i].stacked} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -84,7 +84,7 @@ export default function LocalFood({ content }: LocalFoodProps) {
   return (
     <section
       aria-labelledby="itinerary-local-food-heading"
-      className="w-full overflow-hidden bg-base-white"
+      className="w-full overflow-hidden bg-secondary-black"
     >
       <div
         className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col px-6 py-16 sm:px-10 lg:px-0 lg:py-22"
@@ -102,16 +102,16 @@ export default function LocalFood({ content }: LocalFoodProps) {
             >
               <h2
                 id="itinerary-local-food-heading"
-                className="font-display text-heading-4 uppercase text-base-black"
+                className="font-display text-heading-4 uppercase text-base-white"
               >
                 {resolved.heading}
               </h2>
-              <p className="font-body font-light text-p1 text-base-black">
+              <p className="font-body font-light text-p1 text-base-white">
                 {resolved.tagline}
               </p>
             </div>
 
-            <p className="font-body text-itinerary-local-food-body text-base-black">
+            <p className="font-body text-itinerary-local-food-body text-base-white">
               {resolved.body}
             </p>
           </div>

@@ -26,62 +26,70 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Resting horizontal placement for each scene's two images (Figma about-3/5/7:
-// image 0 on the left, image 1 on the right).
-const IMAGE_SIDES = ["left", "right"] as const;
-
-// Display aspect ratio (width ÷ height) per scene image. Most boxes derive width
-// from a responsive height via `aspect-ratio`; B[1] is width-driven at 20vw.
-const IMAGE_TEN_SEVEN_AR = 10 / 7;
-const IMAGE_FIVE_SIX_AR = 5 / 6;
-const IMAGE_LANDSCAPE_AR = 16 / 9;
-const IMAGE_FIVE_FOUR_AR = 5 / 4;
-const IMAGE_ASPECT: readonly (readonly [number, number])[] = [
-  [IMAGE_TEN_SEVEN_AR, IMAGE_FIVE_SIX_AR], // A[0] 10:7, A[1] 5:6
-  [440 / 560, IMAGE_LANDSCAPE_AR], // B[0] narrowed, B[1] 16:9
-  [IMAGE_LANDSCAPE_AR, IMAGE_FIVE_FOUR_AR], // C[0] 16:9, C[1] 5:4
+// Resting position for each scene's decorative images, from about-3/5/7. Both
+// axes are expressed in vw (% of the 1512-px frame width), so the whole 1512×982
+// composition scales uniformly by width and reproduces the frame exactly at any
+// window size — vertical no longer compresses with viewport height. Box sizes
+// come from SCENE_IMAGE_MOTION (Figma w×h) via `aspect-ratio`. Index-aligned
+// with SCENE_IMAGE_MOTION. (top vw = pixel-y ÷ 1512.)
+type SceneImagePos = { left: string; top: string; width: string };
+const SCENE_IMAGE_POS: readonly (readonly SceneImagePos[])[] = [
+  // Scene A (about-3): centred image (536,96 · 446×485) + right column
+  // (1008,334 · 464×532), matching the two-image screenshot.
+  [
+    { left: "35.450vw", top: "6.349vw", width: "29.497vw" },
+    { left: "66.667vw", top: "22.090vw", width: "30.688vw" },
+  ],
+  // Scene B (about-5): tall left (40,334 · 464×626), landscape top-right (1008,0 · 464×349).
+  [
+    { left: "2.646vw", top: "22.090vw", width: "30.688vw" },
+    { left: "66.667vw", top: "0vw", width: "30.688vw" },
+  ],
+  // Scene C (about-7): top-left (43,54 · 461×373), bottom-right (1008,580 · 464×357).
+  [
+    { left: "2.844vw", top: "3.571vw", width: "30.489vw" },
+    { left: "66.667vw", top: "38.360vw", width: "30.688vw" },
+  ],
 ];
-// Viewport-width override per image (null = height-driven sizing).
-const IMAGE_WIDTH_VW: readonly (readonly (number | null)[])[] = [
-  [null, null],
-  [null, 20], // B[1]
-  [null, null],
+
+// Resting position + widths for each scene's text block (Figma Frame 123). The
+// vertical (top) is vh so each block stays anchored to the pinned viewport
+// height and never rides off-screen; horizontal is vw (or a fixed rem width).
+// `width` is the headline/block width; `bodyWidth` narrows the body copy to
+// match the design. Applied on desktop only; the block centres on mobile.
+// (top vh = pixel-y ÷ 982.)
+type SceneTextPos = { left: string; top: string; width: string; bodyWidth: string };
+const SCENE_TEXT_POS: readonly SceneTextPos[] = [
+  { left: "16.071vw", top: "48vh", width: "40rem", bodyWidth: "35.251vw" }, // A: 243 (vw) / 518 (52.749vh) · block fixed 37rem
+  { left: "34.656vw", top: "24vh", width: "43.320vw", bodyWidth: "36.971vw" }, // B: 524 (vw) / 334 (34.012vh)
+  { left: "34.656vw", top: "41.344vh", width: "31.217vw", bodyWidth: "31.217vw" }, // C: 524 (vw) / 406 (41.344vh)
 ];
 
-// Scene text colours (A/B/C): light, dark, light.
+// Scene text colours (A/B/C): all light against the darker backgrounds.
 const SCENE_TEXT_COLORS = [
   "var(--color-about-text-light)",
-  "var(--color-about-text-dark)",
+  "var(--color-about-text-light)",
   "var(--color-about-text-light)",
 ] as const;
 
-function sceneImageBoxHeight(i: number, j: number, viewportWidth: number, scale: number) {
-  const widthVw = IMAGE_WIDTH_VW[i][j];
-  if (widthVw != null) {
-    return ((viewportWidth * widthVw) / 100) / IMAGE_ASPECT[i][j];
-  }
-  return SCENE_IMAGE_MOTION[i][j].h * scale;
+// Rendered image-box height (px) at the current viewport: the box is vw-width
+// driven with a Figma aspect ratio, so height = widthPx ÷ (w/h). Feeds the
+// System 3 parallax travel.
+function sceneImageBoxHeight(i: number, j: number, viewportWidth: number): number {
+  const { w, h } = SCENE_IMAGE_MOTION[i][j];
+  const widthPx = (viewportWidth * parseFloat(SCENE_IMAGE_POS[i][j].width)) / 100;
+  return (widthPx * h) / w;
 }
 
 function sceneImageBoxStyle(i: number, j: number): React.CSSProperties {
-  const widthVw = IMAGE_WIDTH_VW[i][j];
-  if (widthVw != null) {
-    return { width: `${widthVw}vw`, aspectRatio: IMAGE_ASPECT[i][j] };
-  }
-  const motion = SCENE_IMAGE_MOTION[i][j];
+  const { w, h } = SCENE_IMAGE_MOTION[i][j];
+  const pos = SCENE_IMAGE_POS[i][j];
   return {
-    height: `max(${motion.h}px, ${(motion.h / 15.12).toFixed(3)}vw)`,
-    aspectRatio: IMAGE_ASPECT[i][j],
+    left: pos.left,
+    top: pos.top,
+    width: pos.width,
+    aspectRatio: `${w} / ${h}`,
   };
-}
-
-function sceneImageIntrinsic(i: number, j: number) {
-  const ar = IMAGE_ASPECT[i][j];
-  if (ar === IMAGE_TEN_SEVEN_AR) return { width: 1000, height: 700 };
-  if (ar === IMAGE_FIVE_SIX_AR) return { width: 500, height: 600 };
-  if (ar === IMAGE_LANDSCAPE_AR) return { width: 1600, height: 900 };
-  if (ar === IMAGE_FIVE_FOUR_AR) return { width: 500, height: 400 };
-  return { width: 440, height: 560 };
 }
 
 // Scene active windows derived from the boundary midpoints (§3): A holds until
@@ -98,9 +106,10 @@ type AboutSceneStageProps = {
 };
 
 // Systems 2 + 3 (MOTION_SPEC §5–6). A sticky-pinned stage spanning SCENE_LAYER_VH
-// of scroll: the background colour interpolates olive → blue → coral, the centre
-// headline/body crossfades at each boundary, and each scene's two decorative
-// images parallax bottom→top. Renders the resting state on the server; motion is
+// of scroll: the background colour interpolates forest → grey → charcoal, the
+// headline/body crossfades at each boundary, and each scene's decorative images
+// parallax bottom→top at their Figma positions. Renders the resting state on the
+// server; motion is
 // driven by a single ScrollTrigger. Reduced motion → instant swaps, no parallax.
 export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -124,12 +133,6 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
       }
 
       const H = window.innerHeight;
-      // Above the 1512 design frame the composition scales up uniformly (vw),
-      // so the decorative images grow with it. Their CSS height uses the same
-      // max(px, vw) cap; mirror that factor here so the parallax travel — which
-      // is computed from the image height in px — stays in sync with what's
-      // rendered. At and below 1512 the factor is 1 (unchanged).
-      const scale = Math.max(1, window.innerWidth / 1512);
 
       scenes.forEach((_, i) => {
         const panel = panelRefs.current[i];
@@ -156,9 +159,9 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
         SCENE_IMAGE_MOTION[i].forEach((motion, j) => {
           const el = imageRefs.current[i][j];
           if (!el) return;
-          const imageHeight = sceneImageBoxHeight(i, j, window.innerWidth, scale);
+          const imageHeight = sceneImageBoxHeight(i, j, window.innerWidth);
           const y = parallaxY(H, imageHeight, motion.speed, localP);
-          el.style.transform = `translateY(calc(-50% + ${y}px))`;
+          el.style.transform = `translateY(${y}px)`;
         });
       });
 
@@ -205,41 +208,56 @@ export default function AboutSceneStage({ scenes }: AboutSceneStageProps) {
             ref={(el) => {
               panelRefs.current[i] = el;
             }}
-            className="absolute inset-0 flex items-center justify-center px-6 will-change-[opacity] sm:px-10"
+            className="absolute inset-0 flex items-center justify-center px-6 will-change-[opacity] sm:px-10 lg:block lg:px-0"
             style={{ opacity: i === 0 ? 1 : 0 }}
           >
-            {/* Decorative parallax images (desktop only). */}
-            {scene.images.map((img, j) => (
-              <div
-                key={img.imageUrl + j}
-                aria-hidden={!img.imageAlt}
-                ref={(el) => {
-                  imageRefs.current[i][j] = el;
-                }}
-                className={`pointer-events-none absolute top-1/2 hidden overflow-hidden rounded-card-corner will-change-transform lg:block ${
-                  IMAGE_SIDES[j] === "left" ? "left-[3vw]" : "right-[3vw]"
-                }`}
-                style={sceneImageBoxStyle(i, j)}
-              >
-                <Image
-                  src={img.imageUrl}
-                  alt={img.imageAlt}
-                  {...sceneImageIntrinsic(i, j)}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            ))}
+            {/* Decorative parallax images at their exact Figma positions
+                (desktop only). Mapped over the layout so scene A renders one
+                image and scenes B/C render two. */}
+            {SCENE_IMAGE_POS[i].map((_, j) => {
+              const img = scene.images[j];
+              if (!img) return null;
+              const { w, h } = SCENE_IMAGE_MOTION[i][j];
+              return (
+                <div
+                  key={img.imageUrl + j}
+                  aria-hidden={!img.imageAlt}
+                  ref={(el) => {
+                    imageRefs.current[i][j] = el;
+                  }}
+                  className="pointer-events-none absolute hidden overflow-hidden rounded-card-corner will-change-transform lg:block"
+                  style={sceneImageBoxStyle(i, j)}
+                >
+                  <Image
+                    src={img.imageUrl}
+                    alt={img.imageAlt}
+                    width={w}
+                    height={h}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              );
+            })}
 
-            {/* Center text column. */}
+            {/* Text block: centred on mobile, positioned at its exact Figma
+                Frame-123 coordinates on desktop (via CSS vars). */}
             <div
               ref={(el) => {
                 textRefs.current[i] = el;
               }}
-              className="relative z-10 flex max-w-[max(40rem,42.328vw)] flex-col gap-[max(1.5rem,1.587vw)] will-change-transform"
-              style={{ color: SCENE_TEXT_COLORS[i] }}
+              className="relative z-10 flex w-full max-w-[34rem] flex-col gap-4 will-change-transform lg:absolute lg:left-[var(--tl)] lg:top-[var(--tt)] lg:w-[var(--tw)] lg:max-w-none lg:gap-[max(0.9375rem,0.992vw)]"
+              style={
+                {
+                  color: SCENE_TEXT_COLORS[i],
+                  "--tl": SCENE_TEXT_POS[i].left,
+                  "--tt": SCENE_TEXT_POS[i].top,
+                  "--tw": SCENE_TEXT_POS[i].width,
+                  "--bw": SCENE_TEXT_POS[i].bodyWidth,
+                } as React.CSSProperties
+              }
             >
               <h2 className="font-display text-heading-4">{scene.headline}</h2>
-              <p className="max-w-[max(34rem,35.979vw)] whitespace-pre-line font-body text-p1">
+              <p className="max-w-full whitespace-pre-line font-body text-p1 lg:max-w-[var(--bw)]">
                 {scene.body}
               </p>
             </div>

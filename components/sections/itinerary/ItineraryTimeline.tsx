@@ -340,12 +340,12 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
     <>
       <section
         aria-labelledby="itinerary-timeline-heading"
-        className="w-full overflow-hidden bg-base-white"
+        className="w-full overflow-hidden bg-secondary-black"
       >
       <div className="mx-auto w-full max-w-[var(--size-itinerary-overview-width)] px-6 py-16 sm:px-10 lg:px-0 lg:py-22">
         <h2
           id="itinerary-timeline-heading"
-          className="font-display text-heading-4 text-base-black"
+          className="font-display text-heading-4 text-base-white"
         >
           {resolved.heading}
         </h2>
@@ -401,14 +401,14 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                   <div className="flex flex-col gap-4 lg:w-[var(--size-itinerary-day-label-width)]">
                     <p
                       className={`font-open-sans text-itinerary-day-count uppercase transition-colors duration-300 ${
-                        active ? "text-itinerary-accent" : "text-base-black"
+                        active ? "text-itinerary-accent" : "text-base-white"
                       }`}
                     >
                       {day.dayLabel}
                     </p>
                     <p
                       className={`whitespace-pre-line font-open-sans text-itinerary-day-summary transition-colors duration-300 ${
-                        active ? "text-itinerary-accent" : "text-itinerary-day-muted"
+                        active ? "text-itinerary-accent" : "text-base-white/90"
                       }`}
                     >
                       {day.daySummary}
@@ -493,12 +493,12 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                       className={`font-open-sans text-itinerary-day-count uppercase transition-colors duration-300 ${
                         index === mobileActive
                           ? "text-itinerary-accent"
-                          : "text-base-black"
+                          : "text-base-white"
                       }`}
                     >
                       {day.dayLabel}
                     </p>
-                    <p className="whitespace-pre-line font-open-sans text-itinerary-day-summary text-itinerary-day-muted">
+                    <p className="whitespace-pre-line font-open-sans text-itinerary-day-summary text-base-white/90">
                       {day.daySummary}
                     </p>
                   </div>

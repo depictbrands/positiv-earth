@@ -12,25 +12,29 @@ export const CROSSFADE_HALF = 0.05; // ± window around each midpoint
 
 // §5 — scene background hexes (also tokenised in globals.css) and headlines.
 // Ordered A → B → C; background interpolates linearly across these.
-export const SCENE_BG_HEXES = ["#345342", "#A5B3AB", "#1D402D"] as const;
+export const SCENE_BG_HEXES = ["#454545", "#61796C", "#333336"] as const;
 export const HEADLINE_EXIT_EM = -0.4; // old headline translateY on exit (§5)
 
-// §4 — System 1 text reposition. Each intro line's start (off-screen) and end
-// (about-2 resting) positions, with a per-line stagger. Units: vh / vw.
+// §4 — System 1 text reveal. Each intro line's resting (about-2) position plus
+// the side it reveals from. On enter, each line fades in (invisible → visible)
+// while sliding in from one full span of itself: line 1 from one width to its
+// left, line 2 from one width to its right, line 3 from one height below. The
+// travel distance is the element's own measured width/height, so it is not
+// stored here. Positions: vh / vw.
 export type IntroLineMotion = {
-  startYvh: number;
   endYvh: number;
-  startXvw: number;
   endXvw: number;
+  slide: "left" | "right" | "bottom"; // side the line reveals in from
   stagger: number; // p offset
 };
 
-// End positions are the exact about-2 (node 40:18) box top-lefts, expressed as
-// %s of the 1512×982 frame: line 1 (140,149), line 2 (931,416), line 3 (372,725).
+// End positions are the exact about-2 (node 1150:1734) box top-lefts, expressed
+// as %s of the 1512×982 frame: line 1 (174,151), line 2 (991,314), line 3 (829,779).
+// Line 3 Y is nudged down to clear the portrait overlap while X stays at Figma.
 export const INTRO_LINES: readonly IntroLineMotion[] = [
-  { startYvh: 100, endYvh: 15.173, startXvw: 0, endXvw: 9.259, stagger: 0.0 },
-  { startYvh: 130, endYvh: 42.363, startXvw: 68, endXvw: 61.574, stagger: 0.08 },
-  { startYvh: 169, endYvh: 85, startXvw: 19, endXvw: 24.603, stagger: 0.16 },
+  { endXvw: 11.508, endYvh: 15.377, slide: "left", stagger: 0.0 },
+  { endXvw: 65.542, endYvh: 31.976, slide: "right", stagger: 0.08 },
+  { endXvw: 54.827, endYvh: 90, slide: "bottom", stagger: 0.16 },
 ];
 
 // §4 — System 1 plays as a one-shot Smart-Animate transition when the intro
@@ -39,24 +43,26 @@ export const INTRO_LINES: readonly IntroLineMotion[] = [
 export const INTRO_DURATION_MS = 1500;
 export const INTRO_EASE_BEZIER = [0.82, 0, 0.15, 1] as const;
 
-// §6 — decorative parallax images. h is the Figma image height (px); s is the
-// speed coefficient. Index-aligned with each scene's two images.
-export type SceneImageMotion = { h: number; speed: number };
+// §6 — decorative parallax images. w×h are the Figma image sizes (px); speed is
+// the parallax coefficient. Index-aligned with each scene's images — about-3 has
+// one image, about-5 and about-7 have two. Resting positions live in the scene
+// stage component (layout, not motion).
+export type SceneImageMotion = { w: number; h: number; speed: number };
 
-export const SCENE_IMAGE_MOTION: readonly (readonly [
-  SceneImageMotion,
-  SceneImageMotion,
-])[] = [
+export const SCENE_IMAGE_MOTION: readonly (readonly SceneImageMotion[])[] = [
+  // Scene A (about-3): centred image + a taller image in the right column.
   [
-    { h: 255, speed: 0.7 }, // img-1.1
-    { h: 532, speed: 1.0 }, // img-1.2
+    { w: 446, h: 485, speed: 1.0 },
+    { w: 464, h: 532, speed: 0.7 },
   ],
+  // Scene B (about-5): tall image left, landscape image top-right.
   [
-    { h: 431, speed: 1.0 }, // img-2.1
-    { h: 209, speed: 0.7 }, // img-2.2
+    { w: 464, h: 626, speed: 1.0 },
+    { w: 464, h: 349, speed: 0.7 },
   ],
+  // Scene C (about-7): image top-left, image bottom-right.
   [
-    { h: 241, speed: 0.7 }, // img-3.1
-    { h: 374, speed: 1.0 }, // img-3.2
+    { w: 461, h: 373, speed: 0.7 },
+    { w: 464, h: 357, speed: 1.0 },
   ],
 ];

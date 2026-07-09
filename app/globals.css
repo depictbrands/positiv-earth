@@ -291,7 +291,9 @@
  * text-reveal-line-buffer-italic | --spacing-text-reveal-line-buffer-italic | 0.5em
  * abouthero-role-gap    | --spacing-abouthero-role-gap              | 32px
  * abouthero-firstrow-gap | --spacing-abouthero-firstrow-gap         | 48px
- * abouthero-headline-inset-left | --spacing-abouthero-headline-inset-left | 17rem (272px)
+ * abouthero-headline-inset-left | --spacing-abouthero-headline-inset-left | 8.25rem (132px)
+ * abouthero-lead-indent | --spacing-abouthero-lead-indent          | 5.25rem (84px)
+ * abouthero-role-indent | --spacing-abouthero-role-indent          | 15.0625rem (241px)
  * hero-subcopy          | --text-hero-subcopy                       | 20px
  * cta-overlay           | --color-cta-overlay                       | rgba(0,0,0,0.25)
  * cta-content-gap       | --spacing-cta-content-gap                 | 46px
@@ -343,12 +345,15 @@
  * faq-item-gap          | --spacing-faq-item-gap                    | 24px
  * faq-answer-gap        | --spacing-faq-answer-gap                  | 20px
  * forest                | --color-about-forest                      | #1D402D
- * about-scene-a         | --color-about-scene-a                     | #345342 (MOTION_SPEC §5 Scene A)
- * about-scene-b         | --color-about-scene-b                     | #A5B3AB (MOTION_SPEC §5 Scene B)
- * about-scene-c         | --color-about-scene-c                     | --color-about-forest (MOTION_SPEC §5 Scene C)
+ * about-scene-a         | --color-about-scene-a                     | #454545 (MOTION_SPEC §5 Scene A)
+ * about-scene-b         | --color-about-scene-b                     | #61796C (MOTION_SPEC §5 Scene B)
+ * about-scene-c         | --color-about-scene-c                     | #333336 (MOTION_SPEC §5 Scene C)
  * about-text-light      | --color-about-text-light                  | #E8ECEA
  * about-text-dark       | --color-about-text-dark                   | #042714
  * about-cta-band-height | --size-about-cta-band-height              | 580px (MOTION_SPEC §7 bandH)
+ * about-intro-portrait-width | --size-about-intro-portrait-width    | 794px (49.625rem)
+ * about-intro-portrait-height | --size-about-intro-portrait-height  | 518px (32.375rem)
+ * about-intro-portrait-corner | --radius-about-intro-portrait-corner | 20px (1.25rem)
  * abouthero-content-width | --size-abouthero-content-width          | 1312px
  * quiz-overlay-backgroud | --color-quiz-overlay                     | rgba(24,24,24,0.8) (Figma "quiz-overlay-backgroud")
  * quiz-bg-overlay       | --color-quiz-bg-overlay                   | rgba(0,0,0,0.3)
@@ -440,9 +445,9 @@
    * scroll-driven interpolation in the scene stage stays faithful to the spec.
    */
   --color-about-forest: #1D402D;
-  --color-about-scene-a: #345342;
-  --color-about-scene-b: #A5B3AB;
-  --color-about-scene-c: var(--color-about-forest);
+  --color-about-scene-a: #454545;
+  --color-about-scene-b: #61796C;
+  --color-about-scene-c: #333336;
   --color-about-text-light: #E8ECEA;
   --color-about-text-dark: #042714;
 
@@ -454,8 +459,8 @@
 
   /*
    * Design-Your-Travel quiz (Figma node 584:1372). The overlay panel and page
-   * scrim are kept as the exact Figma values; the progress fill reuses the
-   * Figma "blue" swatch (same hex as --color-about-scene-b).
+   * scrim are kept as the exact Figma values; the progress fill uses the Figma
+   * "blue" swatch (#7297ae).
    */
   --color-quiz-overlay: oklch(0.209 0 0 / 0.8);
   --color-quiz-bg-overlay: oklch(0 0 0 / 0.3);
@@ -469,6 +474,7 @@
   --radius-search-bar-corner: 5rem;
   --radius-search-button-corner: 3rem;
   --radius-card-corner: 0.625rem;
+  --radius-about-intro-portrait-corner: 1.25rem;
 
   --spacing-header-active-pill-offset: 0.3125rem;
   /* Desktop header side inset — logo's left gap and the quiz CTA's right gap,
@@ -553,7 +559,9 @@
   --spacing-text-reveal-line-buffer-italic:0.5em;
   --spacing-abouthero-role-gap: 2rem;
   --spacing-abouthero-firstrow-gap: 3rem;
-  --spacing-abouthero-headline-inset-left: 17rem;
+  --spacing-abouthero-headline-inset-left: 8.25rem;
+  --spacing-abouthero-lead-indent: 5.25rem;
+  --spacing-abouthero-role-indent: 15.0625rem;
   --spacing-how-it-works-turntable-gap: 9.0625rem;
   --spacing-how-it-works-turntable-offset-x: 3rem;
   --spacing-how-it-works-turntable-mobile-inset-x: 3.5rem;
@@ -720,9 +728,34 @@
   --size-faq-list-width: 43.25rem;
   --size-about-cta-band-height: 36.25rem;
   --size-abouthero-content-width: 82rem;
-  /* About intro (about-2 / Figma node 40:18). Portrait box is 439×519px; 439px
-     (27.4375rem) is the desktop max width, reached at the 1512 frame. */
-  --size-about-intro-portrait-width: 27.4375rem;
+  /* About intro (about-2 / Figma node 1150:1734). Scene image box is 794×518px
+     (49.625×32.375rem), corner radius 20px (1.25rem). Desktop width scales in vw
+     at the 1512 frame; height tracks the 794:518 aspect ratio. */
+  --position-about-intro-portrait-left: 10.913vw;
+  --position-about-intro-portrait-top: 34.012vh;
+  --size-about-intro-portrait-vw: 52.513vw;
+  --size-about-intro-portrait-height-vw: calc(
+    var(--size-about-intro-portrait-vw) * 518 / 794
+  );
+  /* Stat 1 (12 years in airline industry): exact about-2 box top-left at (174, 151)
+     in the 1512×982 frame — vw/vh scale fluidly with viewport size. */
+  --position-about-intro-stat-1-top: 15.377vh;
+  --position-about-intro-stat-1-left: 11.508vw;
+  /* Stat 2 (Psychology master degree): exact about-2 box top-left at (991, 314)
+     in the 1512×982 frame — vw/vh scale fluidly with viewport size. */
+  --position-about-intro-stat-2-top: 31.976vh;
+  --position-about-intro-stat-2-left: 65.542vw;
+  /* Stat 3 (100+ destinations): Figma box at (829, 779); Y nudged to 90vh so the
+     block clears the portrait and has room above the section bottom. */
+  --spacing-about-intro-stat-3-offset-top: -2rem;
+  --position-about-intro-stat-3-top: calc(
+    90vh + var(--spacing-about-intro-stat-3-offset-top)
+  );
+  --position-about-intro-stat-3-left: 54.827vw;
+  /* Desktop intro cluster (portrait + stats) — shared upward shift. */
+  --spacing-about-intro-cluster-offset-top: -3vh;
+  /* Taller than 100vh so stat 3 can sit below the portrait with bottom breathing room. */
+  --size-about-intro-section-height: 120vh;
 
   /* Design-Your-Travel quiz layout (Figma nodes 584:1372, 947:1426). */
   --size-quiz-block-width: 76rem;
@@ -1000,20 +1033,19 @@
   --text-contact-info-detail--font-weight: 400;
 
   /*
-   * About intro stat lines (about-2 / node 40:18). Two-tone: the emphasis is
-   * 96px Merriweather SemiBold Italic, the rest 64px Raleway SemiBold; both use
-   * an 80px line height in the design. The line-height ratios (0.8333 = 80/96,
-   * 1.25 = 80/64) keep both spans on the same 80px line box at every size, and
-   * the clamp maxes are reached at the 1512 frame.
+   * About intro stat lines (about-2 / node 1150:1734). Two-tone: the emphasis
+   * is 96px Merriweather SemiBold Italic (line-height 1.1), the rest 32px
+   * Raleway SemiBold (line-height 1.26, +3% tracking). The clamp maxes are
+   * reached at the 1512 frame.
    */
   --text-about-stat-emphasis: clamp(3rem, 6.35vw, 6rem);
-  --text-about-stat-emphasis--line-height: 0.8333;
+  --text-about-stat-emphasis--line-height: 1.1;
   --text-about-stat-emphasis--letter-spacing: 0em;
   --text-about-stat-emphasis--font-weight: 600;
 
-  --text-about-stat-rest: clamp(2rem, 4.23vw, 4rem);
-  --text-about-stat-rest--line-height: 1.25;
-  --text-about-stat-rest--letter-spacing: 0em;
+  --text-about-stat-rest: clamp(1.25rem, 2.116vw, 2rem);
+  --text-about-stat-rest--line-height: 1.26;
+  --text-about-stat-rest--letter-spacing: 0.03em;
   --text-about-stat-rest--font-weight: 600;
 
   /*
@@ -1140,18 +1172,23 @@ body {
   --text-heading-3: max(1.75rem, 4.63vw);
   --text-p1: max(1.25rem, 1.323vw);
   --text-about-stat-emphasis: max(3rem, 6.35vw);
-  --text-about-stat-rest: max(2rem, 4.23vw);
+  --text-about-stat-rest: max(1.25rem, 2.116vw);
   /* Headline gaps in AboutHero (rem) tracked to vw so they scale with the type. */
   --spacing-hero-headline-gap: max(2.25rem, 2.381vw);
   --spacing-abouthero-role-gap: max(2rem, 2.116vw);
   --spacing-abouthero-firstrow-gap: max(3rem, 3.175vw);
-  --spacing-abouthero-headline-inset-left: max(17rem, 17.989vw);
+  --spacing-abouthero-headline-inset-left: max(8.25rem, 8.73vw);
+  --spacing-abouthero-lead-indent: max(5.25rem, 5.556vw);
+  --spacing-abouthero-role-indent: max(15.0625rem, 15.939vw);
 
   /* AboutHero structural rem tokens — without these the hero section height and
      title block froze at the 1512 frame while the headline type kept scaling.
      Now they grow in lockstep above 1512 like the other routes' heroes. */
   --size-hero-height: max(61.375rem, 64.947vw);
   --size-abouthero-content-width: max(82rem, 86.772vw);
+  --size-about-intro-portrait-width: max(49.625rem, 52.513vw);
+  --size-about-intro-portrait-height: max(32.375rem, 34.259vw);
+  --radius-about-intro-portrait-corner: max(1.25rem, 1.323vw);
 
   /* Shared Header + quiz button in the hero top bar (matches .home-scale). */
   --text-cta-button: max(1.25rem, 1.323vw);

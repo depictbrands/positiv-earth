@@ -189,12 +189,12 @@ export default function Accommodation({ content }: AccommodationProps) {
   return (
     <section
       aria-labelledby="itinerary-accommodation-heading"
-      className="w-full overflow-hidden bg-base-white"
+      className="w-full overflow-hidden bg-secondary-black"
     >
       <div className="mx-auto flex w-full max-w-[var(--size-itinerary-overview-width)] flex-col gap-12 px-6 py-16 sm:px-10 lg:gap-y-[var(--spacing-itinerary-accommodation-heading-gap)] lg:px-0 lg:py-22">
         <h2
           id="itinerary-accommodation-heading"
-          className="font-display text-heading-4 text-base-black"
+          className="font-display text-heading-4 text-base-white"
         >
           {resolved.heading}
         </h2>
@@ -219,8 +219,10 @@ export default function Accommodation({ content }: AccommodationProps) {
                   aria-selected={selected}
                   aria-controls={panelId}
                   onClick={() => setSelectedCityId(city.id)}
-                  className={`w-full rounded-card-corner text-left font-open-sans font-bold text-itinerary-headline text-base-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-black ${
-                    selected ? "bg-itinerary-accommodation-city-active" : "bg-transparent"
+                  className={`w-full rounded-card-corner text-left font-open-sans font-bold text-itinerary-day-summary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white ${
+                    selected
+                      ? "bg-itinerary-accommodation-city-active text-base-black"
+                      : "bg-transparent text-base-white"
                   }`}
                   style={{ padding: "var(--spacing-itinerary-accommodation-city-inset)" }}
                 >
