@@ -20,12 +20,23 @@ import type { LogoContent } from "@/types/logo-content";
 /** Editorial CTA shown bottom-right of the mobile menu overlay. */
 type QuizCta = { href: string; label: string };
 
-const NAV_ITEMS = [
+type NavItem = {
+  label: string;
+  href: string;
+  pillVariant?: "fixed" | "content";
+};
+
+const NAV_ITEMS: readonly NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
+  {
+    label: "Destinations",
+    href: "/#destinations-heading",
+    pillVariant: "content",
+  },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
-] as const;
+];
 
 type HeaderProps = {
   className?: string;
@@ -89,9 +100,11 @@ type HeaderNavButtonProps = {
   onNavigate?: () => void;
   // "fixed": pill matches the design's pill-width and nests an equal `offset`
   // gap on every side — shared by every desktop item so they all read like the
-  // active "About" pill. "menu": mobile stacked item — pill expands `offset`
-  // around the full-width button.
-  variant?: "fixed" | "menu";
+  // active "About" pill. "content": auto-width pill with
+  // `--spacing-header-nav-pill-padding-x` between label and border.
+  // "menu": mobile stacked item — pill expands `offset` around the full-width
+  // button.
+  variant?: "fixed" | "content" | "menu";
   className?: string;
   buttonClassName?: string;
   style?: CSSProperties;
@@ -105,6 +118,8 @@ const outerClassByVariant: Record<
 > = {
   fixed:
     "group relative flex h-full w-full items-center justify-center",
+  content:
+    "group relative flex h-full w-auto items-center justify-center px-[var(--spacing-header-nav-pill-padding-x)]",
   menu: "group relative flex w-full items-center",
 };
 
@@ -115,6 +130,9 @@ const pillInsetByVariant: Record<
   // Inset equally on all sides → offset gap top/bottom/left and a pill that is
   // exactly `--size-header-active-pill-width` wide.
   fixed: { top: PILL_OFFSET, right: PILL_OFFSET, bottom: PILL_OFFSET, left: PILL_OFFSET },
+  // Horizontal padding on the link supplies the label-to-border gap; only
+  // inset top/bottom so the pill spans the padded width.
+  content: { top: PILL_OFFSET, right: 0, bottom: PILL_OFFSET, left: 0 },
   // Expand `offset` around the full-width mobile button.
   menu: { top: PILL_OFFSET_NEG, right: PILL_OFFSET_NEG, bottom: PILL_OFFSET_NEG, left: PILL_OFFSET_NEG },
 };
@@ -253,7 +271,8 @@ export default function Header({
               {NAV_ITEMS.map((item) => (
                 <HeaderNavButton
                   key={item.label}
-                  style={navCellStyle}
+                  style={item.pillVariant === "content" ? undefined : navCellStyle}
+                  variant={item.pillVariant ?? "fixed"}
                   href={item.href}
                   isActive={pathname === item.href}
                 >

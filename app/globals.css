@@ -477,6 +477,9 @@
   --radius-about-intro-portrait-corner: 1.25rem;
 
   --spacing-header-active-pill-offset: 0.3125rem;
+  /* Auto-width nav pills (e.g. Destinations) — horizontal inset between label
+     and the hover/active border. */
+  --spacing-header-nav-pill-padding-x: 1rem;
   /* Desktop header side inset — logo's left gap and the quiz CTA's right gap,
      kept equal so the header is symmetric. 32px at the 1512 frame. */
   --spacing-header-inset-x: 2rem;
@@ -1677,6 +1680,7 @@ body {
   --size-header-active-pill-width: max(6.1875rem, 6.548vw);
   --size-header-active-pill-height: max(2.875rem, 3.042vw);
   --spacing-header-active-pill-offset: max(0.3125rem, 0.331vw);
+  --spacing-header-nav-pill-padding-x: max(1rem, 1.058vw);
   --spacing-header-inset-x: max(2rem, 2.116vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
   --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
