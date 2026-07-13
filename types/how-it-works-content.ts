@@ -1,9 +1,14 @@
+export type HowItWorksStep = {
+  title: string;
+  body: string;
+};
+
 export type HowItWorksSteps = [
-  string,
-  string,
-  string,
-  string,
-  string,
+  HowItWorksStep,
+  HowItWorksStep,
+  HowItWorksStep,
+  HowItWorksStep,
+  HowItWorksStep,
 ];
 
 export type HowItWorksContent = {

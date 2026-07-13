@@ -39,7 +39,9 @@ type SanityHomePage = {
   howItWorks?: {
     heading?: string;
     emphasizedWord?: string;
-    steps?: string[];
+    // Tolerant of legacy string steps and the current {title, body} objects so
+    // the page keeps rendering while CMS content is migrated to the new shape.
+    steps?: Array<string | { title?: string; body?: string } | null>;
     body?: string;
     image?: SanityImageWithAlt;
     cta?: { label?: string; href?: string };
@@ -132,10 +134,14 @@ function mapHowItWorks(
   section: NonNullable<SanityHomePage["howItWorks"]>,
 ): HowItWorksContent {
   const image = mapImage(section.image);
-  const steps = (section.steps ?? []).slice(0, 5);
+  const steps = (section.steps ?? []).slice(0, 5).map((step) =>
+    typeof step === "string"
+      ? { title: step, body: "" }
+      : { title: step?.title ?? "", body: step?.body ?? "" },
+  );
 
   while (steps.length < 5) {
-    steps.push("");
+    steps.push({ title: "", body: "" });
   }
 
   return {

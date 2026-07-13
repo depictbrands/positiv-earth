@@ -111,7 +111,7 @@ export default function LocalFood({ content }: LocalFoodProps) {
               </p>
             </div>
 
-            <p className="font-body text-itinerary-local-food-body text-base-white">
+            <p className="font-body text-turntable-body text-base-white">
               {resolved.body}
             </p>
           </div>

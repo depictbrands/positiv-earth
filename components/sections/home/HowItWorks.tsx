@@ -12,11 +12,26 @@ const DEFAULT_IMAGE_URL =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 936 982"><defs><linearGradient id="sky" x1="0" x2="0" y1="0" y2="1"><stop stop-color="%234aa6e8"/><stop offset="1" stop-color="%23f6fbff"/></linearGradient></defs><rect width="936" height="982" fill="url(%23sky)"/><rect x="0" y="560" width="936" height="422" fill="%23ffffff" fill-opacity="0.35"/><path d="M470 160 L860 360 L470 460 Z" fill="%23d9e1eb" fill-opacity="0.92"/><path d="M540 240 L892 392 L540 448 Z" fill="%23b7c3d2" fill-opacity="0.95"/></svg>';
 
 const DEFAULT_STEPS: HowItWorksSteps = [
-  "Curated Travel Experience",
-  "Pre-Trip Sessions",
-  "Cultural Briefing",
-  "Real-World Preparation",
-  "On-Trip Resources",
+  {
+    title: "Curated Travel Experience",
+    body: "Personalized itineraries crafted around your interests and travel style.",
+  },
+  {
+    title: "Pre-Trip Sessions",
+    body: "A one-on-one planning session before you depart.",
+  },
+  {
+    title: "Cultural Briefing",
+    body: "Clear, practical cultural guidance for your specific destination.",
+  },
+  {
+    title: "Real-World Preparation",
+    body: "Real-life scenarios and examples, not theory.",
+  },
+  {
+    title: "On-Trip Tools",
+    body: "Technological tools and materials you can review.",
+  },
 ];
 
 const DEFAULT_CONTENT: HowItWorksContent = {

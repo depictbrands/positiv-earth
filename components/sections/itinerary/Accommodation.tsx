@@ -155,15 +155,21 @@ function HotelCard({ hotel, featured = false }: HotelCardProps) {
         style={{ backgroundColor: "var(--color-itinerary-accommodation-card-overlay)" }}
       />
 
-      <p
-        className="absolute font-open-sans font-light uppercase text-itinerary-hotel-name text-base-white"
+      <div
+        className="absolute inset-x-0 bottom-0"
         style={{
-          left: "var(--spacing-itinerary-accommodation-name-inset)",
-          bottom: "var(--spacing-itinerary-accommodation-name-inset)",
+          padding:
+            "var(--spacing-itinerary-accommodation-name-inset)",
+          borderRadius:
+            "0 0 var(--radius-card-corner) var(--radius-card-corner)",
+          backgroundImage:
+            "linear-gradient(180deg, var(--color-destination-card-portrait-overlay-end) 7.02%, var(--color-base-black) 100%)",
         }}
       >
-        {hotel.name}
-      </p>
+        <p className="font-open-sans font-light uppercase text-itinerary-hotel-name text-base-white">
+          {hotel.name}
+        </p>
+      </div>
     </article>
   );
 }
@@ -204,6 +210,7 @@ export default function Accommodation({ content }: AccommodationProps) {
             role="tablist"
             aria-label="Accommodation cities"
             className="flex w-full shrink-0 flex-col lg:max-w-[var(--size-itinerary-accommodation-nav-width)]"
+            style={{ gap: "var(--spacing-itinerary-accommodation-grid-gap)" }}
           >
             {resolved.cities.map((city) => {
               const selected = city.id === selectedCity?.id;
@@ -219,14 +226,42 @@ export default function Accommodation({ content }: AccommodationProps) {
                   aria-selected={selected}
                   aria-controls={panelId}
                   onClick={() => setSelectedCityId(city.id)}
-                  className={`w-full rounded-card-corner text-left font-open-sans font-bold text-itinerary-day-summary transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white ${
-                    selected
-                      ? "bg-itinerary-accommodation-city-active text-base-black"
-                      : "bg-transparent text-base-white"
-                  }`}
-                  style={{ padding: "var(--spacing-itinerary-accommodation-city-inset)" }}
+                  className="group relative w-full overflow-hidden text-left font-open-sans text-base-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-base-white"
+                  style={{
+                    padding: "var(--spacing-itinerary-accommodation-city-inset)",
+                    fontSize: "var(--text-turntable-body)",
+                    lineHeight: "var(--text-turntable-body--line-height)",
+                    letterSpacing: "var(--text-turntable-body--letter-spacing)",
+                    fontWeight: "var(--font-weight-open-sans-bold)",
+                  }}
                 >
-                  {city.label}
+                  <span
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute inset-0 z-0 transition-opacity duration-300 ease-out ${
+                      selected
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-100 group-active:opacity-100"
+                    }`}
+                    style={{
+                      backgroundColor: "var(--color-quiz-entry-glass-fill)",
+                      boxShadow: "var(--shadow-quiz-entry-glass-edge)",
+                      border: "1px solid var(--color-glass-border)",
+                      borderRadius: "var(--radius-header-active-pill-corner)",
+                      backdropFilter: "blur(var(--blur-glass)) saturate(var(--glass-saturate))",
+                      WebkitBackdropFilter:
+                        "blur(var(--blur-glass)) saturate(var(--glass-saturate))",
+                      filter: "drop-shadow(var(--shadow-quiz-entry-drop))",
+                    }}
+                  />
+                  <span
+                    className={`relative z-10 transition-colors ${
+                      selected
+                        ? "text-base-white"
+                        : "text-base-white"
+                    }`}
+                  >
+                    {city.label}
+                  </span>
                 </button>
               );
             })}

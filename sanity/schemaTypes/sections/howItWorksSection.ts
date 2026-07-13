@@ -19,7 +19,18 @@ export const howItWorksSection = defineType({
       name: "steps",
       title: "Turntable steps",
       type: "array",
-      of: [defineArrayMember({ type: "string" })],
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({ name: "body", title: "Body", type: "text", rows: 2 }),
+          ],
+          preview: {
+            select: { title: "title", subtitle: "body" },
+          },
+        }),
+      ],
     }),
     defineField({
       name: "body",

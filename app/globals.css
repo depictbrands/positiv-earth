@@ -41,6 +41,8 @@
  * destination-card-duration-label | --text-destination-card-duration-label | 14px
  * destination-card-locations | --text-destination-card-locations    | 24px
  * turntable-tag         | --text-turntable-tag                     | 24px
+ * turntable-body        | --text-turntable-body                    | 16px
+ * turntable-tag-corner  | --radius-turntable-tag-corner            | 20px
  * navi                  | --text-nav                               | 16px
  * quick-link-footer     | --text-quick-link-footer                 | 20px
  * destination-card-scrim | --color-destination-card-scrim         | rgba(0, 0, 0, 0.4)
@@ -474,6 +476,7 @@
   --radius-search-bar-corner: 5rem;
   --radius-search-button-corner: 3rem;
   --radius-card-corner: 0.625rem;
+  --radius-turntable-tag-corner: 1.25rem;
   --radius-about-intro-portrait-corner: 1.25rem;
 
   --spacing-header-active-pill-offset: 0.3125rem;
@@ -1020,6 +1023,11 @@
   --text-turntable-tag--letter-spacing: 0em;
   --text-turntable-tag--font-weight: 600;
 
+  --text-turntable-body: 1rem;
+  --text-turntable-body--line-height: 1.5;
+  --text-turntable-body--letter-spacing: 0em;
+  --text-turntable-body--font-weight: 400;
+
   --text-nav: 1rem;
   --text-nav--line-height: 1.2rem;
   --text-nav--letter-spacing: 0em;
@@ -1239,6 +1247,7 @@ body {
   --text-destination-card-duration-label: max(0.875rem, 0.926vw);
   --text-destination-card-locations: max(1.167rem, 1.587vw);
   --text-turntable-tag: max(1.5rem, 1.587vw);
+  --text-turntable-body: max(1rem, 1.058vw);
   --text-testimonial-card-name: max(1.25rem, 1.323vw);
   --text-testimonial-card-quote: max(1rem, 1.058vw);
   --text-cta-button: max(1.25rem, 1.323vw);
@@ -1343,6 +1352,7 @@ body {
 
   /* Corner radii (track element growth) */
   --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-turntable-tag-corner: max(1.25rem, 1.323vw);
   --radius-search-bar-corner: max(5rem, 5.291vw);
   --radius-search-button-corner: max(3rem, 3.175vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
@@ -1370,6 +1380,7 @@ body {
   --text-heading-3: max(1.75rem, 4.63vw);
   --text-heading-4: max(2.25rem, 4.63vw);
   --text-turntable-tag: max(1.5rem, 1.587vw);
+  --text-turntable-body: max(1rem, 1.058vw);
   --text-cta-button: max(1.25rem, 1.323vw);
   --text-nav: max(1rem, 1.058vw);
   --text-header-logo: max(1.5rem, 1.587vw);
@@ -1397,6 +1408,7 @@ body {
 
   /* Corner radii (track element growth) */
   --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-turntable-tag-corner: max(1.25rem, 1.323vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
   --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
 }
@@ -1437,6 +1449,7 @@ body {
 
   /* Corner radii */
   --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-turntable-tag-corner: max(1.25rem, 1.323vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
   --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
 }
@@ -1454,6 +1467,7 @@ body {
   --text-heading-2: max(2.5rem, 6.35vw);
   --text-heading-4: max(2.25rem, 4.63vw);
   --text-turntable-tag: max(1.5rem, 1.587vw);
+  --text-turntable-body: max(1rem, 1.058vw);
   --text-cta-button: max(1.25rem, 1.323vw);
   --text-nav: max(1rem, 1.058vw);
   --text-header-logo: max(1.5rem, 1.587vw);
@@ -1486,6 +1500,7 @@ body {
 
   /* Corner radii */
   --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-turntable-tag-corner: max(1.25rem, 1.323vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
   --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
 }
@@ -1541,6 +1556,7 @@ body {
 
   /* Corner radii */
   --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-turntable-tag-corner: max(1.25rem, 1.323vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
   --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
 }
@@ -1656,6 +1672,7 @@ body {
 
   /* Corner radii */
   --radius-card-corner: max(0.625rem, 0.661vw);
+  --radius-turntable-tag-corner: max(1.25rem, 1.323vw);
   --radius-header-corner: max(3.125rem, 3.307vw);
   --radius-header-active-pill-corner: max(1.5625rem, 1.653vw);
 }
@@ -1721,7 +1738,6 @@ body {
   --size-footer-support-width: max(26rem, 27.513vw);
   --size-footer-contact-column-width: max(25.5625rem, 27.05vw);
   --size-footer-form-width: max(37.25rem, 39.418vw);
-  --size-footer-social-icon: max(1.5rem, 1.587vw);
   --size-footer-submit-width: max(12.0625rem, 12.765vw);
 
   /* Spacing */

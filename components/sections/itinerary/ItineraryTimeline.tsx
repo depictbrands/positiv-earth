@@ -429,7 +429,7 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                   </div>
 
                   <div
-                    className="relative flex w-full flex-1 flex-col bg-base-white lg:absolute lg:left-0 lg:top-0 lg:h-full lg:w-[var(--size-itinerary-card-panel-width)] lg:flex-none lg:bg-itinerary-card-overlay"
+                    className="relative flex w-full flex-1 flex-col bg-base-black/60 lg:absolute lg:left-0 lg:top-0 lg:h-full lg:w-[var(--size-itinerary-card-panel-width)] lg:flex-none"
                     style={{
                       gap: "var(--spacing-itinerary-card-content-gap)",
                       padding: "var(--spacing-itinerary-card-inset)",
@@ -439,7 +439,7 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                       className="flex flex-col"
                       style={{ gap: "var(--spacing-itinerary-card-group-gap)" }}
                     >
-                      <p className="font-open-sans text-itinerary-day-summary text-base-black">
+                      <p className="font-open-sans text-itinerary-day-summary text-base-white">
                         {day.date}
                       </p>
 
@@ -447,10 +447,10 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
                         className="flex flex-col"
                         style={{ gap: "var(--spacing-itinerary-card-headline-gap)" }}
                       >
-                        <p className="font-open-sans text-itinerary-headline text-base-black">
+                        <p className="font-open-sans text-itinerary-headline text-base-white">
                           {day.headline}
                         </p>
-                        <p className="font-open-sans text-itinerary-body text-itinerary-body-ink">
+                        <p className="font-open-sans text-itinerary-body text-base-white/90">
                           {day.body}
                         </p>
                       </div>
@@ -511,7 +511,35 @@ export default function ItineraryTimeline({ content }: ItineraryTimelineProps) {
       </section>
 
       {openDay ? (
-        <DayDetailModal day={openDay} onClose={() => setOpenDayIndex(null)} />
+        <div data-itinerary-detail-theme>
+          <DayDetailModal day={openDay} onClose={() => setOpenDayIndex(null)} />
+          <style jsx global>{`
+            [data-itinerary-detail-theme] [role="dialog"] > div:last-child {
+              background-color: var(--color-secondary-black);
+            }
+
+            [data-itinerary-detail-theme] [role="dialog"] > div:last-child p,
+            [data-itinerary-detail-theme] [role="dialog"] > div:last-child h3,
+            [data-itinerary-detail-theme] [role="dialog"] > div:last-child span,
+            [data-itinerary-detail-theme] [role="dialog"] > div:last-child button {
+              color: var(--color-base-white);
+            }
+
+            [data-itinerary-detail-theme]
+              [role="dialog"]
+              > div:last-child
+              .text-itinerary-accent {
+              color: var(--color-itinerary-accent);
+            }
+
+            [data-itinerary-detail-theme]
+              [role="dialog"]
+              > div:last-child
+              button[aria-label="Close"] {
+              background-color: var(--color-secondary-black);
+            }
+          `}</style>
+        </div>
       ) : null}
     </>
   );

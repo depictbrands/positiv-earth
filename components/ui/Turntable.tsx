@@ -2,7 +2,6 @@
 
 import {
   type CSSProperties,
-  type FocusEvent,
   type MouseEvent,
   useEffect,
   useMemo,
@@ -10,17 +9,37 @@ import {
   useState,
 } from "react";
 
-const DEFAULT_STEPS = [
-  "Curated Travel Experience",
-  "Pre-Trip Sessions",
-  "Cultural Briefing",
-  "Real-World Preparation",
-  "On-Trip Resources",
-] as const;
+type TurntableStep = {
+  title: string;
+  body: string;
+};
 
-// Structural geometry of the Figma "turntable" frame (node 630:787): a 702×408
-// viewBox with an offset 357px-diameter ring. Nodes sit evenly around the ring,
-// the first one at the top (12 o'clock).
+const DEFAULT_STEPS: readonly TurntableStep[] = [
+  {
+    title: "Curated Travel Experience",
+    body: "Personalized itineraries crafted around your interests and travel style.",
+  },
+  {
+    title: "Pre-Trip Sessions",
+    body: "A one-on-one planning session before you depart.",
+  },
+  {
+    title: "Cultural Briefing",
+    body: "Clear, practical cultural guidance for your specific destination.",
+  },
+  {
+    title: "Real-World Preparation",
+    body: "Real-life scenarios and examples, not theory.",
+  },
+  {
+    title: "On-Trip Tools",
+    body: "Technological tools and materials you can review.",
+  },
+];
+
+// Structural geometry of the Figma "turntable" frame: a 702×408 viewBox with an
+// offset 357px-diameter ring. Nodes sit evenly around the ring, the first one at
+// the top (12 o'clock).
 const BOX_W = 702;
 const BOX_H = 408;
 const CENTER_X = 315.5;
@@ -30,9 +49,16 @@ const RING_RADIUS = 178.5;
 // type — the gap (LABEL_RADIUS − RING_RADIUS) is the clearance the plane keeps.
 const LABEL_RADIUS = 224;
 const DOT_RADIUS = 5;
-// Label line-height; halved, it's the vertical offset that keeps a single line
-// centered on its node and lets extra wrapped lines flow off the node instead.
+// Label line-height; halved, it's the vertical offset that keeps the title's
+// first line centered on its node so the body block flows off the node instead
+// of shifting the title when it appears.
 const LABEL_LINE_HEIGHT = 1.25;
+
+// Desktop body-block type/size, expressed in container-query units so the block
+// tracks the fluid tag type as the turntable shrinks. 2.28cqw == the 16px
+// turntable-body token at the 702px design width.
+const DESKTOP_BODY_FONT = "min(var(--text-turntable-body), 2.28cqw)";
+const DESKTOP_BODY_MAX_WIDTH = "30cqw";
 
 // "Nomads Airplane" mark that leads the highlight arc. Its native viewBox is
 // 2106×1053 and the nose points right (+x). It keeps a fixed 0° heading while
@@ -56,18 +82,14 @@ const ENTRY_THRESHOLD = 0.4;
 const FULL_TURN_MS = 1400;
 // Floor so a single short click hop still eases noticeably.
 const MIN_STEP_MS = 220;
-// Auto-advance glides one node at a noticeably slower, calmer pace than a click
-// so the resting wheel visibly drifts and reads as interactive.
-const AUTO_STEP_MS = 1600;
 const EPSILON = 0.0005;
 
 // ---- Mobile linear timeline ----
 // Below the lg breakpoint HowItWorks stacks, so the ring is re-expressed as a
-// vertical timeline (see screenshot reference). Values per design: the tag type
-// scales fluidly, the icon column is as wide as the plane, labels sit a fixed
-// gap to its right, rows are evenly spaced, and the timeline clears the top of
-// the section. The animation state itself is shared with the ring — only the
-// projection differs.
+// vertical timeline. Values per design: the tag type scales fluidly, the icon
+// column is as wide as the plane, labels sit a fixed gap to its right, rows are
+// evenly spaced, and the timeline clears the top of the section. The animation
+// state itself is shared with the ring — only the projection differs.
 const MOBILE_TAG_FONT = "clamp(1rem, 1.59vw, 1.5rem)";
 const MOBILE_LINE_HEIGHT = 1.25;
 const MOBILE_TRACK_WIDTH = "1.5rem";
@@ -79,8 +101,7 @@ type LabelAlign = "left" | "center" | "right";
 
 type TurntableProps = {
   className?: string;
-  intervalMs?: number;
-  steps?: readonly string[];
+  steps?: readonly TurntableStep[];
 };
 
 type Point = {
@@ -117,8 +138,8 @@ function getPoint(angle: number, radius: number): Point {
   };
 }
 
-// Clockwise easing shared by the intro draw, auto-advance, and click sweep so
-// every motion reads with the same acceleration curve.
+// Clockwise easing shared by the intro draw and click sweep so every motion
+// reads with the same acceleration curve.
 function easeInOut(t: number) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
@@ -126,7 +147,7 @@ function easeInOut(t: number) {
 // Project a ring fraction (0–1, the shared animation value) onto a vertical
 // pixel position on the mobile timeline. Nodes sit at i/itemCount; the final
 // segment wraps from the last node back to the first so the loop-based engine
-// (intro full sweep, auto-advance wrap) reads as the plane returning to the top.
+// (intro full sweep) reads as the plane returning to the top.
 function mapFractionToY(fraction: number, dotYs: number[], itemCount: number) {
   const seg = fraction * itemCount;
   const index = ((Math.floor(seg) % itemCount) + itemCount) % itemCount;
@@ -154,7 +175,6 @@ function usePrefersReducedMotion() {
 
 export default function Turntable({
   className,
-  intervalMs = 4000,
   steps = DEFAULT_STEPS,
 }: TurntableProps) {
   const itemCount = steps.length;
@@ -164,18 +184,21 @@ export default function Turntable({
   const mobileRootRef = useRef<HTMLDivElement>(null);
   const spanRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const rafRef = useRef<number | null>(null);
-  const timeoutRef = useRef<number | null>(null);
   const introPlayedRef = useRef(false);
 
-  // Mirror state into refs so the rAF loop and timers read current values
-  // without re-subscribing on every render.
+  // Mirror state into refs so the rAF loop reads current values without
+  // re-subscribing on every render.
   const activeRef = useRef(0);
   const frontRef = useRef(0);
   const phaseRef = useRef<Phase>("idle");
-  const pausedRef = useRef(false);
   const animatingRef = useRef(false);
 
+  // Where the plane is parked (drives the plane target + lit dot).
   const [activeIndex, setActiveIndex] = useState(0);
+  // The clicked node keeps its title inked even after the pointer leaves; a
+  // hovered node inks only while hovered. Null == nothing selected on load.
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   // Fraction of the ring (0–1) the highlight arc reveals, clockwise from the top.
   const [frontFraction, setFrontFraction] = useState(0);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -184,14 +207,13 @@ export default function Turntable({
   // Even 72° spacing for five nodes, first node at the top, plus a derived
   // clockwise fraction (0 at top) used to place the highlight arc endpoint.
   const geometry = useMemo(() => {
-    return steps.map((label, index) => {
+    return steps.map((step, index) => {
       const fraction = index / itemCount;
       const angle = -90 + fraction * 360;
       const dot = getPoint(angle, RING_RADIUS);
       const labelPoint = getPoint(angle, LABEL_RADIUS);
 
       const dx = labelPoint.x - CENTER_X;
-      const dy = labelPoint.y - CENTER_Y;
       const isCentered = Math.abs(dx) < 40;
 
       let align: LabelAlign;
@@ -208,12 +230,10 @@ export default function Turntable({
         translateX = "-100%";
       }
 
-      // Below the ring's middle, pin the first line on the node (offset by half a
-      // line) so wrapped lines grow downward, away from the track; a single-line
-      // label is unchanged since -50% of one line equals half a line. This keeps
-      // a 2-line label (e.g. "Real-World Preparation") the same distance from the
-      // track as a 1-line one (e.g. "Cultural Briefing"). Elsewhere, center.
-      const translateY = dy > 40 ? `-${LABEL_LINE_HEIGHT / 2}em` : "-50%";
+      // Anchor the title's first line on the node (offset by half a line) so the
+      // body block growing below never shifts the title, and wrapped title lines
+      // flow downward away from the track.
+      const translateY = `-${LABEL_LINE_HEIGHT / 2}em`;
 
       const labelStyle: CSSProperties = {
         left: `${(labelPoint.x / BOX_W) * 100}%`,
@@ -226,7 +246,15 @@ export default function Turntable({
         lineHeight: `${LABEL_LINE_HEIGHT}`,
       };
 
-      return { angle, fraction, dot, label, align, labelStyle };
+      return {
+        angle,
+        fraction,
+        dot,
+        title: step.title,
+        body: step.body,
+        align,
+        labelStyle,
+      };
     });
   }, [itemCount, steps]);
 
@@ -237,13 +265,6 @@ export default function Turntable({
     const bottom = getPoint(90, RING_RADIUS);
     return `M ${top.x} ${top.y} A ${RING_RADIUS} ${RING_RADIUS} 0 0 1 ${bottom.x} ${bottom.y} A ${RING_RADIUS} ${RING_RADIUS} 0 0 1 ${top.x} ${top.y}`;
   }, []);
-
-  const clearTimer = () => {
-    if (timeoutRef.current !== null) {
-      window.clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  };
 
   const cancelRaf = () => {
     if (rafRef.current !== null) {
@@ -256,7 +277,6 @@ export default function Turntable({
   useEffect(() => {
     return () => {
       cancelRaf();
-      clearTimer();
     };
   }, []);
 
@@ -328,9 +348,14 @@ export default function Turntable({
     cancelRaf();
 
     const from = frontRef.current;
-    const start = performance.now();
+    // Seed the clock from the first rAF timestamp so the loop stays pure (no
+    // impure performance.now() read); the first frame lands at t=0.
+    let start: number | null = null;
 
     const tick = (now: number) => {
+      if (start === null) {
+        start = now;
+      }
       const t = Math.min((now - start) / duration, 1);
       let value = from + delta * easeInOut(t);
 
@@ -357,29 +382,9 @@ export default function Turntable({
     rafRef.current = window.requestAnimationFrame(tick);
   }
 
-  function scheduleNext() {
-    clearTimer();
-
-    if (
-      prefersReducedMotion ||
-      pausedRef.current ||
-      animatingRef.current ||
-      phaseRef.current !== "steady" ||
-      itemCount <= 1
-    ) {
-      return;
-    }
-
-    timeoutRef.current = window.setTimeout(() => {
-      runStepTo((activeRef.current + 1) % itemCount, "auto");
-    }, intervalMs);
-  }
-
-  // Move the active node (and arc endpoint) to `target`, sweeping clockwise.
-  // Auto-advance glides slowly; clicks track the faster intro rate.
-  function runStepTo(target: number, source: "auto" | "click") {
-    clearTimer();
-
+  // Move the parked node (and arc endpoint) to `target`, sweeping clockwise from
+  // the plane's current position.
+  function runStepTo(target: number) {
     if (itemCount === 0) {
       return;
     }
@@ -387,7 +392,7 @@ export default function Turntable({
     const targetFraction = geometry[target].fraction;
 
     if (prefersReducedMotion) {
-      // Switch instantly; the arc endpoint is derived from the active node.
+      // Switch instantly; the arc endpoint is derived from the parked node.
       cancelRaf();
       activeRef.current = target;
       frontRef.current = targetFraction;
@@ -399,9 +404,8 @@ export default function Turntable({
     let delta = (targetFraction - frontRef.current) % 1;
     if (delta < 0) delta += 1;
 
-    // Clicking the already-active node: nothing to sweep.
+    // Clicking the already-parked node: nothing to sweep.
     if (delta < EPSILON) {
-      scheduleNext();
       return;
     }
 
@@ -410,12 +414,9 @@ export default function Turntable({
     setPhase("steady");
     setActiveIndex(target);
 
-    const duration =
-      source === "auto"
-        ? AUTO_STEP_MS
-        : Math.max(FULL_TURN_MS * delta, MIN_STEP_MS);
+    const duration = Math.max(FULL_TURN_MS * delta, MIN_STEP_MS);
 
-    animateFront(delta, targetFraction, duration, scheduleNext);
+    animateFront(delta, targetFraction, duration);
   }
 
   function playIntro() {
@@ -424,14 +425,13 @@ export default function Turntable({
     setPhase("intro");
     setActiveIndex(0);
 
-    // Draw a full clockwise turn, then settle into the steady carousel with the
-    // top node active and the arc reset to undrawn.
+    // Draw a full clockwise turn, then settle with the top node parked and the
+    // arc reset to undrawn.
     animateFront(1, 0, FULL_TURN_MS, () => {
       phaseRef.current = "steady";
       activeRef.current = 0;
       setPhase("steady");
       setActiveIndex(0);
-      scheduleNext();
     });
   }
 
@@ -443,7 +443,6 @@ export default function Turntable({
     }
 
     cancelRaf();
-    clearTimer();
     introPlayedRef.current = true;
     phaseRef.current = "steady";
   }, [prefersReducedMotion]);
@@ -481,42 +480,21 @@ export default function Turntable({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prefersReducedMotion, itemCount]);
 
-  const handleMouseEnter = () => {
-    pausedRef.current = true;
-    clearTimer();
-  };
-
-  const handleMouseLeave = () => {
-    pausedRef.current = false;
-    scheduleNext();
-  };
-
-  const handleFocusCapture = () => {
-    pausedRef.current = true;
-    clearTimer();
-  };
-
-  const handleBlurCapture = (event: FocusEvent<HTMLDivElement>) => {
-    const nextTarget = event.relatedTarget;
-
-    if (nextTarget instanceof Node && rootRef.current?.contains(nextTarget)) {
-      return;
-    }
-
-    pausedRef.current = false;
-    scheduleNext();
-  };
-
   const handleNodeClick =
     (index: number) => (event: MouseEvent<HTMLButtonElement>) => {
       if (event.currentTarget.disabled) {
         return;
       }
 
-      // Trigger B.
+      // Trigger B: park the plane on the clicked node and keep its title inked.
       introPlayedRef.current = true;
-      runStepTo(index, "click");
+      setSelectedIndex(index);
+      runStepTo(index);
     };
+
+  const handleNodeEnter = (index: number) => () => setHoveredIndex(index);
+  const handleNodeLeave = (index: number) => () =>
+    setHoveredIndex((current) => (current === index ? null : current));
 
   if (itemCount === 0) {
     return null;
@@ -525,21 +503,15 @@ export default function Turntable({
   const safeActiveIndex = activeIndex < itemCount ? activeIndex : 0;
 
   // With reduced motion we render the final state directly: the arc endpoint
-  // sits at the active node and there is no intro phase.
+  // sits at the parked node and there is no intro phase.
   const renderPhase: Phase = prefersReducedMotion ? "steady" : phase;
   const renderFront = prefersReducedMotion
     ? (geometry[safeActiveIndex]?.fraction ?? 0)
     : frontFraction;
 
-  // A node lights to 100% when the draw front has passed it (intro) or when it
-  // is the active node (steady / idle default).
-  const isLit = (index: number, fraction: number) => {
-    if (renderPhase === "intro") {
-      return fraction <= renderFront + EPSILON;
-    }
-
-    return index === safeActiveIndex;
-  };
+  // A dot inks to base-black once the drawn arc front has reached it (measuring
+  // clockwise from the top), and stays base-white ahead of the front.
+  const isReached = (fraction: number) => fraction <= renderFront + EPSILON;
 
   // The plane rides the leading edge of the highlight arc at a fixed orientation
   // (no rotation) while tracing the ring.
@@ -570,14 +542,7 @@ export default function Turntable({
     mobileMetrics != null && mobilePlaneY - mobileTrackTop > 0.5;
 
   return (
-    <div
-      ref={rootRef}
-      className={cn("relative w-full text-base-black", className)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocusCapture={handleFocusCapture}
-      onBlurCapture={handleBlurCapture}
-    >
+    <div ref={rootRef} className={cn("relative w-full", className)}>
       {/* Desktop (lg+): the circular turntable. */}
       <div className="@container relative hidden aspect-[702/408] w-full overflow-visible lg:block">
         <svg
@@ -590,7 +555,7 @@ export default function Turntable({
             cx={CENTER_X}
             cy={CENTER_Y}
             r={RING_RADIUS}
-            className="fill-none stroke-base-black opacity-20"
+            className="fill-none stroke-base-white opacity-40"
             strokeWidth="1.5"
           />
 
@@ -605,15 +570,15 @@ export default function Turntable({
             strokeDashoffset={1 - renderFront}
           />
 
-          {geometry.map((item, index) => (
+          {geometry.map((item) => (
             <circle
-              key={`dot-${item.label}`}
+              key={`dot-${item.title}`}
               cx={item.dot.x}
               cy={item.dot.y}
               r={DOT_RADIUS}
               className={cn(
-                "fill-base-black transition-opacity duration-300",
-                isLit(index, item.fraction) ? "opacity-100" : "opacity-40",
+                "transition-colors duration-300",
+                isReached(item.fraction) ? "fill-base-black" : "fill-base-white",
               )}
             />
           ))}
@@ -629,29 +594,64 @@ export default function Turntable({
         </svg>
 
         {geometry.map((item, index) => {
-          const isActive = index === safeActiveIndex;
-          const lit = isLit(index, item.fraction);
+          const selected = selectedIndex === index;
+          const hovered = hoveredIndex === index;
+          const alignItems =
+            item.align === "center"
+              ? "items-center"
+              : item.align === "left"
+                ? "items-start"
+                : "items-end";
           const textAlign =
             item.align === "center"
               ? "text-center"
               : item.align === "left"
                 ? "text-left"
                 : "text-right";
+          const blockAlign =
+            item.align === "center"
+              ? "left-1/2 -translate-x-1/2"
+              : item.align === "left"
+                ? "left-0"
+                : "right-0";
 
           return (
-            <div key={item.label} className="absolute" style={item.labelStyle}>
-              <button
-                type="button"
-                aria-current={isActive ? "step" : undefined}
-                onClick={handleNodeClick(index)}
-                className={cn(
-                  "focus-ring-ink rounded-sm bg-transparent font-body font-semibold text-base-black transition-opacity duration-300 disabled:pointer-events-none",
-                  textAlign,
-                  lit ? "opacity-100" : "opacity-65",
+            <div key={item.title} className="absolute" style={item.labelStyle}>
+              <div className={cn("relative flex flex-col", alignItems)}>
+                <button
+                  type="button"
+                  aria-current={selected ? "step" : undefined}
+                  onClick={handleNodeClick(index)}
+                  onMouseEnter={handleNodeEnter(index)}
+                  onMouseLeave={handleNodeLeave(index)}
+                  onFocus={handleNodeEnter(index)}
+                  onBlur={handleNodeLeave(index)}
+                  className={cn(
+                    "focus-ring-ink rounded-sm bg-transparent font-body font-semibold text-base-black disabled:pointer-events-none",
+                    textAlign,
+                  )}
+                >
+                  {item.title}
+                </button>
+
+                {/* Body block: revealed on hover of the title, hidden otherwise. */}
+                {hovered && item.body && (
+                  <div
+                    className={cn(
+                      "pointer-events-none absolute top-full z-10 mt-2 flex items-center justify-center rounded-[var(--radius-turntable-tag-corner)] bg-base-white px-3 py-2.5",
+                      blockAlign,
+                    )}
+                    style={{ width: "max-content", maxWidth: DESKTOP_BODY_MAX_WIDTH }}
+                  >
+                    <p
+                      className="font-body font-normal break-words text-base-black"
+                      style={{ fontSize: DESKTOP_BODY_FONT, lineHeight: 1.26 }}
+                    >
+                      {item.body}
+                    </p>
+                  </div>
                 )}
-              >
-                {item.label}
-              </button>
+              </div>
             </div>
           );
         })}
@@ -675,7 +675,7 @@ export default function Turntable({
               y1={mobileTrackTop}
               x2={mobileMetrics.lineX}
               y2={mobileTrackBottom}
-              className="stroke-base-black opacity-20"
+              className="stroke-base-white opacity-40"
               strokeWidth={mobileStroke}
             />
 
@@ -694,15 +694,15 @@ export default function Turntable({
 
             {mobileMetrics.dotYs.map((y, index) => (
               <circle
-                key={`mobile-dot-${geometry[index].label}`}
+                key={`mobile-dot-${geometry[index].title}`}
                 cx={mobileMetrics.lineX}
                 cy={y}
                 r={mobileDotRadius}
                 className={cn(
-                  "fill-base-black transition-opacity duration-300",
-                  isLit(index, geometry[index].fraction)
-                    ? "opacity-100"
-                    : "opacity-40",
+                  "transition-colors duration-300",
+                  isReached(geometry[index].fraction)
+                    ? "fill-base-black"
+                    : "fill-base-white",
                 )}
               />
             ))}
@@ -728,12 +728,15 @@ export default function Turntable({
           style={{ gap: MOBILE_TAG_GAP }}
         >
           {geometry.map((item, index) => {
-            const isActive = index === safeActiveIndex;
-            const lit = isLit(index, item.fraction);
+            const selected = selectedIndex === index;
+            const hovered = hoveredIndex === index;
+            // Touch has no hover, so the tapped (selected) node keeps its body
+            // block open here in addition to the hover reveal.
+            const showBody = (hovered || selected) && Boolean(item.body);
 
             return (
               <li
-                key={item.label}
+                key={item.title}
                 className="flex items-start"
                 style={{ gap: MOBILE_LABEL_GAP }}
               >
@@ -751,21 +754,43 @@ export default function Turntable({
                     fontSize: MOBILE_TAG_FONT,
                   }}
                 />
-                <button
-                  type="button"
-                  aria-current={isActive ? "step" : undefined}
-                  onClick={handleNodeClick(index)}
-                  className={cn(
-                    "focus-ring-ink rounded-sm bg-transparent text-left font-body font-semibold text-base-black transition-opacity duration-300 disabled:pointer-events-none",
-                    lit ? "opacity-100" : "opacity-65",
-                  )}
-                  style={{
-                    fontSize: MOBILE_TAG_FONT,
-                    lineHeight: MOBILE_LINE_HEIGHT,
-                  }}
+                <div
+                  className="flex min-w-0 flex-col items-start"
+                  style={{ gap: "0.5rem" }}
                 >
-                  {item.label}
-                </button>
+                  <button
+                    type="button"
+                    aria-current={selected ? "step" : undefined}
+                    onClick={handleNodeClick(index)}
+                    onMouseEnter={handleNodeEnter(index)}
+                    onMouseLeave={handleNodeLeave(index)}
+                    onFocus={handleNodeEnter(index)}
+                    onBlur={handleNodeLeave(index)}
+                    className={cn(
+                      "focus-ring-ink rounded-sm bg-transparent text-left font-body font-semibold text-base-black disabled:pointer-events-none",
+                    )}
+                    style={{
+                      fontSize: MOBILE_TAG_FONT,
+                      lineHeight: MOBILE_LINE_HEIGHT,
+                    }}
+                  >
+                    {item.title}
+                  </button>
+
+                  {showBody && (
+                    <div className="flex w-fit max-w-full items-center justify-center rounded-[var(--radius-turntable-tag-corner)] bg-base-white px-3 py-2.5">
+                      <p
+                        className="font-body font-normal break-words text-base-black"
+                        style={{
+                          fontSize: "var(--text-turntable-body)",
+                          lineHeight: 1.26,
+                        }}
+                      >
+                        {item.body}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </li>
             );
           })}
