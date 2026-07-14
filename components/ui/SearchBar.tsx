@@ -1,6 +1,15 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
+import { createPortal } from "react-dom";
 
 import DestinationCard from "@/components/ui/DestinationCard";
 import SearchButton from "@/components/ui/SearchButton";
@@ -54,6 +63,18 @@ function formatDate(date: Date) {
     day: "numeric",
     year: "numeric",
   });
+}
+
+/** Travel window: a start date and (once completed) an end date. */
+type DateRange = { start: Date | null; end: Date | null };
+
+const EMPTY_RANGE: DateRange = { start: null, end: null };
+
+/** "Jul 14 – Jul 20, 2026", or just the start while the range is incomplete. */
+function formatRange({ start, end }: DateRange) {
+  if (!start) return "";
+  if (!end) return formatDate(start);
+  return `${formatDate(start)} – ${formatDate(end)}`;
 }
 
 /** Case-insensitive AND match across a destination's name and locations. */
@@ -243,18 +264,84 @@ function SearchInputSegment({
 }
 
 function CalendarPopover({
-  selected,
-  onSelect,
+  range,
+  onChange,
+  anchorRef,
+  popoverRef,
 }: {
-  selected: Date | null;
-  onSelect: (date: Date) => void;
+  range: DateRange;
+  onChange: (range: DateRange) => void;
+  /** Element the calendar is anchored beneath. */
+  anchorRef: RefObject<HTMLElement | null>;
+  /** Forwarded to the portalled root so outside-click detection can exclude it. */
+  popoverRef: RefObject<HTMLDivElement | null>;
 }) {
   const today = useMemo(() => startOfDay(new Date()), []);
-  const initial = selected ?? today;
+  const initial = range.start ?? range.end ?? today;
   const [view, setView] = useState({
     year: initial.getFullYear(),
     month: initial.getMonth(),
   });
+
+  // Day being hovered while the range is half-open, so the in-between days can
+  // preview the window the user is about to select.
+  const [hovered, setHovered] = useState<Date | null>(null);
+
+  // Range selection: the first pick starts a new (open) range; the second pick
+  // closes it. Clicking a day before the current start restarts from that day.
+  const pickDate = (date: Date) => {
+    const { start, end } = range;
+    if (!start || end) {
+      onChange({ start: date, end: null });
+    } else if (date < start) {
+      onChange({ start: date, end: null });
+    } else {
+      onChange({ start, end: date });
+    }
+  };
+
+  // End used purely for highlighting: the committed end, or the hovered day
+  // while the range is still open.
+  const previewEnd =
+    range.end ?? (range.start && hovered && hovered >= range.start ? hovered : null);
+
+  // The calendar is rendered in a portal on document.body with fixed
+  // positioning so it can't be clipped by an ancestor's `overflow-hidden`
+  // (the Hero section) or painted over by the following section. Position is
+  // measured from the anchor and kept in sync on scroll/resize.
+  const [position, setPosition] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
+
+  useLayoutEffect(() => {
+    const anchor = anchorRef.current;
+    if (!anchor) return;
+
+    const MAX_WIDTH = 320; // Tailwind max-w-xs (20rem)
+    const GAP = 12; // mt-3
+    const EDGE = 8; // viewport breathing room
+
+    const update = () => {
+      const rect = anchor.getBoundingClientRect();
+      const width = Math.min(rect.width, MAX_WIDTH);
+      let left = rect.left;
+      const overflowRight = left + width + EDGE - window.innerWidth;
+      if (overflowRight > 0) left -= overflowRight;
+      left = Math.max(EDGE, left);
+      setPosition({ top: rect.bottom + GAP, left, width });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    // Capture phase so scrolling any ancestor repositions the calendar.
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [anchorRef]);
 
   const daysInMonth = new Date(view.year, view.month + 1, 0).getDate();
   const leadingBlanks = new Date(view.year, view.month, 1).getDay();
@@ -271,11 +358,21 @@ function CalendarPopover({
       return { year: next.getFullYear(), month: next.getMonth() };
     });
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div
+      ref={popoverRef}
       role="dialog"
-      aria-label="Choose a travel date"
-      className="absolute left-0 top-full z-30 mt-3 w-full max-w-xs rounded-card-corner bg-base-white p-4 shadow-[var(--shadow-search-bar)]"
+      aria-label="Choose travel dates"
+      className="fixed z-[100] rounded-card-corner bg-base-white p-4 shadow-[var(--shadow-search-bar)]"
+      style={{
+        top: position?.top ?? 0,
+        left: position?.left ?? 0,
+        width: position?.width,
+        // Hidden until measured on the client to avoid a flash at (0,0).
+        visibility: position ? "visible" : "hidden",
+      }}
     >
       <div className="mb-2 flex items-center justify-between">
         <button
@@ -342,39 +439,64 @@ function CalendarPopover({
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      <div
+        className="grid grid-cols-7 gap-y-1"
+        onMouseLeave={() => setHovered(null)}
+      >
         {cells.map((date, index) => {
           if (!date) {
             return <span key={`blank-${index}`} aria-hidden="true" />;
           }
 
           const isPast = date < today;
-          const isSelected = selected ? isSameDay(date, selected) : false;
           const isToday = isSameDay(date, today);
+          const isStart = range.start ? isSameDay(date, range.start) : false;
+          const isEnd = previewEnd ? isSameDay(date, previewEnd) : false;
+          const isEndpoint = isStart || isEnd;
+          const inRange =
+            range.start && previewEnd
+              ? date > range.start && date < previewEnd
+              : false;
+          // Continuous track behind the days that fall inside the range; the
+          // endpoints round off the outer edge so the bar reads as one span.
+          const showTrack = inRange || (isEndpoint && range.start && previewEnd);
 
           return (
-            <button
+            <div
               key={date.toISOString()}
-              type="button"
-              disabled={isPast}
-              aria-pressed={isSelected}
-              aria-label={formatDate(date)}
-              onClick={() => onSelect(date)}
               className={[
-                "focus-ring-search-button flex aspect-square items-center justify-center rounded-full font-body text-sm transition-colors",
-                isPast
-                  ? "cursor-not-allowed opacity-30"
-                  : "hover:bg-[var(--color-search-bar-divider)]",
-                isSelected ? "bg-base-black text-base-white" : "text-base-black",
-                isToday && !isSelected ? "font-semibold" : "",
+                "relative flex items-center justify-center",
+                showTrack ? "bg-[var(--color-search-bar-divider)]" : "",
+                showTrack && isStart ? "rounded-l-full" : "",
+                showTrack && isEnd ? "rounded-r-full" : "",
               ].join(" ")}
             >
-              {date.getDate()}
-            </button>
+              <button
+                type="button"
+                disabled={isPast}
+                aria-pressed={isEndpoint}
+                aria-label={formatDate(date)}
+                onClick={() => pickDate(date)}
+                onMouseEnter={() => setHovered(date)}
+                className={[
+                  "focus-ring-search-button relative z-[1] flex aspect-square w-full items-center justify-center rounded-full font-body text-sm transition-colors",
+                  isPast
+                    ? "cursor-not-allowed opacity-30"
+                    : "hover:bg-[var(--color-search-bar-divider)]",
+                  isEndpoint
+                    ? "bg-base-black text-base-white"
+                    : "text-base-black",
+                  isToday && !isEndpoint ? "font-semibold" : "",
+                ].join(" ")}
+              >
+                {date.getDate()}
+              </button>
+            </div>
           );
         })}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -446,21 +568,28 @@ export default function SearchBar({
 }: SearchBarProps) {
   const [where, setWhere] = useState("");
   const [what, setWhat] = useState("");
-  const [whenDate, setWhenDate] = useState<Date | null>(null);
+  const [whenRange, setWhenRange] = useState<DateRange>(EMPTY_RANGE);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [results, setResults] = useState<Destination[] | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
+  const whenAnchorRef = useRef<HTMLDivElement>(null);
+  const calendarPopoverRef = useRef<HTMLDivElement>(null);
   const whenLabelId = useId();
 
-  const whenValue = whenDate ? formatDate(whenDate) : "";
+  const whenValue = formatRange(whenRange);
 
   // Close both popovers on outside click or Escape.
   useEffect(() => {
     if (!calendarOpen && results === null) return;
 
     const handlePointerDown = (event: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      // The calendar is portalled to document.body, so it lives outside rootRef;
+      // exclude it explicitly or interacting with it would close the popover.
+      const insideRoot = rootRef.current?.contains(target);
+      const insidePopover = calendarPopoverRef.current?.contains(target);
+      if (!insideRoot && !insidePopover) {
         setCalendarOpen(false);
         setResults(null);
       }
@@ -534,7 +663,10 @@ export default function SearchBar({
         />
 
         {/* When — opens a calendar dropdown instead of free text entry. */}
-        <div className="relative flex w-full min-w-0 items-center xl:min-w-0 xl:flex-1">
+        <div
+          ref={whenAnchorRef}
+          className="relative flex w-full min-w-0 items-center xl:min-w-0 xl:flex-1"
+        >
           <span id={whenLabelId} className="sr-only">
             When do you want to go?
           </span>
@@ -561,10 +693,13 @@ export default function SearchBar({
 
           {calendarOpen ? (
             <CalendarPopover
-              selected={whenDate}
-              onSelect={(date) => {
-                setWhenDate(date);
-                setCalendarOpen(false);
+              range={whenRange}
+              anchorRef={whenAnchorRef}
+              popoverRef={calendarPopoverRef}
+              onChange={(next) => {
+                setWhenRange(next);
+                // Close only once a full range (start + end) is chosen.
+                if (next.start && next.end) setCalendarOpen(false);
               }}
             />
           ) : null}

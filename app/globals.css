@@ -317,6 +317,7 @@
  * three-services-olive   | --color-three-services-olive              | #e5daac (Figma "olive")
  * three-services-blue    | --color-three-services-blue               | #b9d5e6 (Figma "blue")
  * three-services-coral   | --color-three-services-coral              | #d9a59e (Figma "coral")
+ * brick-red              | --color-brick-red                         | #a85527
  * three-services-image-overlay | --color-three-services-image-overlay | rgba(0,0,0,0.2) (gradient end)
  * cream-white           | --color-cream-white                       | #f4efe9
  * contact-detail-ink    | --color-contact-detail-ink                | #373737
@@ -428,6 +429,8 @@
   --color-three-services-olive: #e5daac;
   --color-three-services-blue: #b9d5e6;
   --color-three-services-coral: #d9a59e;
+  /* Search button default surface — kept as exact sRGB hex per brand request. */
+  --color-brick-red: #a85527;
   --color-cream-white: oklch(0.954 0.011 65.1);
   --color-contact-detail-ink: oklch(0.338 0 0);
   --color-faq-question: oklch(0.309 0 0);
