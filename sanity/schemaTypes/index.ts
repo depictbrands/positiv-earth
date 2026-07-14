@@ -8,6 +8,7 @@ import { homePage } from "./documents/homePage";
 import { logo } from "./documents/logo";
 import { itinerary } from "./documents/itinerary";
 import { quizSubmission } from "./documents/quizSubmission";
+import { searchRequest } from "./documents/searchRequest";
 import { servicesPage } from "./documents/servicesPage";
 import { aboutIntroStat } from "./objects/aboutIntroStat";
 import { contactSocial } from "./objects/contactSocial";
@@ -107,5 +108,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     designYourTravelPage,
     itinerary,
     quizSubmission,
+    searchRequest,
   ],
 };

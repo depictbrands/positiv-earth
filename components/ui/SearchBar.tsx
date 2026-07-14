@@ -11,10 +11,11 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
-import DestinationCard from "@/components/ui/DestinationCard";
 import SearchButton from "@/components/ui/SearchButton";
-import { DEFAULT_DESTINATIONS } from "@/components/sections/home/Destinations";
-import type { Destination } from "@/types/destination";
+import type { SearchRequestPayload } from "@/types/search-request";
+
+// Scroll target for the featured destinations section (see Destinations.tsx).
+const DESTINATIONS_ANCHOR_ID = "destinations";
 
 type SearchCriteria = {
   where: string;
@@ -23,10 +24,8 @@ type SearchCriteria = {
 };
 
 type SearchBarProps = {
-  /** Notified whenever a search runs. Results are also rendered inline. */
+  /** Notified whenever a search runs, after the enquiry is submitted. */
   onSearch?: (criteria: SearchCriteria) => void;
-  /** Pool searched against. Defaults to the itinerary-linked destinations. */
-  destinations?: Destination[];
 };
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;
@@ -77,13 +76,12 @@ function formatRange({ start, end }: DateRange) {
   return `${formatDate(start)} – ${formatDate(end)}`;
 }
 
-/** Case-insensitive AND match across a destination's name and locations. */
-function matchesCriteria(destination: Destination, terms: string[]) {
-  if (terms.length === 0) return true;
-  const haystack = [destination.name, ...destination.locations]
-    .join(" ")
-    .toLowerCase();
-  return terms.every((term) => haystack.includes(term));
+/** Local `YYYY-MM-DD` (not `toISOString`, which would shift across time zones). */
+function toISODate(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function SegmentIcon({
@@ -500,77 +498,11 @@ function CalendarPopover({
   );
 }
 
-function ResultsPanel({
-  results,
-  onClose,
-}: {
-  results: Destination[];
-  onClose: () => void;
-}) {
-  return (
-    <div
-      className="absolute left-0 top-full z-20 mt-3 max-h-[70vh] w-full overflow-y-auto rounded-card-corner bg-base-white p-4 shadow-[var(--shadow-search-bar)]"
-    >
-      <div className="mb-4 flex items-center justify-between">
-        <p className="font-body text-search-bar text-base-black">
-          {results.length === 0
-            ? "No matching destinations"
-            : `${results.length} destination${results.length === 1 ? "" : "s"}`}
-        </p>
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close results"
-          className="focus-ring-search-button flex size-8 items-center justify-center rounded-full text-base-black transition-opacity hover:opacity-70"
-        >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            className="size-5"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6 6L18 18M18 6L6 18"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {results.length === 0 ? (
-        <p
-          className="font-body text-search-bar"
-          style={{ color: "var(--color-search-bar-ink-light)" }}
-        >
-          Try a different place or clear your filters to see every itinerary.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {results.map((destination, index) => (
-            <DestinationCard
-              key={destination.href ?? `${destination.name}-${index}`}
-              destination={destination}
-              layout="next-itinerary"
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function SearchBar({
-  onSearch,
-  destinations = DEFAULT_DESTINATIONS,
-}: SearchBarProps) {
+export default function SearchBar({ onSearch }: SearchBarProps) {
   const [where, setWhere] = useState("");
   const [what, setWhat] = useState("");
   const [whenRange, setWhenRange] = useState<DateRange>(EMPTY_RANGE);
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [results, setResults] = useState<Destination[] | null>(null);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const whenAnchorRef = useRef<HTMLDivElement>(null);
@@ -579,9 +511,9 @@ export default function SearchBar({
 
   const whenValue = formatRange(whenRange);
 
-  // Close both popovers on outside click or Escape.
+  // Close the calendar on outside click or Escape.
   useEffect(() => {
-    if (!calendarOpen && results === null) return;
+    if (!calendarOpen) return;
 
     const handlePointerDown = (event: MouseEvent) => {
       const target = event.target as Node;
@@ -589,16 +521,10 @@ export default function SearchBar({
       // exclude it explicitly or interacting with it would close the popover.
       const insideRoot = rootRef.current?.contains(target);
       const insidePopover = calendarPopoverRef.current?.contains(target);
-      if (!insideRoot && !insidePopover) {
-        setCalendarOpen(false);
-        setResults(null);
-      }
+      if (!insideRoot && !insidePopover) setCalendarOpen(false);
     };
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setCalendarOpen(false);
-        setResults(null);
-      }
+      if (event.key === "Escape") setCalendarOpen(false);
     };
 
     document.addEventListener("mousedown", handlePointerDown);
@@ -607,21 +533,47 @@ export default function SearchBar({
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [calendarOpen, results]);
+  }, [calendarOpen]);
 
   const runSearch = () => {
-    const terms = [where, what]
-      .map((term) => term.trim().toLowerCase())
-      .filter(Boolean);
-    const matched = destinations.filter(
-      (destination) =>
-        Boolean(destination.href?.trim()) &&
-        matchesCriteria(destination, terms),
-    );
-
     setCalendarOpen(false);
-    setResults(matched);
+
+    const payload: SearchRequestPayload = {
+      where: where.trim(),
+      what: what.trim(),
+      dateFrom: whenRange.start ? toISODate(whenRange.start) : null,
+      dateTo: whenRange.end ? toISODate(whenRange.end) : null,
+    };
+
+    // No destination database yet: capture the enquiry for the advisor team
+    // (best-effort — never block the hand-off to Destinations on the save) and
+    // skip empty searches so we don't create blank leads.
+    const hasInput = Boolean(
+      payload.where || payload.what || payload.dateFrom || payload.dateTo,
+    );
+    if (hasInput) {
+      void (async () => {
+        try {
+          const response = await fetch("/api/search-request", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) {
+            throw new Error(`Request failed: ${response.status}`);
+          }
+        } catch (error) {
+          console.error("Search request failed to save", error);
+        }
+      })();
+    }
+
     onSearch?.({ where, what, when: whenValue });
+
+    // Every search routes travellers to the featured destinations section.
+    document
+      .getElementById(DESTINATIONS_ANCHOR_ID)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
@@ -712,10 +664,6 @@ export default function SearchBar({
           />
         </div>
       </div>
-
-      {results !== null ? (
-        <ResultsPanel results={results} onClose={() => setResults(null)} />
-      ) : null}
     </div>
   );
 }

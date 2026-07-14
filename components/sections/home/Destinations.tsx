@@ -90,8 +90,9 @@ export default function Destinations({
 
   return (
     <section
+      id="destinations"
       aria-labelledby="destinations-heading"
-      className="w-full overflow-hidden bg-secondary-black"
+      className="w-full scroll-mt-[var(--size-header-height)] overflow-hidden bg-secondary-black"
     >
       <div className="mx-auto flex w-full max-w-[var(--size-destinations-grid-width)] flex-col items-center px-6 py-20 sm:px-10 lg:px-0 lg:py-[var(--spacing-destinations-heading-offset-top)]">
         <h2
