@@ -24,7 +24,7 @@ type QuizSceneFrameProps = {
 // The motion graphic (airplane + handwritten quotes) is decorative repo art
 // (public/quiz) rather than CMS content. Each scene supplies its own file via
 // `quoteLottieSrc`; this is the fallback when one isn't passed.
-const DEFAULT_QUOTE_LOTTIE_SRC = "/quiz/quotes-motion-1.json";
+const DEFAULT_QUOTE_LOTTIE_SRC = "/quiz/quote-1.json";
 
 // Shared chrome for every quiz scene (Figma node 939:1414): the overlay panel,
 // the progress header, the prompt, the swappable body, the animated quote, and

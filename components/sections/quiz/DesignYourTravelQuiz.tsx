@@ -230,11 +230,11 @@ export default function DesignYourTravelQuiz({
       : (question?.prompt ?? "");
 
   // Each scene shows its own decorative quote animation (repo assets in
-  // public/quiz). The four questions map 1:1 by order to quotes-motion-1..4; the
+  // public/quiz). The four questions map 1:1 by order to quote-1..4; the
   // traveller-count sub-scene uses the fifth file.
   const quoteLottieSrc = inTravelerCount
-    ? "/quiz/quotes-motion-5.json"
-    : `/quiz/quotes-motion-${stepIndex + 1}.json`;
+    ? "/quiz/quote-5.json"
+    : `/quiz/quote-${stepIndex + 1}.json`;
 
   const submitting = submitState === "submitting";
   const nextLabel = isLastStep
