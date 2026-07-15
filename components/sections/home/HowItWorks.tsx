@@ -13,7 +13,7 @@ const DEFAULT_IMAGE_URL =
 
 const DEFAULT_STEPS: HowItWorksSteps = [
   {
-    title: "Curated Travel Experience",
+    title: "Curated Travel\nExperience",
     body: "Personalized itineraries crafted around your interests and travel style.",
   },
   {
@@ -21,7 +21,7 @@ const DEFAULT_STEPS: HowItWorksSteps = [
     body: "A one-on-one planning session before you depart.",
   },
   {
-    title: "Cultural Briefing",
+    title: "Cultural\nBriefing",
     body: "Clear, practical cultural guidance for your specific destination.",
   },
   {
@@ -29,7 +29,7 @@ const DEFAULT_STEPS: HowItWorksSteps = [
     body: "Real-life scenarios and examples, not theory.",
   },
   {
-    title: "On-Trip Tools",
+    title: "On-Trip\nTools",
     body: "Technological tools and materials you can review.",
   },
 ];

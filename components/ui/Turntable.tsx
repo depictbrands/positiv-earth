@@ -16,7 +16,7 @@ type TurntableStep = {
 
 const DEFAULT_STEPS: readonly TurntableStep[] = [
   {
-    title: "Curated Travel Experience",
+    title: "Curated Travel\nExperience",
     body: "Personalized itineraries crafted around your interests and travel style.",
   },
   {
@@ -24,7 +24,7 @@ const DEFAULT_STEPS: readonly TurntableStep[] = [
     body: "A one-on-one planning session before you depart.",
   },
   {
-    title: "Cultural Briefing",
+    title: "Cultural\nBriefing",
     body: "Clear, practical cultural guidance for your specific destination.",
   },
   {
@@ -32,7 +32,7 @@ const DEFAULT_STEPS: readonly TurntableStep[] = [
     body: "Real-life scenarios and examples, not theory.",
   },
   {
-    title: "On-Trip Tools",
+    title: "On-Trip\nTools",
     body: "Technological tools and materials you can review.",
   },
 ];
@@ -58,7 +58,7 @@ const LABEL_LINE_HEIGHT = 1.25;
 // tracks the fluid tag type as the turntable shrinks. 2.28cqw == the 16px
 // turntable-body token at the 702px design width.
 const DESKTOP_BODY_FONT = "min(var(--text-turntable-body), 2.28cqw)";
-const DESKTOP_BODY_MAX_WIDTH = "30cqw";
+const DESKTOP_BODY_MAX_WIDTH = "25cqw";
 
 // "Nomads Airplane" mark that leads the highlight arc. Its native viewBox is
 // 2106×1053 and the nose points right (+x). It keeps a fixed 0° heading while
@@ -627,7 +627,7 @@ export default function Turntable({
                   onFocus={handleNodeEnter(index)}
                   onBlur={handleNodeLeave(index)}
                   className={cn(
-                    "focus-ring-ink rounded-sm bg-transparent font-body font-semibold text-base-black disabled:pointer-events-none",
+                    "focus-ring-ink whitespace-pre-line rounded-sm bg-transparent font-body font-semibold text-base-black disabled:pointer-events-none",
                     textAlign,
                   )}
                 >
@@ -767,7 +767,7 @@ export default function Turntable({
                     onFocus={handleNodeEnter(index)}
                     onBlur={handleNodeLeave(index)}
                     className={cn(
-                      "focus-ring-ink rounded-sm bg-transparent text-left font-body font-semibold text-base-black disabled:pointer-events-none",
+                      "focus-ring-ink whitespace-pre-line rounded-sm bg-transparent text-left font-body font-semibold text-base-black disabled:pointer-events-none",
                     )}
                     style={{
                       fontSize: MOBILE_TAG_FONT,

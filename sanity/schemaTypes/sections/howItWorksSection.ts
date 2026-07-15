@@ -23,7 +23,9 @@ export const howItWorksSection = defineType({
         defineArrayMember({
           type: "object",
           fields: [
-            defineField({ name: "title", title: "Title", type: "string" }),
+            // `text` (multi-line) so editors can press Enter to add a line
+            // break; the stored newline renders via the tag's whitespace-pre-line.
+            defineField({ name: "title", title: "Title", type: "text", rows: 2 }),
             defineField({ name: "body", title: "Body", type: "text", rows: 2 }),
           ],
           preview: {
