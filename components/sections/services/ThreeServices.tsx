@@ -47,16 +47,24 @@ const DEFAULT_CONTENT: ThreeServicesContent = {
   ],
 };
 
-// Caption-card swatches, cycled by row order (Figma olive / blue / coral).
+// Caption-card swatches by row: forest, light-green, forest.
 const CARD_COLORS = [
   "var(--color-three-services-olive)",
   "var(--color-three-services-blue)",
   "var(--color-three-services-coral)",
-];
+] as const;
+
+// Text on each card contrasts with its background (light-green on forest, forest on light-green).
+const CARD_TEXT_COLORS = [
+  "text-light-green",
+  "text-forest",
+  "text-light-green",
+] as const;
 
 type ServiceRowProps = {
   service: Service;
   cardColor: string;
+  textColor: string;
   // Even rows mirror the layout: photo to the right, caption card overlapping
   // the photo's inner edge from the left.
   reversed?: boolean;
@@ -67,6 +75,7 @@ type ServiceRowProps = {
 function ServiceRow({
   service,
   cardColor,
+  textColor,
   reversed = false,
   noWrapTitle = false,
 }: ServiceRowProps) {
@@ -118,7 +127,8 @@ function ServiceRow({
         >
           <h3
             className={cn(
-              "font-display text-heading-4 text-base-black",
+              "font-display text-heading-4",
+              textColor,
               noWrapTitle && "lg:whitespace-nowrap",
             )}
           >
@@ -126,7 +136,12 @@ function ServiceRow({
           </h3>
           {/* Body keeps the narrow cap; the heading uses full card width and
               shares the same edge as the body via the wrapper's alignment. */}
-          <p className="w-full font-body text-turntable-tag text-base-black lg:max-w-[var(--size-three-services-text-width)]">
+          <p
+            className={cn(
+              "w-full font-body text-turntable-tag lg:max-w-[var(--size-three-services-text-width)]",
+              textColor,
+            )}
+          >
             {service.description}
           </p>
         </div>
@@ -154,6 +169,7 @@ export default function ThreeServices({
             key={`${service.title}-${index}`}
             service={service}
             cardColor={CARD_COLORS[index % CARD_COLORS.length]}
+            textColor={CARD_TEXT_COLORS[index % CARD_TEXT_COLORS.length]}
             reversed={index % 2 === 1}
             noWrapTitle={index < 2}
           />
