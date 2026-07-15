@@ -315,7 +315,7 @@ export const ITINERARY_SLUGS_QUERY = `*[_type == "itinerary" && defined(slug.cur
   "slug": slug.current
 }`;
 
-export const ALL_DESTINATIONS_QUERY = `*[_type == "destinations"] | order(name asc) {
+export const ALL_DESTINATIONS_QUERY = `*[_type == "destinations"] | order(orderRank) {
   _id,
   name,
   durationDays,
