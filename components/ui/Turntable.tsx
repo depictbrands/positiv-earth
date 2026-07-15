@@ -214,6 +214,7 @@ export default function Turntable({
       const labelPoint = getPoint(angle, LABEL_RADIUS);
 
       const dx = labelPoint.x - CENTER_X;
+      const dy = labelPoint.y - CENTER_Y;
       const isCentered = Math.abs(dx) < 40;
 
       let align: LabelAlign;
@@ -230,10 +231,16 @@ export default function Turntable({
         translateX = "-100%";
       }
 
-      // Anchor the title's first line on the node (offset by half a line) so the
-      // body block growing below never shifts the title, and wrapped title lines
-      // flow downward away from the track.
-      const translateY = `-${LABEL_LINE_HEIGHT / 2}em`;
+      // Anchor the title on its node so multi-line titles grow AWAY from the
+      // ring: labels above the ring's middle pin their LAST line on the node
+      // (extra lines stack upward, clear of the plane), labels below pin their
+      // FIRST line (extra lines flow downward). A single-line title stays
+      // centered on the node either way. The body block is absolutely positioned
+      // (top-full), so it never affects the title's own placement.
+      const translateY =
+        dy < -40
+          ? `calc(-100% + ${LABEL_LINE_HEIGHT / 2}em)`
+          : `-${LABEL_LINE_HEIGHT / 2}em`;
 
       const labelStyle: CSSProperties = {
         left: `${(labelPoint.x / BOX_W) * 100}%`,
