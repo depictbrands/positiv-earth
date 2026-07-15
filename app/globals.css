@@ -1386,6 +1386,10 @@ body {
   --text-heading-3: max(1.75rem, 4.63vw);
   --text-heading-4: max(2.25rem, 4.63vw);
   --text-turntable-tag: max(1.5rem, 1.587vw);
+  /* Line-height tracks the font above 1512 (30px @1512 → 1.984vw) so the ratio
+     holds; without this the fixed 1.875rem tightened as the ThreeServices body
+     type scaled up past the frame. */
+  --text-turntable-tag--line-height: max(1.875rem, 1.984vw);
   --text-turntable-body: max(1rem, 1.058vw);
   --text-cta-button: max(1.25rem, 1.323vw);
   --text-nav: max(1rem, 1.058vw);

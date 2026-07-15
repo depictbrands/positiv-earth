@@ -638,7 +638,7 @@ export default function Turntable({
                 {hovered && item.body && (
                   <div
                     className={cn(
-                      "pointer-events-none absolute top-full z-10 mt-2 flex items-center justify-center rounded-[var(--radius-turntable-tag-corner)] bg-base-white px-3 py-2.5",
+                      "home-scale pointer-events-none absolute top-full z-10 mt-2 flex items-center justify-center rounded-[var(--radius-turntable-tag-corner)] bg-base-white px-3 py-2.5",
                       blockAlign,
                     )}
                     style={{ width: "max-content", maxWidth: DESKTOP_BODY_MAX_WIDTH }}
@@ -778,7 +778,7 @@ export default function Turntable({
                   </button>
 
                   {showBody && (
-                    <div className="flex w-fit max-w-full items-center justify-center rounded-[var(--radius-turntable-tag-corner)] bg-base-white px-3 py-2.5">
+                    <div className="home-scale flex w-fit max-w-full items-center justify-center rounded-[var(--radius-turntable-tag-corner)] bg-base-white px-3 py-2.5">
                       <p
                         className="font-body font-normal break-words text-base-black"
                         style={{
