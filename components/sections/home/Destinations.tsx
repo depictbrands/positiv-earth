@@ -65,8 +65,11 @@ export const DEFAULT_DESTINATIONS: Destination[] = [
   },
 ];
 
+export const HOME_FEATURED_DESTINATION_COUNT = 6;
+
 const DEFAULT_CONTENT: DestinationsSectionContent = {
   heading: "Our Featured Destinations",
+  allTripsHeading: "All Trips",
   destinations: DEFAULT_DESTINATIONS,
 };
 
@@ -87,6 +90,14 @@ type DestinationsProps = {
    * Omit when Sanity is not configured so local fallback routes still work.
    */
   publishedItinerarySlugs?: readonly string[];
+  /** Where the mosaic layout index starts. */
+  layoutIndexOffset?: number;
+  /** Cap how many cards render; home uses 6. Omit for unlimited. */
+  maxDestinations?: number;
+  /** Override the section heading (destinations page uses CMS `allTripsHeading`). */
+  headingOverride?: string;
+  /** Home section only — links to /destinations. */
+  showAllTripsCta?: boolean;
 };
 
 /** Drop hrefs that don't point at a published itinerary slug. */
@@ -103,9 +114,36 @@ function withPublishedLinksOnly(
   });
 }
 
+function chunkIntoRows<T>(items: T[], rowSize = 3): T[][] {
+  const rows: T[][] = [];
+  for (let i = 0; i < items.length; i += rowSize) {
+    rows.push(items.slice(i, i + rowSize));
+  }
+  return rows;
+}
+
+function rowGridClass(globalRowIndex: number) {
+  return globalRowIndex % 2 === 0
+    ? "lg:[grid-template-columns:342fr_342fr_701fr]"
+    : "lg:[grid-template-columns:701fr_342fr_342fr]";
+}
+
+function rowGapStyle(globalRowIndex: number) {
+  return {
+    gap:
+      globalRowIndex % 2 === 0
+        ? "var(--spacing-destinations-grid-gap-x-sm)"
+        : "var(--spacing-destinations-grid-gap-x-lg)",
+  };
+}
+
 export default function Destinations({
   content = DEFAULT_CONTENT,
   publishedItinerarySlugs,
+  layoutIndexOffset = 0,
+  maxDestinations,
+  headingOverride,
+  showAllTripsCta = false,
 }: DestinationsProps) {
   const destinations =
     publishedItinerarySlugs === undefined
@@ -114,8 +152,13 @@ export default function Destinations({
           content.destinations,
           new Set(publishedItinerarySlugs),
         );
-  const firstRow = destinations.slice(0, 3);
-  const secondRow = destinations.slice(3, 6);
+
+  const visible =
+    maxDestinations === undefined
+      ? destinations
+      : destinations.slice(0, maxDestinations);
+  const rows = chunkIntoRows(visible);
+  const heading = headingOverride?.trim() || content.heading;
 
   return (
     <section
@@ -128,46 +171,53 @@ export default function Destinations({
           id="destinations-heading"
           className="text-center font-display text-heading-4 text-base-white"
         >
-          {content.heading}
+          {heading}
         </h2>
 
-        <div
-          className="mt-12 flex w-full flex-col lg:mt-24"
-          style={{ gap: "var(--spacing-destinations-grid-gap-y)" }}
-        >
+        {rows.length > 0 ? (
           <div
-            className="grid w-full grid-cols-1 justify-items-stretch lg:[grid-template-columns:342fr_342fr_701fr] lg:justify-items-stretch"
-            style={{ gap: "var(--spacing-destinations-grid-gap-x-sm)" }}
+            className="mt-12 flex w-full flex-col lg:mt-24"
+            style={{ gap: "var(--spacing-destinations-grid-gap-y)" }}
           >
-            {firstRow.map((destination, index) => (
-              <DestinationCard
-                key={`${destination.name}-${index}`}
-                destination={destination}
-                orientation={GRID_ORIENTATIONS[index]}
-              />
-            ))}
-          </div>
+            {rows.map((row, rowIndex) => {
+              const globalRowIndex = Math.floor(
+                (layoutIndexOffset + rowIndex * 3) / 3,
+              );
 
-          <div
-            className="grid w-full grid-cols-1 justify-items-stretch lg:[grid-template-columns:701fr_342fr_342fr] lg:justify-items-stretch"
-            style={{ gap: "var(--spacing-destinations-grid-gap-x-lg)" }}
+              return (
+                <div
+                  key={globalRowIndex}
+                  className={`grid w-full grid-cols-1 justify-items-stretch ${rowGridClass(globalRowIndex)} lg:justify-items-stretch`}
+                  style={rowGapStyle(globalRowIndex)}
+                >
+                  {row.map((destination, colIndex) => {
+                    const globalIndex =
+                      layoutIndexOffset + rowIndex * 3 + colIndex;
+
+                    return (
+                      <DestinationCard
+                        key={`${destination.name}-${globalIndex}`}
+                        destination={destination}
+                        orientation={
+                          GRID_ORIENTATIONS[globalIndex % GRID_ORIENTATIONS.length]
+                        }
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+
+        {showAllTripsCta ? (
+          <Link
+            href="/destinations"
+            className="focus-ring-white mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center rounded-search-button-corner border border-base-white font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 lg:mt-20"
           >
-            {secondRow.map((destination, index) => (
-              <DestinationCard
-                key={`${destination.name}-${index + 3}`}
-                destination={destination}
-                orientation={GRID_ORIENTATIONS[index + 3]}
-              />
-            ))}
-          </div>
-        </div>
-
-        <Link
-          href="#"
-          className="focus-ring-white mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center rounded-search-button-corner border border-base-white font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 lg:mt-20"
-        >
-          All Trips
-        </Link>
+            All Trips
+          </Link>
+        ) : null}
       </div>
     </section>
   );

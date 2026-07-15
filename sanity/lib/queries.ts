@@ -38,7 +38,9 @@ export const HOME_PAGE_QUERY = `*[_type == "homePage" && _id == "homePage"][0]{
   },
   destinations {
     heading,
-    destinations[] {
+    allTripsHeading,
+    featuredDestinations[]-> {
+      _id,
       name,
       durationDays,
       locations,
@@ -313,7 +315,8 @@ export const ITINERARY_SLUGS_QUERY = `*[_type == "itinerary" && defined(slug.cur
   "slug": slug.current
 }`;
 
-export const HOME_DESTINATIONS_QUERY = `*[_type == "homePage" && _id == "homePage"][0].destinations.destinations[]{
+export const ALL_DESTINATIONS_QUERY = `*[_type == "destinations"] | order(name asc) {
+  _id,
   name,
   durationDays,
   locations,
@@ -323,6 +326,8 @@ export const HOME_DESTINATIONS_QUERY = `*[_type == "homePage" && _id == "homePag
     alt
   }
 }`;
+
+export const HOME_DESTINATIONS_QUERY = ALL_DESTINATIONS_QUERY;
 
 export const LOGO_QUERY = `coalesce(
   *[_type == "homePage" && _id == "homePage"][0].logo->,

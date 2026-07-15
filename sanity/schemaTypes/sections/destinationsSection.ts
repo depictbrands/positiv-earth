@@ -11,10 +11,25 @@ export const destinationsSection = defineType({
       type: "string",
     }),
     defineField({
-      name: "destinations",
-      title: "Destinations",
+      name: "allTripsHeading",
+      title: "All trips page heading",
+      description:
+        "Heading for the /destinations page, which lists every destination in the library.",
+      type: "string",
+    }),
+    defineField({
+      name: "featuredDestinations",
+      title: "Featured destinations",
+      description:
+        "Select up to six destination cards from Content → Destinations to show on the home page.",
       type: "array",
-      of: [defineArrayMember({ type: "destination" })],
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "destinations" }],
+        }),
+      ],
+      validation: (rule) => rule.max(6),
     }),
   ],
 });

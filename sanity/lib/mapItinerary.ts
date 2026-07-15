@@ -1,6 +1,5 @@
 import type { SanityImageSource } from "@sanity/image-url";
 
-import type { Destination } from "@/types/destination";
 import type { ItineraryAccommodationContent } from "@/types/itinerary-accommodation-content";
 import type {
   ItineraryContent,
@@ -93,14 +92,6 @@ type SanityItinerary = {
     headingTrailing?: string;
     editorialSlugs?: string[];
   };
-};
-
-type SanityDestination = {
-  name?: string;
-  durationDays?: number;
-  locations?: string[];
-  href?: string;
-  image?: SanityImageWithAlt;
 };
 
 function mapImage(image?: SanityImageWithAlt) {
@@ -274,20 +265,7 @@ function mapNextItineraries(
   };
 }
 
-export function mapDestination(
-  destination: SanityDestination,
-): Destination {
-  const image = mapImage(destination.image);
-
-  return {
-    name: destination.name ?? "",
-    durationDays: destination.durationDays ?? 0,
-    locations: destination.locations ?? [],
-    imageUrl: image?.imageUrl ?? "",
-    imageAlt: image?.imageAlt ?? "",
-    href: destination.href,
-  };
-}
+export { mapDestination } from "./mapDestination";
 
 export function mapItinerary(
   data: SanityItinerary | null,

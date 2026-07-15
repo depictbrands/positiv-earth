@@ -3,6 +3,7 @@ import { type SchemaTypeDefinition } from "sanity";
 import { aboutPage } from "./documents/aboutPage";
 import { contactPage } from "./documents/contactPage";
 import { designYourTravelPage } from "./documents/designYourTravelPage";
+import { destinations } from "./documents/destinations";
 import { faqPage } from "./documents/faqPage";
 import { homePage } from "./documents/homePage";
 import { logo } from "./documents/logo";
@@ -13,7 +14,6 @@ import { servicesPage } from "./documents/servicesPage";
 import { aboutIntroStat } from "./objects/aboutIntroStat";
 import { contactSocial } from "./objects/contactSocial";
 import { ctaLink } from "./objects/ctaLink";
-import { destination } from "./objects/destination";
 import { faqItem } from "./objects/faqItem";
 import { imageWithAlt } from "./objects/imageWithAlt";
 import { itineraryAccommodationCity } from "./objects/itineraryAccommodationCity";
@@ -58,7 +58,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     imageWithAlt,
     ctaLink,
-    destination,
     testimonial,
     service,
     faqItem,
@@ -106,6 +105,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     contactPage,
     aboutPage,
     designYourTravelPage,
+    destinations,
     itinerary,
     quizSubmission,
     searchRequest,

@@ -2,7 +2,6 @@ import type { SanityImageSource } from "@sanity/image-url";
 
 import type { BrandStoryContent } from "@/types/brand-story-content";
 import type { CTAContent } from "@/types/cta-content";
-import type { Destination } from "@/types/destination";
 import type { DestinationsSectionContent } from "@/types/destinations-section-content";
 import type { HeroContent } from "@/types/hero-content";
 import type {
@@ -14,6 +13,10 @@ import type {
   TestimonialSectionContent,
 } from "@/types/testimonial-section-content";
 
+import {
+  mapDestinationsSection,
+  type SanityDestinationsSection,
+} from "./mapDestinations";
 import { urlFor } from "./image";
 
 type SanityImageWithAlt = {
@@ -46,16 +49,7 @@ type SanityHomePage = {
     image?: SanityImageWithAlt;
     cta?: { label?: string; href?: string };
   };
-  destinations?: {
-    heading?: string;
-    destinations?: Array<{
-      name?: string;
-      durationDays?: number;
-      locations?: string[];
-      href?: string;
-      image?: SanityImageWithAlt;
-    }>;
-  };
+  destinations?: SanityDestinationsSection;
   testimonial?: {
     heading?: string;
     testimonials?: Array<{
@@ -155,32 +149,6 @@ function mapHowItWorks(
   };
 }
 
-function mapDestination(
-  destination: NonNullable<
-    NonNullable<SanityHomePage["destinations"]>["destinations"]
-  >[number],
-): Destination {
-  const image = mapImage(destination.image);
-
-  return {
-    name: destination.name ?? "",
-    durationDays: destination.durationDays ?? 0,
-    locations: destination.locations ?? [],
-    imageUrl: image?.imageUrl ?? "",
-    imageAlt: image?.imageAlt ?? "",
-    href: destination.href,
-  };
-}
-
-function mapDestinations(
-  section: NonNullable<SanityHomePage["destinations"]>,
-): DestinationsSectionContent {
-  return {
-    heading: section.heading ?? "",
-    destinations: (section.destinations ?? []).map(mapDestination),
-  };
-}
-
 function mapTestimonial(
   item: NonNullable<
     NonNullable<SanityHomePage["testimonial"]>["testimonials"]
@@ -246,7 +214,7 @@ export function mapHomePage(data: SanityHomePage | null): HomePageContent | null
     hero: mapHero(data.hero),
     brandStory: mapBrandStory(data.brandStory),
     howItWorks: mapHowItWorks(data.howItWorks),
-    destinations: mapDestinations(data.destinations),
+    destinations: mapDestinationsSection(data.destinations),
     testimonial: mapTestimonialSection(data.testimonial),
     cta: mapCtaSection(data.cta),
   };

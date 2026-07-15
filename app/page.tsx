@@ -6,10 +6,7 @@ import HowItWorks from "@/components/sections/home/HowItWorks";
 import Testimonial from "@/components/sections/home/Testimonial";
 import { client } from "@/sanity/lib/client";
 import { mapHomePage } from "@/sanity/lib/mapHomePage";
-import {
-  HOME_PAGE_QUERY,
-  ITINERARY_SLUGS_QUERY,
-} from "@/sanity/lib/queries";
+import { HOME_PAGE_QUERY, ITINERARY_SLUGS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home() {
   const [sanityHomePage, itinerarySlugRows] = await Promise.all([
@@ -34,6 +31,8 @@ export default async function Home() {
       <Destinations
         content={content?.destinations}
         publishedItinerarySlugs={publishedItinerarySlugs}
+        maxDestinations={6}
+        showAllTripsCta
       />
       <Testimonial content={content?.testimonial} />
       <CTA content={content?.cta} />
