@@ -599,8 +599,8 @@
   --spacing-testimonial-card-inset-top: 2.125rem;
   --spacing-testimonial-card-gap: 0.6875rem;
   --spacing-cta-content-gap: 2.875rem;
-  --spacing-three-services-top: 6.3125rem;
-  --spacing-three-services-bottom: 15.4375rem;
+  --spacing-three-services-top: 7rem;
+  --spacing-three-services-bottom: 7rem;
   --spacing-three-services-row-gap: 12.5rem;
   --spacing-three-services-row-gap-mobile: 4rem;
   --spacing-three-services-caption-gap: 1rem;
@@ -1404,8 +1404,8 @@ body {
   --size-header-active-pill-height: max(2.875rem, 3.042vw);
 
   /* Spacing */
-  --spacing-three-services-top: max(6.3125rem, 6.68vw);
-  --spacing-three-services-bottom: max(15.4375rem, 16.336vw);
+  --spacing-three-services-top: max(7rem, 7.41vw);
+  --spacing-three-services-bottom: max(7rem, 7.41vw);
   --spacing-three-services-row-gap: max(12.5rem, 13.228vw);
   --spacing-three-services-caption-gap: max(1rem, 1.058vw);
   --spacing-three-services-card-pad-x: max(1.625rem, 1.72vw);

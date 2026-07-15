@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import DestinationCard from "@/components/ui/DestinationCard";
+import { slugFromItineraryHref } from "@/lib/itinerary/recommendNextItineraries";
 import type { Destination } from "@/types/destination";
 import type { DestinationsSectionContent } from "@/types/destinations-section-content";
 
@@ -80,13 +81,41 @@ const GRID_ORIENTATIONS: Array<"portrait" | "landscape"> = [
 
 type DestinationsProps = {
   content?: DestinationsSectionContent;
+  /**
+   * When provided (Sanity-backed site), only cards whose `/itinerary/<slug>` is
+   * in this list stay linked. Others render as static cards so they never 404.
+   * Omit when Sanity is not configured so local fallback routes still work.
+   */
+  publishedItinerarySlugs?: readonly string[];
 };
+
+/** Drop hrefs that don't point at a published itinerary slug. */
+function withPublishedLinksOnly(
+  destinations: Destination[],
+  publishedSlugs: ReadonlySet<string>,
+): Destination[] {
+  return destinations.map((destination) => {
+    const slug = slugFromItineraryHref(destination.href);
+    if (slug && publishedSlugs.has(slug)) {
+      return destination;
+    }
+    return { ...destination, href: undefined };
+  });
+}
 
 export default function Destinations({
   content = DEFAULT_CONTENT,
+  publishedItinerarySlugs,
 }: DestinationsProps) {
-  const firstRow = content.destinations.slice(0, 3);
-  const secondRow = content.destinations.slice(3, 6);
+  const destinations =
+    publishedItinerarySlugs === undefined
+      ? content.destinations
+      : withPublishedLinksOnly(
+          content.destinations,
+          new Set(publishedItinerarySlugs),
+        );
+  const firstRow = destinations.slice(0, 3);
+  const secondRow = destinations.slice(3, 6);
 
   return (
     <section
