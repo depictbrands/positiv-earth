@@ -9,7 +9,7 @@ type LogoProps = {
   imageUrl?: string;
   imageAlt?: string;
   priority?: boolean;
-  /** light = original SVG on base-white; dark = inverted for other backgrounds */
+  /** Background the logo sits on — picks the focus-visible ring color. */
   surface?: LogoSurface;
 };
 
@@ -32,7 +32,6 @@ export default function Logo({
       : "font-display text-header-logo text-base-white";
 
   const showImage = Boolean(imageUrl?.trim());
-  const invertForSurface = surface === "dark";
 
   return (
     <Link
@@ -55,8 +54,7 @@ export default function Logo({
           height={56}
           fetchPriority={priority ? "high" : undefined}
           className={cn(
-            "h-[var(--size-header-height)] w-auto max-w-none object-contain object-left transition-[filter] duration-300 ease-out",
-            invertForSurface && "invert",
+            "h-[var(--size-header-height)] w-auto max-w-none object-contain object-left",
             imageClassName,
           )}
         />
