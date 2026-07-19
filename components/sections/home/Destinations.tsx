@@ -213,9 +213,24 @@ export default function Destinations({
         {showAllTripsCta ? (
           <Link
             href="/destinations"
-            className="focus-ring-white mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center rounded-search-button-corner border border-base-white font-body text-cta-button text-base-white transition-opacity hover:opacity-80 active:opacity-70 lg:mt-20"
+            aria-label="All Trips"
+            className="focus-ring-white group relative mt-12 inline-flex h-[var(--size-destinations-cta-height)] w-[var(--size-destinations-cta-width)] items-center justify-center overflow-hidden rounded-search-button-corner border border-base-white font-body text-cta-button text-base-white lg:mt-20"
           >
-            All Trips
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-[1] translate-y-full bg-base-white transition-transform duration-300 ease-out group-hover:translate-y-0"
+            />
+            <span className="relative z-10 inline-grid overflow-hidden">
+              <span className="col-start-1 row-start-1 transition-transform duration-300 ease-out group-hover:-translate-y-full">
+                All Trips
+              </span>
+              <span
+                aria-hidden="true"
+                className="col-start-1 row-start-1 translate-y-full text-base-black transition-transform duration-300 ease-out group-hover:translate-y-0"
+              >
+                All Trips
+              </span>
+            </span>
           </Link>
         ) : null}
       </div>

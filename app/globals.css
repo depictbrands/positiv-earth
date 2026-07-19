@@ -89,6 +89,7 @@
  * header-active-pill-height | --size-header-active-pill-height      | 46px
  * header-active-pill-offset | --spacing-header-active-pill-offset   | 5px
  * header-glass-blur     | --blur-header-glass                       | 2px
+ * header-nav-pill-blur  | --blur-header-nav-pill                    | 50px
  * testimonial-card-width | --size-testimonial-card-width          | 225px (9:16)
  * testimonial-card-height | --size-testimonial-card-height        | 400px (9:16)
  * testimonial-card-inset-x | --spacing-testimonial-card-inset-x   | 32px
@@ -804,6 +805,7 @@
   --font-display: var(--font-merriweather);
   --font-body: var(--font-raleway);
   --blur-header-glass: 0.125rem;
+  --blur-header-nav-pill: 3.125rem;
   --shadow-search-bar: 0 0 0.0625rem 0 oklch(0.1913 0 89.88 / 0.08), 0 0.0625rem 0.5rem 0.125rem oklch(0.1913 0 89.88 / 0.08);
   --shadow-footer-submit: 0 0 0.875rem 0 oklch(0 0 0 / 0.12);
 

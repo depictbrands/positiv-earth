@@ -67,19 +67,17 @@ const glassStyle: CSSProperties = {
   WebkitBackdropFilter: "blur(var(--blur-header-glass))",
 };
 
-// The hover / active pill is half the bar's corner radius and keeps an equal
-// `offset` gap to the bar on top, bottom and (for the leftmost item) the left,
-// so it nests concentrically inside the rounded header.
+// The hover / active pill is half the header's corner radius and keeps an equal
+// `offset` gap on top, bottom and (for the leftmost item) the left, so it reads
+// as nested concentrically inside the header.
 const PILL_CORNER = "calc(var(--radius-header-corner) / 2)";
 const PILL_OFFSET = "var(--spacing-header-active-pill-offset)";
 
 const pillClassName =
-  "pointer-events-none absolute opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100";
+  "pointer-events-none absolute bg-base-white/15 backdrop-blur-header-nav-pill opacity-0 transition-all duration-300 group-hover:opacity-100 group-focus-within:opacity-100";
 
 const pillVisualStyle: CSSProperties = {
   borderRadius: PILL_CORNER,
-  backgroundColor: "transparent",
-  border: "1px solid var(--color-base-white)",
 };
 
 // Every desktop item shares the active pill's footprint: pill-width plus an
@@ -258,12 +256,6 @@ export default function Header({
           style={{ height: "var(--size-header-height)" }}
         >
           <div className="relative h-full w-fit max-w-full">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 rounded-header-corner"
-              style={glassStyle}
-            />
-
             <nav
               aria-label="Main navigation"
               className="relative z-10 flex h-full items-center gap-2 text-base-white"
