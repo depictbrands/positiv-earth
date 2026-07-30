@@ -1518,6 +1518,34 @@ body {
 }
 
 /*
+ * Contact page — scale DOWN between `lg` (1024px) and the 1512px design frame.
+ *
+ * The ContactInfo row needs the whole frame to fit: photo composition + detail
+ * column + both side offsets add up to the full 1512px. Below the frame the
+ * tokens are fixed rem, so on a landscape tablet the row overflowed its
+ * container — the detail column was squeezed straight against the overlapping
+ * photos. Re-declaring the geometry tokens as the same vw ratios used above the
+ * frame keeps the composition proportional on the way down, so the photos, the
+ * column and the gap between them all shrink together and the design's spacing
+ * ratio holds at every width in this range. Type, radii and the social icons
+ * stay at their design values so the details stay readable.
+ */
+@media (min-width: 1024px) and (max-width: 1511.98px) {
+  .contact-scale {
+    --size-contact-info-photos-width: 53.241vw;
+    --size-contact-info-photos-height: 47.355vw;
+    --size-contact-info-photo-width: 25.992vw;
+    --size-contact-info-photo-height: 30.952vw;
+    --size-contact-info-column-width: 35.185vw;
+
+    --spacing-contact-info-block-offset: 9.656vw;
+    --spacing-contact-info-side-offset: 3.175vw;
+    --spacing-contact-info-photo-offset-x: 27.249vw;
+    --spacing-contact-info-photo-offset-y: 16.402vw;
+  }
+}
+
+/*
  * Design Your Travel (quiz) page — uniform scale-up above the 1512px frame.
  * Same approach as .home-scale: every token the quiz route uses (the quiz shell
  * + scene frame + all quiz primitives, plus the shared Header / quiz button) is

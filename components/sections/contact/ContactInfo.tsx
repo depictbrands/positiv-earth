@@ -77,7 +77,7 @@ function ProfilePhoto({
         alt={photo.imageAlt}
         fill
         className="object-cover"
-        sizes="(min-width: 1024px) 393px, 100vw"
+        sizes="(min-width: 1024px) 26vw, 100vw"
       />
     </div>
   );
@@ -95,8 +95,13 @@ export default function ContactInfo({ content }: ContactInfoProps) {
       {/* Edge gutter matches the rest of the site (e.g. Footer / FAQ): the
           container spans the full 1512px frame and insets by the 48px side
           offset, so the 1416px content row sits 48px from the viewport edge. */}
+      {/* From `lg` up the row is the design composition; the geometry tokens
+          scale with the viewport between 1024px and the 1512px frame so the
+          photos and the detail column shrink together. The column gap is a
+          justify-between minimum — free space exceeds it at every width in
+          that range, so it only kicks in as a guard against collision. */}
       <div
-        className="mx-auto flex w-full max-w-[calc(var(--size-contact-info-width)_+_var(--spacing-contact-info-side-offset)_*_2)] flex-col items-center gap-12 px-6 sm:px-10 lg:flex-row lg:justify-between lg:gap-0 lg:px-[var(--spacing-contact-info-side-offset)]"
+        className="mx-auto flex w-full max-w-[calc(var(--size-contact-info-width)_+_var(--spacing-contact-info-side-offset)_*_2)] flex-col items-center gap-12 px-6 sm:px-10 lg:flex-row lg:justify-between lg:gap-[var(--spacing-contact-info-column-gap)] lg:px-[var(--spacing-contact-info-side-offset)]"
         style={{
           paddingBlock: "var(--spacing-contact-info-block-offset)",
         }}
@@ -151,8 +156,11 @@ export default function ContactInfo({ content }: ContactInfoProps) {
         </div>
 
         {/* Contact details */}
+        {/* Below `lg` the column is centered under the stacked photos and capped
+            at the same photo width, so the details read as one centered stack;
+            from `lg` it returns to the design's left-aligned column. */}
         <div
-          className="flex w-full flex-col items-start lg:w-[var(--size-contact-info-column-width)]"
+          className="flex w-full max-w-[var(--size-contact-info-photo-width)] flex-col items-center text-center lg:w-[var(--size-contact-info-column-width)] lg:max-w-none lg:items-start lg:text-left"
           style={{ gap: "var(--spacing-contact-info-column-gap)" }}
         >
           <h2
@@ -163,11 +171,11 @@ export default function ContactInfo({ content }: ContactInfoProps) {
           </h2>
 
           <div
-            className="flex w-full flex-col items-start"
+            className="flex w-full flex-col items-center lg:items-start"
             style={{ gap: "var(--spacing-contact-info-details-gap)" }}
           >
             <div
-              className="flex w-full flex-col items-start"
+              className="flex w-full flex-col items-center lg:items-start"
               style={{ gap: "var(--spacing-contact-info-detail-gap)" }}
             >
               <a
@@ -183,7 +191,7 @@ export default function ContactInfo({ content }: ContactInfoProps) {
             </div>
 
             <div
-              className="flex flex-wrap items-center text-base-white"
+              className="flex flex-wrap items-center justify-center text-base-white lg:justify-start"
               style={{ gap: "var(--spacing-contact-info-social-gap)" }}
             >
               {resolved.socials.map((social) => (
