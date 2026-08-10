@@ -1,6 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { useState, type FormEvent } from "react";
 
 import Logo from "@/components/ui/Logo";
+import type { ContactSubmissionPayload } from "@/types/contact-submission";
 import type { LogoContent } from "@/types/logo-content";
 
 const QUICK_LINKS = [
@@ -84,41 +88,117 @@ function SocialIcon({ label }: { label: FooterSocialLabel }) {
 
 function FooterField({
   label,
+  name,
+  value,
+  onChange,
+  type = "text",
   placeholder,
+  textarea = false,
+  required = false,
+  disabled = false,
+  autoComplete,
   className,
 }: {
   label: string;
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  type?: string;
   placeholder?: string;
+  textarea?: boolean;
+  required?: boolean;
+  disabled?: boolean;
+  autoComplete?: string;
   className?: string;
 }) {
+  const controlClassName =
+    "footer-form-control w-full bg-transparent font-raleway text-footer-form-placeholder text-base-white outline-none placeholder:text-base-white/70 focus-visible:outline-none disabled:opacity-60";
+
   return (
     <label className={cn("flex flex-col text-base-white", className)}>
       <span className="font-body text-body-1">{label}</span>
-      {placeholder ? (
-        <span
-          className="font-raleway text-footer-form-placeholder"
-          style={{
-            marginTop: "var(--spacing-footer-form-message-gap)",
-          }}
-        >
-          {placeholder}
-        </span>
-      ) : null}
+      {textarea ? (
+        <textarea
+          name={name}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          rows={2}
+          className={cn(controlClassName, "resize-none")}
+          style={{ marginTop: "var(--spacing-footer-form-message-gap)" }}
+        />
+      ) : (
+        <input
+          name={name}
+          type={type}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          autoComplete={autoComplete}
+          className={controlClassName}
+          style={{ marginTop: "var(--spacing-footer-form-message-gap)" }}
+        />
+      )}
       <span
         aria-hidden="true"
         className="block border-t"
         style={{
           borderColor: "var(--color-footer-divider)",
-          marginTop: placeholder
-            ? "var(--spacing-footer-form-message-gap)"
-            : "var(--spacing-footer-form-line-offset-top)",
+          marginTop: "var(--spacing-footer-form-message-gap)",
         }}
       />
     </label>
   );
 }
 
+type ContactSubmitState = "idle" | "submitting" | "success" | "error";
+
 export default function Footer({ className, logo }: FooterProps) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [submitState, setSubmitState] = useState<ContactSubmitState>("idle");
+
+  const isSubmitting = submitState === "submitting";
+
+  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    const payload: ContactSubmissionPayload = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      message: message.trim(),
+    };
+
+    setSubmitState("submitting");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error(`Request failed: ${response.status}`);
+      setSubmitState("success");
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setPhone("");
+      setMessage("");
+    } catch (error) {
+      console.error("Footer contact submission failed", error);
+      setSubmitState("error");
+    }
+  };
+
   return (
     <footer
       className={cn("footer-scale relative w-full overflow-hidden", className)}
@@ -256,39 +336,107 @@ export default function Footer({ className, logo }: FooterProps) {
             aria-label="Contact form"
             className="flex w-full max-w-[var(--size-footer-form-width)] flex-col items-start lg:ml-auto"
           >
-            <div
+            <form
+              onSubmit={handleContactSubmit}
+              noValidate
               className="flex w-full flex-col items-start"
-              style={{ gap: "var(--spacing-footer-form-sections-gap)" }}
             >
               <div
-                className="flex w-full flex-col sm:flex-row"
-                style={{ gap: "var(--spacing-footer-form-row-gap)" }}
+                className="flex w-full flex-col items-start"
+                style={{ gap: "var(--spacing-footer-form-sections-gap)" }}
               >
-                <FooterField label="First Name" className="w-full flex-1" />
-                <FooterField label="Last Name" className="w-full flex-1" />
+                <div
+                  className="flex w-full flex-col sm:flex-row"
+                  style={{ gap: "var(--spacing-footer-form-row-gap)" }}
+                >
+                  <FooterField
+                    label="First Name"
+                    name="firstName"
+                    value={firstName}
+                    onChange={setFirstName}
+                    autoComplete="given-name"
+                    required
+                    disabled={isSubmitting}
+                    className="w-full flex-1"
+                  />
+                  <FooterField
+                    label="Last Name"
+                    name="lastName"
+                    value={lastName}
+                    onChange={setLastName}
+                    autoComplete="family-name"
+                    disabled={isSubmitting}
+                    className="w-full flex-1"
+                  />
+                </div>
+
+                <div
+                  className="flex w-full flex-col sm:flex-row"
+                  style={{ gap: "var(--spacing-footer-form-row-gap)" }}
+                >
+                  <FooterField
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={setEmail}
+                    autoComplete="email"
+                    required
+                    disabled={isSubmitting}
+                    className="w-full flex-1"
+                  />
+                  <FooterField
+                    label="Phone Number"
+                    name="phone"
+                    type="tel"
+                    value={phone}
+                    onChange={setPhone}
+                    autoComplete="tel"
+                    disabled={isSubmitting}
+                    className="w-full flex-1"
+                  />
+                </div>
+
+                <FooterField
+                  label="Message"
+                  name="message"
+                  value={message}
+                  onChange={setMessage}
+                  placeholder="Write your message."
+                  textarea
+                  required
+                  disabled={isSubmitting}
+                  className="w-full"
+                />
               </div>
 
-              <div
-                className="flex w-full flex-col sm:flex-row"
-                style={{ gap: "var(--spacing-footer-form-row-gap)" }}
-              >
-                <FooterField label="Email" className="w-full flex-1" />
-                <FooterField label="Phone Number" className="w-full flex-1" />
+              <div className="mt-10 flex w-full flex-col items-end gap-4">
+                <p
+                  role="status"
+                  aria-live="polite"
+                  className={cn(
+                    "self-start font-body text-body-1 text-base-white",
+                    submitState === "success" || submitState === "error"
+                      ? ""
+                      : "sr-only",
+                  )}
+                >
+                  {submitState === "success"
+                    ? "Thanks — your message has been sent. We'll be in touch soon."
+                    : submitState === "error"
+                      ? "Something went wrong. Please try again or email us directly."
+                      : ""}
+                </p>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="focus-ring-white inline-flex w-auto min-w-[var(--size-footer-submit-width)] items-center justify-center self-end whitespace-nowrap rounded-search-button-corner border border-base-white bg-transparent px-[var(--spacing-footer-submit-padding-x)] py-[var(--spacing-footer-submit-padding-y)] font-body text-cta-button text-base-white shadow-[var(--shadow-footer-submit)] transition-opacity hover:opacity-80 active:opacity-70 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isSubmitting ? "Sending…" : "Send Message"}
+                </button>
               </div>
-
-              <FooterField
-                label="Message"
-                placeholder="Write your message."
-                className="w-full"
-              />
-            </div>
-
-            <button
-              type="button"
-              className="focus-ring-white mt-10 inline-flex w-auto min-w-[var(--size-footer-submit-width)] items-center justify-center self-end whitespace-nowrap rounded-search-button-corner border border-base-white bg-transparent px-[var(--spacing-footer-submit-padding-x)] py-[var(--spacing-footer-submit-padding-y)] font-body text-cta-button text-base-white shadow-[var(--shadow-footer-submit)] transition-opacity hover:opacity-80 active:opacity-70"
-            >
-              Send Message
-            </button>
+            </form>
           </section>
         </div>
 

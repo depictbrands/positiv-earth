@@ -2,6 +2,7 @@ import { type SchemaTypeDefinition } from "sanity";
 
 import { aboutPage } from "./documents/aboutPage";
 import { contactPage } from "./documents/contactPage";
+import { contactSubmission } from "./documents/contactSubmission";
 import { designYourTravelPage } from "./documents/designYourTravelPage";
 import { destinations } from "./documents/destinations";
 import { faqPage } from "./documents/faqPage";
@@ -109,5 +110,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     itinerary,
     quizSubmission,
     searchRequest,
+    contactSubmission,
   ],
 };

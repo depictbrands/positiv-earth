@@ -1803,6 +1803,21 @@ body {
   --radius-search-button-corner: max(3rem, 3.175vw);
 }
 
+/* Chrome/Safari paint a light background + dark text on autofilled inputs, which
+   is unreadable on the dark footer. Repaint the field to match the footer surface
+   and keep the text white. The long background-color transition defers the UA
+   restyle so the override sticks. */
+.footer-form-control:-webkit-autofill,
+.footer-form-control:-webkit-autofill:hover,
+.footer-form-control:-webkit-autofill:focus,
+.footer-form-control:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--color-base-white);
+  caret-color: var(--color-base-white);
+  -webkit-box-shadow: inset 0 0 0 100vw var(--color-footer-surface);
+  box-shadow: inset 0 0 0 100vw var(--color-footer-surface);
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 /* Keyboard focus rings — use on focusable elements instead of outline-none or
    outline-* inline styles (Stark / WCAG 2.4.7). */
 .focus-ring-ink:focus-visible {
