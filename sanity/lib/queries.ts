@@ -1,13 +1,20 @@
+// Hero backgrounds add optional art-directed crops for tablet and mobile. Each
+// of `asset` / `tablet` / `mobile` is a whole image value, so its hotspot and
+// crop ride along for the image URL builder.
+const HERO_IMAGE = `{
+  asset,
+  alt,
+  tablet,
+  mobile
+}`;
+
 export const HOME_PAGE_QUERY = `*[_type == "homePage" && _id == "homePage"][0]{
   hero {
     headlinePre,
     headlineEmphasis,
     headlinePost,
     subcopy,
-    backgroundImage {
-      asset,
-      alt
-    }
+    backgroundImage ${HERO_IMAGE}
   },
   brandStory {
     heading,
@@ -80,10 +87,7 @@ export const HOME_PAGE_QUERY = `*[_type == "homePage" && _id == "homePage"][0]{
 export const SERVICES_PAGE_QUERY = `*[_type == "servicesPage" && _id == "servicesPage"][0]{
   hero {
     headline,
-    backgroundImage {
-      asset,
-      alt
-    }
+    backgroundImage ${HERO_IMAGE}
   },
   threeServices {
     services[] {
@@ -100,10 +104,7 @@ export const SERVICES_PAGE_QUERY = `*[_type == "servicesPage" && _id == "service
 export const FAQ_PAGE_QUERY = `*[_type == "faqPage" && _id == "faqPage"][0]{
   hero {
     headline,
-    backgroundImage {
-      asset,
-      alt
-    }
+    backgroundImage ${HERO_IMAGE}
   },
   faq {
     heading,
@@ -128,10 +129,7 @@ export const ABOUT_PAGE_QUERY = `*[_type == "aboutPage" && _id == "aboutPage"][0
     lead,
     name,
     role,
-    backgroundImage {
-      asset,
-      alt
-    }
+    backgroundImage ${HERO_IMAGE}
   },
   intro {
     stats[] {
@@ -207,10 +205,7 @@ export const QUIZ_PAGE_QUERY = `*[_type == "designYourTravelPage" && _id == "des
 export const CONTACT_PAGE_QUERY = `*[_type == "contactPage" && _id == "contactPage"][0]{
   hero {
     headline,
-    backgroundImage {
-      asset,
-      alt
-    }
+    backgroundImage ${HERO_IMAGE}
   },
   info {
     name,
@@ -253,7 +248,7 @@ export const ITINERARY_BY_SLUG_QUERY = `*[_type == "itinerary" && slug.current =
     durationDays,
     nights,
     travelers,
-    backgroundImage ${IMAGE_WITH_ALT}
+    backgroundImage ${HERO_IMAGE}
   },
   overview {
     heading,

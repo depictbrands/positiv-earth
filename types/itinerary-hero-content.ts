@@ -1,3 +1,5 @@
+import type { HeroBackgroundImage } from "./hero-background-image";
+
 /**
  * Content shape for the Itinerary page hero (Figma node 584:1071).
  *
@@ -16,6 +18,4 @@ export type ItineraryHeroContent = {
   nights: number;
   /** Number of travellers, drives the "{n} travelers" portion of the meta line. */
   travelers: number;
-  backgroundImageUrl: string;
-  backgroundImageAlt: string;
-};
+} & HeroBackgroundImage;

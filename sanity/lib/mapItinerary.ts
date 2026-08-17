@@ -17,6 +17,7 @@ import type {
 import type { ItineraryWhatsIncludedContent } from "@/types/itinerary-whats-included-content";
 
 import { urlFor } from "./image";
+import { mapHeroImage, type SanityHeroImage } from "./mapHeroImage";
 
 type SanityImageWithAlt = {
   asset?: SanityImageSource;
@@ -33,7 +34,7 @@ type SanityItinerary = {
     durationDays?: number;
     nights?: number;
     travelers?: number;
-    backgroundImage?: SanityImageWithAlt;
+    backgroundImage?: SanityHeroImage;
   };
   overview?: {
     heading?: string;
@@ -110,16 +111,13 @@ function mapImage(image?: SanityImageWithAlt) {
 }
 
 function mapHero(hero: NonNullable<SanityItinerary["hero"]>): ItineraryHeroContent {
-  const background = mapImage(hero.backgroundImage);
-
   return {
     country: hero.country ?? "",
     title: hero.title ?? "",
     durationDays: hero.durationDays ?? 0,
     nights: hero.nights ?? 0,
     travelers: hero.travelers ?? 0,
-    backgroundImageUrl: background?.imageUrl ?? "",
-    backgroundImageAlt: background?.imageAlt ?? "",
+    ...mapHeroImage(hero.backgroundImage),
   };
 }
 

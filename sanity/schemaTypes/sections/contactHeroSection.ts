@@ -13,7 +13,7 @@ export const contactHeroSection = defineType({
     defineField({
       name: "backgroundImage",
       title: "Background image",
-      type: "imageWithAlt",
+      type: "heroImage",
     }),
   ],
 });

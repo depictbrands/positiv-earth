@@ -18,6 +18,7 @@ import {
   type SanityDestinationsSection,
 } from "./mapDestinations";
 import { urlFor } from "./image";
+import { mapHeroImage, type SanityHeroImage } from "./mapHeroImage";
 
 type SanityImageWithAlt = {
   asset?: SanityImageSource;
@@ -30,7 +31,7 @@ type SanityHomePage = {
     headlineEmphasis?: string;
     headlinePost?: string;
     subcopy?: string;
-    backgroundImage?: SanityImageWithAlt;
+    backgroundImage?: SanityHeroImage;
   };
   brandStory?: {
     heading?: string;
@@ -95,8 +96,6 @@ function mapCta(cta?: { label?: string; href?: string }) {
 }
 
 function mapHero(hero: NonNullable<SanityHomePage["hero"]>): HeroContent {
-  const background = mapImage(hero.backgroundImage);
-
   return {
     headline: {
       pre: hero.headlinePre ?? "",
@@ -104,8 +103,7 @@ function mapHero(hero: NonNullable<SanityHomePage["hero"]>): HeroContent {
       post: hero.headlinePost ?? "",
     },
     subcopy: hero.subcopy ?? "",
-    backgroundImageUrl: background?.imageUrl ?? "",
-    backgroundImageAlt: background?.imageAlt ?? "",
+    ...mapHeroImage(hero.backgroundImage),
   };
 }
 

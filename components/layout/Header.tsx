@@ -276,12 +276,13 @@ export default function Header({
         </div>
       </div>
 
-      {/* Mobile / tablet: logo + hamburger centered together in a glass bar.
-          The menu opens as a full-viewport overlay (portaled below). */}
+      {/* Mobile / tablet: logo + hamburger centered together in a glass bar
+          that shrink-wraps them, with padding so the logo isn't flush to the
+          edges. The menu opens as a full-viewport overlay (portaled below). */}
       <div className="lg:hidden">
         <div
-          className="relative z-50 flex items-center justify-center gap-2 rounded-header-corner px-4 sm:gap-4 sm:px-5"
-          style={{ height: "var(--size-header-height)", ...glassStyle }}
+          className="relative z-50 mx-auto flex w-fit items-center justify-center gap-2 rounded-header-corner px-[var(--spacing-header-nav-pill-padding-x)] py-[var(--spacing-header-nav-pill-padding-x)] sm:gap-4"
+          style={glassStyle}
         >
           <Logo
             variant="header"
@@ -338,7 +339,7 @@ export default function Header({
                 if (event.target === event.currentTarget) closeMenu();
               }}
               className={cn(
-                "fixed inset-0 z-40 flex flex-col px-6 pb-12 pt-[calc(var(--size-header-height)+5rem)] transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none lg:hidden",
+                "fixed inset-0 z-40 flex flex-col px-6 pb-12 pt-[calc(var(--size-header-height)+2*var(--spacing-header-nav-pill-padding-x)+5rem)] transition-[opacity,visibility] duration-300 ease-out motion-reduce:transition-none lg:hidden",
                 open ? "visible opacity-100" : "invisible opacity-0",
               )}
               style={{

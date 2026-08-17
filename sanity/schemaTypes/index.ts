@@ -16,6 +16,7 @@ import { aboutIntroStat } from "./objects/aboutIntroStat";
 import { contactSocial } from "./objects/contactSocial";
 import { ctaLink } from "./objects/ctaLink";
 import { faqItem } from "./objects/faqItem";
+import { heroImage } from "./objects/heroImage";
 import { imageWithAlt } from "./objects/imageWithAlt";
 import { itineraryAccommodationCity } from "./objects/itineraryAccommodationCity";
 import { itineraryDay } from "./objects/itineraryDay";
@@ -58,6 +59,7 @@ import { threeServicesSection } from "./sections/threeServicesSection";
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     imageWithAlt,
+    heroImage,
     ctaLink,
     testimonial,
     service,

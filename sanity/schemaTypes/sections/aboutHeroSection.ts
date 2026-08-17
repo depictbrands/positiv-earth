@@ -26,7 +26,7 @@ export const aboutHeroSection = defineType({
     defineField({
       name: "backgroundImage",
       title: "Background image",
-      type: "imageWithAlt",
+      type: "heroImage",
     }),
   ],
 });

@@ -35,7 +35,7 @@ export const itineraryHeroSection = defineType({
     defineField({
       name: "backgroundImage",
       title: "Background image",
-      type: "imageWithAlt",
+      type: "heroImage",
     }),
   ],
   preview: {

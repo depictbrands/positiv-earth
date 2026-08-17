@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
-
+import HeroBackgroundImage from "@/components/ui/HeroBackgroundImage";
 import SearchBar from "@/components/ui/SearchBar";
 import TextReveal from "@/components/ui/TextReveal";
+import { resolveHeroBackgroundImage } from "@/lib/resolveHeroBackgroundImage";
 import type { HeroContent } from "@/types/hero-content";
 
 const DEFAULT_IMAGE_URL =
@@ -33,11 +33,7 @@ function resolveHeroContent(content?: HeroContent): HeroContent {
       ...DEFAULT_CONTENT.headline,
       ...content?.headline,
     },
-    backgroundImageUrl:
-      content?.backgroundImageUrl?.trim() || DEFAULT_CONTENT.backgroundImageUrl,
-    backgroundImageAlt:
-      content?.backgroundImageAlt?.trim() ||
-      DEFAULT_CONTENT.backgroundImageAlt,
+    ...resolveHeroBackgroundImage(content, DEFAULT_CONTENT),
     subcopy: content?.subcopy?.trim() || DEFAULT_CONTENT.subcopy,
   };
 }
@@ -54,13 +50,7 @@ export default function Hero({ content }: HeroProps) {
       aria-labelledby="hero-heading"
       className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]"
     >
-      <Image
-        src={resolved.backgroundImageUrl}
-        alt={resolved.backgroundImageAlt}
-        fill
-        className="object-cover"
-        priority
-      />
+      <HeroBackgroundImage content={resolved} />
 
       {/* Full-bleed dark scrim that also wraps the foreground copy, so the copy
           is measured against a real ancestor background. Renders identically to

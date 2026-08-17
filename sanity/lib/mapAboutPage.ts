@@ -6,6 +6,7 @@ import type { AboutSceneContent } from "@/types/about-scene-content";
 import type { CTAContent } from "@/types/cta-content";
 
 import { urlFor } from "./image";
+import { mapHeroImage, type SanityHeroImage } from "./mapHeroImage";
 
 type SanityImageWithAlt = {
   asset?: SanityImageSource;
@@ -23,7 +24,7 @@ type SanityAboutPage = {
     lead?: string;
     name?: string;
     role?: string;
-    backgroundImage?: SanityImageWithAlt;
+    backgroundImage?: SanityHeroImage;
   };
   intro?: {
     stats?: Array<{ emphasis?: string; rest?: string }>;
@@ -56,14 +57,11 @@ function mapImage(image?: SanityImageWithAlt) {
 }
 
 function mapHero(hero: NonNullable<SanityAboutPage["hero"]>): AboutHeroContent {
-  const background = mapImage(hero.backgroundImage);
-
   return {
     lead: hero.lead ?? "",
     name: hero.name ?? "",
     role: hero.role ?? "",
-    backgroundImageUrl: background?.imageUrl ?? "",
-    backgroundImageAlt: background?.imageAlt ?? "",
+    ...mapHeroImage(hero.backgroundImage),
   };
 }
 

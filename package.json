@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "sanity:reset-destination-order": "node sanity/scripts/resetDestinationOrder.mjs"
+    "sanity:reset-destination-order": "node sanity/scripts/resetDestinationOrder.mjs",
+    "sanity:migrate-hero-image-type": "node sanity/scripts/migrateHeroImageType.mjs"
   },
   "dependencies": {
     "@sanity/image-url": "^2.1.1",

@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
-
+import HeroBackgroundImage from "@/components/ui/HeroBackgroundImage";
 import TextReveal from "@/components/ui/TextReveal";
+import { resolveHeroBackgroundImage } from "@/lib/resolveHeroBackgroundImage";
 import type { AboutHeroContent } from "@/types/about-hero-content";
 
 const DEFAULT_IMAGE_URL =
@@ -34,10 +34,7 @@ function resolveAboutHeroContent(content?: AboutHeroContent): AboutHeroContent {
     lead: content?.lead?.trim() || DEFAULT_CONTENT.lead,
     name: content?.name?.trim() || DEFAULT_CONTENT.name,
     role: content?.role?.trim() || DEFAULT_CONTENT.role,
-    backgroundImageUrl:
-      content?.backgroundImageUrl?.trim() || DEFAULT_CONTENT.backgroundImageUrl,
-    backgroundImageAlt:
-      content?.backgroundImageAlt?.trim() || DEFAULT_CONTENT.backgroundImageAlt,
+    ...resolveHeroBackgroundImage(content, DEFAULT_CONTENT),
   };
 }
 
@@ -50,13 +47,7 @@ export default function AboutHero({ content }: AboutHeroProps) {
       aria-labelledby="about-hero-heading"
       className="relative flex w-full flex-col overflow-hidden min-h-[100svh] lg:min-h-[var(--size-hero-height)]"
     >
-      <Image
-        src={resolved.backgroundImageUrl}
-        alt={resolved.backgroundImageAlt}
-        fill
-        className="object-cover"
-        priority
-      />
+      <HeroBackgroundImage content={resolved} />
 
       <div
         aria-hidden="true"

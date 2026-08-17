@@ -7,6 +7,7 @@ import type {
 } from "@/types/three-services-content";
 
 import { urlFor } from "./image";
+import { mapHeroImage, type SanityHeroImage } from "./mapHeroImage";
 
 type SanityImageWithAlt = {
   asset?: SanityImageSource;
@@ -16,7 +17,7 @@ type SanityImageWithAlt = {
 type SanityServicesPage = {
   hero?: {
     headline?: string;
-    backgroundImage?: SanityImageWithAlt;
+    backgroundImage?: SanityHeroImage;
   };
   threeServices?: {
     services?: Array<{
@@ -45,12 +46,9 @@ function mapImage(image?: SanityImageWithAlt) {
 function mapHero(
   hero: NonNullable<SanityServicesPage["hero"]>,
 ): ServicesHeroContent {
-  const background = mapImage(hero.backgroundImage);
-
   return {
     headline: hero.headline ?? "",
-    backgroundImageUrl: background?.imageUrl ?? "",
-    backgroundImageAlt: background?.imageAlt ?? "",
+    ...mapHeroImage(hero.backgroundImage),
   };
 }
 

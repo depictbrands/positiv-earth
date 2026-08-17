@@ -8,6 +8,7 @@ import type {
 } from "@/types/contact-info-content";
 
 import { urlFor } from "./image";
+import { mapHeroImage, type SanityHeroImage } from "./mapHeroImage";
 
 type SanityImageWithAlt = {
   asset?: SanityImageSource;
@@ -17,7 +18,7 @@ type SanityImageWithAlt = {
 type SanityContactPage = {
   hero?: {
     headline?: string;
-    backgroundImage?: SanityImageWithAlt;
+    backgroundImage?: SanityHeroImage;
   };
   info?: {
     name?: string;
@@ -49,12 +50,9 @@ function mapImage(image?: SanityImageWithAlt) {
 function mapHero(
   hero: NonNullable<SanityContactPage["hero"]>,
 ): ContactHeroContent {
-  const background = mapImage(hero.backgroundImage);
-
   return {
     headline: hero.headline ?? "",
-    backgroundImageUrl: background?.imageUrl ?? "",
-    backgroundImageAlt: background?.imageAlt ?? "",
+    ...mapHeroImage(hero.backgroundImage),
   };
 }
 
