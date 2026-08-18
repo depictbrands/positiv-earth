@@ -30,6 +30,11 @@ const openSans = Open_Sans({
   display: "swap",
 });
 
+// Sanity-backed metadata (favicon) and section content are baked into the
+// static prerender, so without this the site keeps serving build-time content
+// until the next deploy.
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   const logo = await getLogo();
 
@@ -39,7 +44,13 @@ export async function generateMetadata(): Promise<Metadata> {
     ...(logo.faviconUrl
       ? {
           icons: {
-            icon: logo.faviconUrl,
+            icon: [
+              {
+                url: logo.faviconUrl,
+                ...(logo.faviconType ? { type: logo.faviconType } : {}),
+                ...(logo.faviconSizes ? { sizes: logo.faviconSizes } : {}),
+              },
+            ],
           },
         }
       : {}),

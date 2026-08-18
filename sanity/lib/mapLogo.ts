@@ -17,6 +17,13 @@ type SanityLogo = {
   favicon?: { asset?: SanityImageSource };
 };
 
+const FAVICON_MIME_TYPES: Record<string, string> = {
+  png: "image/png",
+  svg: "image/svg+xml",
+  ico: "image/x-icon",
+  webp: "image/webp",
+};
+
 function imageUrl(source?: SanityImageSource): string | undefined {
   if (!source) {
     return undefined;
@@ -27,6 +34,45 @@ function imageUrl(source?: SanityImageSource): string | undefined {
   } catch {
     return undefined;
   }
+}
+
+function assetRef(source?: SanityImageSource): string | undefined {
+  if (!source || typeof source !== "object" || !("_ref" in source)) {
+    return undefined;
+  }
+
+  const { _ref } = source as { _ref?: unknown };
+  return typeof _ref === "string" ? _ref : undefined;
+}
+
+/**
+ * Sanity image refs are `image-<hash>-<width>x<height>-<extension>`, so the
+ * `type` and `sizes` we hand to `<link rel="icon">` follow whatever the editor
+ * actually uploaded rather than assuming a 32x32 PNG.
+ */
+function faviconHints(source?: SanityImageSource): Pick<
+  LogoContent,
+  "faviconType" | "faviconSizes"
+> {
+  const ref = assetRef(source);
+
+  if (!ref) {
+    return {};
+  }
+
+  const parts = ref.split("-");
+  const extension = parts.at(-1);
+  const dimensions = parts.at(-2);
+
+  return {
+    faviconType: extension ? FAVICON_MIME_TYPES[extension] : undefined,
+    faviconSizes:
+      extension === "svg"
+        ? "any"
+        : dimensions && /^\d+x\d+$/.test(dimensions)
+          ? dimensions
+          : undefined,
+  };
 }
 
 export function mapLogo(data: SanityLogo | null | undefined): LogoContent {
@@ -47,5 +93,6 @@ export function mapLogo(data: SanityLogo | null | undefined): LogoContent {
     headerLogoAlt:
       data.headerLogo?.alt?.trim() || DEFAULT_LOGO_CONTENT.headerLogoAlt,
     faviconUrl,
+    ...(faviconUrl ? faviconHints(data.favicon?.asset) : {}),
   };
 }
